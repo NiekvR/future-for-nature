@@ -1,0 +1,17 @@
+<div class="flex flex-column p-10">
+  <h1 class="m-b-10 text-center">Scores</h1>
+  <ng-container *ngIf="score">
+    <ffn-score-category *ngFor="let category of categories"
+                        [category]="category"
+                        [score]="score"
+                        (categoryChanged)="calculateTotal()">
+    </ffn-score-category>
+  </ng-container>
+  <div class="flex justify-space-between total m-t-10" *ngIf="score">
+    <div>Total score:</div>
+    <div class="value">{{ score.total }}</div>
+  </div>
+</div>
+<div class="flex flex-column">
+  <button *ngIf="!score?.submitted" (click)="submitScores()">Submit Scores</button>
+</div>

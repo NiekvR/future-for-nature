@@ -1,0 +1,12 @@
+@import "~src/styles/variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  .sub-total {
+    width: 50px;
+    text-align: center;
+    border-top: 1px solid $black;
+  }
+}

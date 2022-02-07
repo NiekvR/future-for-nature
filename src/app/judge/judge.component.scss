@@ -1,0 +1,39 @@
+@import "~src/styles/variables";
+
+:host {
+  display: flex;
+  width: 100%;
+
+  .top-panel {
+    flex: 0 0 131px;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .left-panel {
+    overflow-x: hidden;
+
+    .list-tools {
+      display: flex;
+      flex: 0 0 30px;
+      padding: 5px;
+      overflow: hidden;
+    }
+  }
+
+  .border-right {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid $secondary;
+  }
+
+  .details {
+    position: absolute;
+    left: 20%;
+    top: 67px;
+    width: 80%;
+    background-color: white;
+    box-shadow: inset 1px 0px 14px -3px #000000;
+  }
+}

@@ -1,0 +1,11 @@
+@import "~src/styles/variables";
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 3px;
+
+  input {
+    flex: 0 0 50px;
+  }
+}

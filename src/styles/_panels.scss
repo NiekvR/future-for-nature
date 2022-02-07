@@ -1,0 +1,35 @@
+@import "variables";
+
+.left-panel, .right-panel {
+  flex: 0 0 20%;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid $black;
+  box-shadow: -2px 0 8px 6px rgba(0,0,0,0.33);
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 101px;
+    border-bottom: 1px solid $black;
+
+    .logo {
+      flex: 0 0 100px;
+    }
+
+    .image-placeholder {
+      flex: 1;
+      background-image: url(~src/assets/img/jaguar-ffn.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+}
+
+.right-panel {
+  border-left: 1px solid $black;
+  box-shadow: -2px 0px 10px 1px rgba(0,0,0,0.33);
+}

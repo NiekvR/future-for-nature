@@ -10,6 +10,11 @@ import { CoreModule } from '@app/core/core.module';
 import { JudgeModule } from '@app/judge/judge.module';
 import { RouterModule } from '@angular/router';
 import { SETTINGS } from '@angular/fire/compat/firestore';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AngularFireFunctionsModule, ORIGIN, USE_EMULATOR } from '@angular/fire/compat/functions';
+import { DefaultSimpleModalOptionConfig, defaultSimpleModalOptions, SimpleModalModule } from 'ngx-simple-modal';
+import { AdminModule } from '@app/admin/admin.module';
+import { AuthenticationModule } from '@app/authentication/authentication.module';
 
 @NgModule({
   declarations: [
@@ -22,16 +27,27 @@ import { SETTINGS } from '@angular/fire/compat/firestore';
     AngularFireStorageModule,
     CoreModule,
     JudgeModule,
-    RouterModule
+    RouterModule,
+    FontAwesomeModule,
+    AngularFireFunctionsModule,
+    AngularFireStorageModule,
+    SimpleModalModule,
+    AdminModule,
+    AuthenticationModule
   ],
   providers: [
+    // {
+    //   provide: SETTINGS,
+    //   useValue: environment.production ? undefined : {
+    //     host: 'localhost:8080',
+    //     ssl: false
+    //   }
+    // },
+    { provide: USE_EMULATOR, useValue: ['localhost', 5001] },
     {
-      provide: SETTINGS,
-      useValue: environment.production ? undefined : {
-        host: 'localhost:8080',
-        ssl: false
-      }
-    },
+      provide: DefaultSimpleModalOptionConfig,
+      useValue: {...defaultSimpleModalOptions, ...{ closeOnEscape: true, closeOnClickOutside: true }}
+    }
   ],
   bootstrap: [AppComponent]
 })

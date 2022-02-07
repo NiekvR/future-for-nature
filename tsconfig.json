@@ -24,7 +24,8 @@
     ],
     "paths": {
       "@app/*": [ "src/app/*" ],
-      "@env/*": [ "src/environments/*" ]
+      "@env/*": [ "src/environments/*" ],
+      "stream": [ "./node_modules/stream-browserify" ]
     }
   },
   "angularCompilerOptions": {

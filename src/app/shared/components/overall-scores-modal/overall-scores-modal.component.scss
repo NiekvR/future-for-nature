@@ -1,0 +1,36 @@
+@import "~src/styles/variables";
+
+:host {
+  overflow: hidden;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .content {
+    background-color: #FFFFFF;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+
+    i.fa-times {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      cursor: pointer;
+    }
+
+    .footer {
+      flex: 0 0 38px;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 50px;
+
+      &.submitted {
+        background-color: $primary;
+      }
+    }
+  }
+}

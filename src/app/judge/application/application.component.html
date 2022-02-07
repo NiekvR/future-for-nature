@@ -1,0 +1,107 @@
+<div class="flex flex-column overflow-auto p-15">
+  <div class="flex">
+    <div class="flex flex-column flex-50">
+      <div class="application-part">
+        <label>Country of work:</label>
+        <p>{{ application.countryOfWork }}</p>
+      </div>
+      <div class="application-part">
+        <label>Focal species:</label>
+        <p>{{ application.focalSpecies }}</p>
+      </div>
+    </div>
+    <div class="flex flex-column flex-50">
+      <div class="application-part">
+        <label>Nationality:</label>
+        <p>{{ application.nationality }}</p>
+      </div>
+      <div class="application-part">
+        <label>Date of birth:</label>
+        <p>{{ application.dateOfBirth }}</p>
+      </div>
+      <div class="application-part">
+        <label>Gender:</label>
+        <p>{{ application.gender }}</p>
+      </div>
+      <div class="application-part">
+        <label>Native language:</label>
+        <p>{{ application.nativeLanguage }}</p>
+      </div>
+      <div class="application-part">
+        <label>English proficiency:</label>
+        <p>{{ application.englishProficiency }}</p>
+      </div>
+      <div class="application-part">
+        <label>Emailaddress:</label>
+        <p>{{ application.email }}</p>
+      </div>
+      <div class="application-part">
+        <label>Postal address:</label>
+        <div class="flex flex-column">
+          <p *ngIf="application.postalAddress.streetAddress">{{ application.postalAddress.streetAddress }}</p>
+          <p *ngIf="application.postalAddress.addressLine2">{{ application.postalAddress.addressLine2 }}</p>
+          <p *ngIf="application.postalAddress.postalCode">{{ application.postalAddress.postalCode }}</p>
+          <p *ngIf="application.postalAddress.city">{{ application.postalAddress.city }}</p>
+          <p *ngIf="application.postalAddress.state">{{ application.postalAddress.state }}</p>
+          <p *ngIf="application.postalAddress.country">{{ application.postalAddress.country }}</p>
+        </div>
+      </div>
+      <div class="application-part">
+        <label>Telephone number:</label>
+        <p>{{ application.telephoneNumber }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Formal education:</label>
+    <p>{{ application.formalEducation }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Employment record:</label>
+    <p>{{ application.employmentRecord }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Former FFN award applications:</label>
+    <p>{{ application.formerApplications }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Other awards:</label>
+    <p>{{ application.otherAwards }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Candidates achievements:</label>
+    <p>{{ application.achievements }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Conservation vision:</label>
+    <p>{{ application.vision }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Added value of the FFN award:</label>
+    <p>{{ application.addedValue }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Additional information:</label>
+    <p>{{ application.additionalInformation }}</p>
+  </div>
+  <div *ngFor="let referee of application.referee; let i = index" class="m-t-15">
+    <div class="application-part">
+      <label>Referee {{ i + 1 }}:</label>
+      <p>{{ referee.name.fullName }}</p>
+    </div>
+    <div class="p-l-15">
+      <div class="application-part">
+        <label>Organisation:</label>
+        <p>{{ referee.organisation }}</p>
+      </div>
+      <div class="application-part">
+        <label>Position:</label>
+        <p>{{ referee.position }}</p>
+      </div>
+      <div class="application-part-row">
+        <label>Reference statement:</label>
+        <p>{{ referee.statement }}</p>
+      </div>
+    </div>
+  </div>
+</div>

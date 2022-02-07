@@ -1,0 +1,19 @@
+@import "variables";
+
+button {
+  border: none;
+  background-color: $primary;
+  padding: 10px;
+  color: $black;
+  cursor: pointer;
+  font-weight: bold;
+
+  &.secondary {
+    background-color: $black;
+    color: $primary;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}

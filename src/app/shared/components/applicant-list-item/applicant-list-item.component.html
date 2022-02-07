@@ -1,0 +1,18 @@
+<ng-container *ngIf="!!applicantsList">
+  <div class="ellipsis">{{ applicant.name.fullName }}</div>
+  <i *ngIf="applicantsList" class="fas fa-sign-out-alt"></i>
+</ng-container>
+<ng-container *ngIf="!applicantsList">
+  <div class="left-side">
+    <div class="ellipsis text-left">{{ applicant.name.fullName }}</div>
+    <i *ngIf="applicantsList" class="fas fa-sign-out-alt"></i>
+  </div>
+  <ng-container *ngFor="let category of categories">
+    <div *ngFor="let sub of category.subs" class="score">
+      {{ !!score && !!score.subScores[ sub.id ].score ? score.subScores[ sub.id ].score : '-' }}
+    </div>
+  </ng-container>
+  <div class="score">
+    {{ !!score ? score.total : '-' }}
+  </div>
+</ng-container>

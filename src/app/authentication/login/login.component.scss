@@ -1,0 +1,61 @@
+@import "~src/styles/variables";
+
+:host {
+  width: 100%;
+
+  .bg-img {
+    background-image: url('~src/assets/img/jaguar-ffn.png');
+    height: 100%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+
+    .logo {
+      width: 100px;
+      background-color: white;
+    }
+
+    form {
+      margin-top: 50px;
+      width: 300px;
+      background-color: white;
+      padding: 20px;
+
+      input {
+        margin-bottom: 10px;
+        border: none;
+        border-bottom: 1px solid $secondary;
+        padding: 5px;
+        transition: border 500ms ease-out;
+
+        ::placeholder {
+          color: $secondary;
+          opacity: 1;
+        }
+
+        :-ms-input-placeholder {
+          color: $secondary;
+        }
+
+        ::-ms-input-placeholder {
+          color: $secondary;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: $primary;
+        }
+      }
+
+      .error-message {
+        margin-bottom: 10px;
+        text-align: center;
+        color: red;
+      }
+    }
+  }
+}

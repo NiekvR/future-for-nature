@@ -1,6 +1,47 @@
-<div *ngFor="let applicant of applications">
-  <div>{{applicant.firstName}}</div>
-  <div>{{applicant.lastName}}</div>
+<div class="left-panel">
+  <div class="header">
+    <img class="logo" src="assets/svg/future-for-nature-logo.svg">
+    <div class="image-placeholder"></div>
+  </div>
+  <div class="list-tools">
+    <i class="fas fa-search m-r-5"></i>
+    <div class="flex-1"><ffn-search (searchTerm)="filterApplicationList($event)"></ffn-search></div>
+  </div>
+  <div class="flex flex-column overflow-hidden flex-1">
+    <div class="flex flex-column overflow-auto flex-1">
+      <ffn-applicant-list-item
+        *ngFor="let applicant of searchedApplications; let i = index"
+        [applicant]="applicant"
+        [score]="submittedScores[ applicant.id! ]"
+        [class.selected]="applicant.id === selectedApplication?.id"
+        [class.completed]="submittedScores[ applicant.id! ]?.submitted"
+        [class.uneven]="i % 2 === 0"
+        [class.selectable]="true"
+        (click)="selectApplicant(applicant)">
+
+      </ffn-applicant-list-item>
+    </div>
+    <div class="flex">
+      <button (click)="logOff()"><i class="fas fa-power-off"></i></button>
+      <button class="secondary flex-1" (click)="openAllScores()">Overall Scores</button>
+    </div>
+  </div>
 </div>
 
-<div>TEST 2</div>
+<div class="flex flex-column flex-1 overflow-hidden">
+  <ng-container *ngIf="selectedApplication">
+    <div class="flex align-center justify-space-between app-header">
+      <h1>Application:</h1>
+      <h2>{{ selectedApplication?.name?.fullName }}</h2>
+    </div>
+    <div class="flex flex-1 overflow-hidden">
+      <div class="flex flex-column flex-1">
+        <ffn-application *ngIf="selectedApplication" [application]="selectedApplication"></ffn-application>
+      </div>
+
+      <div class="right-panel">
+        <ffn-score-sheet *ngIf="selectedApplication" [application]="selectedApplication"></ffn-score-sheet>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .application-part {
+    display: flex;
+    margin: 3px;
+
+    label {
+      font-weight: bold;
+      flex: 0 0 150px;
+      font-style: italic;
+    }
+  }
+
+  .application-part-row {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: bold;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+  }
+}

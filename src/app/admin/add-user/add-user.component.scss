@@ -1,0 +1,66 @@
+@import "~src/styles/variables";
+
+:host {
+  overflow: hidden;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 300px;
+  margin: auto;
+
+  .content {
+    background-color: #FFFFFF;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+
+    .footer {
+      margin-top: 15px;
+      display: flex;
+
+      button {
+        flex: 0 0 50%;
+      }
+    }
+
+    form {
+      background-color: white;
+      padding: 20px;
+
+      input {
+        margin-bottom: 10px;
+        border: none;
+        border-bottom: 1px solid $secondary;
+        padding: 5px;
+        transition: border 500ms ease-out;
+
+        ::placeholder {
+          color: $secondary;
+          opacity: 1;
+        }
+
+        :-ms-input-placeholder {
+          color: $secondary;
+        }
+
+        ::-ms-input-placeholder {
+          color: $secondary;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: $primary;
+        }
+      }
+
+      .error-message {
+        margin-bottom: 10px;
+        text-align: center;
+        color: red;
+      }
+    }
+  }
+}

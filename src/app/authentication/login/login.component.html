@@ -1,0 +1,14 @@
+<div class="bg-img">
+  <div class="flex flex-column align-center justify-center h-100">
+    <img class="logo" src="assets/svg/future-for-nature-logo.svg">
+
+    <form class="flex flex-column">
+      <input type="email" name="name" [(ngModel)]="credentials.name" placeholder="email">
+      <input type="password" name="password" [(ngModel)]="credentials.password" placeholder="password">
+      <div class="error-message" *ngIf="!!error">
+        {{error}}
+      </div>
+      <button (click)="login()" [disabled]="credentials.name.length === 0 || credentials.password.length === 0">Login</button>
+    </form>
+  </div>
+</div>
