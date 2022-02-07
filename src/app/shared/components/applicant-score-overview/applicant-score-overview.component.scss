@@ -1,0 +1,31 @@
+@import "~src/styles/variables";
+
+:host {
+  .header {
+    flex: 0 0 38px;
+    display: flex;
+    background-color: $black;
+    color: $primary;
+
+    .placeholder {
+      flex: 0 0 20%;
+    }
+
+    .score {
+      flex: 1;
+      border-right: 1px solid $secondary;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 38px;
+      font-weight: bold;
+    }
+  }
+
+  .table-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+}

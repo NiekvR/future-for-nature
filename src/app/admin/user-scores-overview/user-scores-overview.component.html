@@ -1,0 +1,27 @@
+<div class="flex align-center justify-space-between app-header">
+  <h1 *ngIf="!selectedUser">Scores overview</h1>
+  <h1 *ngIf="!!selectedUser" class="flex align-center"><i class="fas fa-angle-left cursor-pointer m-r-10" (click)="deselectUser()"></i> Score overview for {{ selectedUser.name }}</h1>
+</div>
+<div class="flex p-15 flex-1 overflow-hidden" *ngIf="!selectedUser">
+  <div class="flex flex-column first-column">
+    <div class="cell header"></div>
+    <div *ngFor="let applicant of applicants; let i = index" class="cell" [class.uneven]="i % 2 === 0">{{applicant.name.fullName}}</div>
+  </div>
+  <div *ngFor="let user of users" class="flex flex-column flex-1">
+    <div class="cell header cursor-pointer justify-center" [class.completed]="user.submitted" (click)="selectUser(user)">{{user.name}}</div>
+    <div *ngFor="let applicant of applicants; let i = index"
+         class="cell justify-center"
+         [class.uneven]="i % 2 === 0">
+      {{ !!this.scores[ user.uid! ][ applicant.id! ] ? this.scores[ user.uid! ][ applicant.id! ].total : '-' }}
+    </div>
+  </div>
+  <div class="flex flex-column flex-1">
+    <div class="cell header">Average</div>
+    <div *ngFor="let applicant of applicants; let i = index" class="cell justify-center" [class.uneven]="i % 2 === 0">
+      {{ this.totalScores[ applicant.id! ] / this.users.length | number: '1.2-2' }}
+    </div>
+  </div>
+</div>
+<div class="flex p-15 flex-1" *ngIf="!!selectedUser">
+  <ffn-applicant-score-overview class="flex-1" [applicants]="applicants!" [scores]="userScores!"></ffn-applicant-score-overview>
+</div>

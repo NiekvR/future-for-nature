@@ -1,10 +1,10 @@
 {
   "name": "future-for-nature",
-  "version": "0.0.0",
+  "version": "0.1.0-Beta-0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
