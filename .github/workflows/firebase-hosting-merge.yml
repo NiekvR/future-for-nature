@@ -18,4 +18,3 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FUTURE_FOR_NATURE }}'
           channelId: live
           projectId: future-for-nature
-          entryPoint: "./future-for-nature"
