@@ -22,13 +22,20 @@
   }
 
   &.completed {
-    border-left: 10px solid $primary;
-    padding: 10px;
+    .left-side {
+      border-left: 10px solid $primary;
+      padding: 10px;
+    }
   }
 
   &.selectable {
     cursor: pointer;
     padding: 0 10px 0 20px;
+
+    &.completed {
+      border-left: 10px solid $primary;
+      padding: 10px;
+    }
 
     &:hover {
       font-weight: bold;

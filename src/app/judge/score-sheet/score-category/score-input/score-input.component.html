@@ -1,2 +1,2 @@
 <p>{{ scoreCategory.name }}</p>
-<input [disabled]="!canScore" type="number" max="5" min="1" placeholder="1" [(ngModel)]="subScore.score" (blur)="onBlur()" [class.error]="error">
+<input [disabled]="!canScore" type="number" max="5" min="0" placeholder="0" [(ngModel)]="subScore.score" (blur)="onBlur()" [class.error]="error">

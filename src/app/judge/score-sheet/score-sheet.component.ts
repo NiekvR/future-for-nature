@@ -40,7 +40,7 @@ export class ScoreSheetComponent implements OnChanges, OnDestroy {
     let totalScore = 0;
     let totalCategories = 0;
     Object.values(this.score.subScores).forEach(subScores => {
-      totalScore += ( subScores.score! || 1);
+      totalScore += ( subScores.score! || 0);
       totalCategories++;
     });
     this.score.total = (totalScore / totalCategories).toFixed(2);

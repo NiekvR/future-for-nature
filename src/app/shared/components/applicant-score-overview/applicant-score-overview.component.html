@@ -15,6 +15,7 @@
     [applicantsList]="false"
     [applicant]="applicant"
     [score]="scores[ applicant.id! ]"
-    [class.uneven]="i % 2 === 0">
+    [class.uneven]="i % 2 === 0"
+    [class.completed]="scores[ applicant.id! ]?.submitted">
   </ffn-applicant-list-item>
 </div>

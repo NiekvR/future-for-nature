@@ -3,16 +3,30 @@
 :host {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  .header {
+    background-color: $black;
+    color: $primary;
+    font-weight: bold;
+    flex: 0 0 38px;
+
+    .placeholder {
+      flex: 0 0 200px;
+      padding: 0 10px 0 20px;
+    }
+  }
 
   .first-column {
-    flex: 0 0 20%;
     z-index: 1;
-    border-right: 1px solid $black;
+    flex: 0 0 200px;
     box-shadow: 3px 0 8px -2px rgb(0 0 0 / 33%);
+    overflow-x: hidden;
 
     .cell {
       border-right: none;
       padding: 0 10px 0 20px;
+      border-right: 1px solid $black;
     }
   }
 
@@ -22,12 +36,6 @@
     flex: 0 0 38px;
     padding: 0 10px;
     border-right: 1px solid $secondary;
-
-    &.header {
-      background-color: $black;
-      color: $primary;
-      font-weight: bold;
-    }
 
     &.uneven {
       background-color: #fafafa;

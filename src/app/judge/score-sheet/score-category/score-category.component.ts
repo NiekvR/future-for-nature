@@ -34,7 +34,7 @@ export class ScoreCategoryComponent implements OnInit, OnChanges {
   private calculateSubTotal() {
     const subScoresIds = Object.keys(this.score.subScores).filter(subScore => subScore.charAt(0) === this.category.id);
     this.subTotal = (subScoresIds.map(id => this.score.subScores[ id ].score!)
-        .reduce((previousValue, currentValue) => (previousValue || 1) + (currentValue || 1)) /
+        .reduce((previousValue, currentValue) => (previousValue || 0) + (currentValue || 0)) /
       this.category.subs!.length)
       .toFixed(2);
   }

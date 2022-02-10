@@ -1,6 +1,10 @@
 @import "~src/styles/variables";
 
 :host {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
   .header {
     flex: 0 0 38px;
     display: flex;
