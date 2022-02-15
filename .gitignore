@@ -40,6 +40,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/functions/lib
+/functions/src/serviceAccount.json
 
 # System Files
 .DS_Store
