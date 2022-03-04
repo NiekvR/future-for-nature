@@ -1,8 +1,9 @@
-<h2 class="m-b-5">{{ category.name }}</h2>
+<p class="m-b-5 bold">{{ category.name }}</p>
 <ffn-score-input *ngFor="let subCategory of category.subs"
                  [scoreCategory]="subCategory"
                  [subScore]="score.subScores[ subCategory.id ]"
                  [canScore]="!score.submitted"
+                 [applicantId]="score.applicationId"
                  (scoreChanged)="updateSubTotal()"></ffn-score-input>
 <div class="flex flex-end">
   <div class="sub-total">{{ this.subTotal }}</div>

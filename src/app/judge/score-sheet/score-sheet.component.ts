@@ -3,15 +3,17 @@ import { Application } from '@app/models/application.model';
 import { ScoreCategory } from '@app/models/score-category.model';
 import { Score } from '@app/models/score.model';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SCORE_CATEGORIES } from '@app/judge/score-categories';
+import { AppUser } from '@app/models/app-user';
+import { UserService } from '@app/core/user.service';
 
 @Component({
   selector: 'ffn-score-sheet',
   templateUrl: './score-sheet.component.html',
   styleUrls: ['./score-sheet.component.scss']
 })
-export class ScoreSheetComponent implements OnChanges, OnDestroy {
+export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() application!: Application;
 
@@ -20,10 +22,15 @@ export class ScoreSheetComponent implements OnChanges, OnDestroy {
   public categories: ScoreCategory[] = SCORE_CATEGORIES;
   public score!: Score;
   public canSubmit = false;
+  public canEdit = true;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private scoreCollectionService: ScoreCollectionService) { }
+  constructor(private scoreCollectionService: ScoreCollectionService, private userService: UserService) { }
+
+  ngOnInit() {
+    this.getCanEdit();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes['application'].currentValue) {
@@ -38,18 +45,29 @@ export class ScoreSheetComponent implements OnChanges, OnDestroy {
 
   public calculateTotal() {
     let totalScore = 0;
-    let totalCategories = 0;
-    Object.values(this.score.subScores).forEach(subScores => {
-      totalScore += ( subScores.score! || 0);
-      totalCategories++;
+    this.categories.forEach(category => {
+      let totalCategoryScore = 0;
+      let totalSubCategories = 0;
+      category.subs!.forEach(subCategory => {
+        totalCategoryScore += ( this.score.subScores[ subCategory.id ].score! || 0);
+        totalSubCategories++;
+      })
+
+      totalScore += (totalCategoryScore / totalSubCategories) * category.relevance!
     });
-    this.score.total = (totalScore / totalCategories).toFixed(2);
+    this.score.total = totalScore.toFixed(2);
     this.everythingScored();
     this.updateScores().subscribe();
   }
 
   public submitScores() {
-    this.score.submitted = true;
+    this.score.skipped = false;
+    this.score.submitted = !this.score.submitted;
+    this.scoreCollectionService.update(this.score).subscribe();
+  }
+
+  public skipScores() {
+    this.score.skipped = true;
     this.scoreCollectionService.update(this.score).subscribe();
   }
 
@@ -62,11 +80,18 @@ export class ScoreSheetComponent implements OnChanges, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(score => {
         this.score = score;
+        console.log(score);
         this.everythingScored();
       });
   }
 
   private updateScores(): Observable<Score> {
     return this.scoreCollectionService.update(this.score);
+  }
+
+  private getCanEdit() {
+    this.userService.getMySelf()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(user => this.canEdit = !user.submitted);
   }
 }

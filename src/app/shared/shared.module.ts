@@ -7,6 +7,7 @@ import { OverallScoresModalComponent } from './components/overall-scores-modal/o
 import { ApplicantListItemComponent } from '@app/shared/components/applicant-list-item/applicant-list-item.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { ApplicantScoreOverviewComponent } from './components/applicant-score-overview/applicant-score-overview.component';
+import { NgxPopperModule } from 'ngx-popper';
 
 
 
@@ -21,7 +22,8 @@ import { ApplicantScoreOverviewComponent } from './components/applicant-score-ov
   imports: [
     CommonModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgxPopperModule.forRoot({placement: 'bottom'})
   ],
   exports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { ApplicantScoreOverviewComponent } from './components/applicant-score-ov
     OverallScoresModalComponent,
     ApplicantListItemComponent,
     ConfirmComponent,
-    ApplicantScoreOverviewComponent
+    ApplicantScoreOverviewComponent,
+    NgxPopperModule
   ]
 })
 export class SharedModule { }

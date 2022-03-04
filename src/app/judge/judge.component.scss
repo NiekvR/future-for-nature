@@ -16,9 +16,23 @@
     .list-tools {
       display: flex;
       flex: 0 0 30px;
-      padding: 5px;
       overflow: hidden;
+
+      i {
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.active {
+          background-color: $primary;
+        }
+      }
     }
+  }
+
+  .right-panel {
+    flex: 0 0 230px;
   }
 
   .border-right {

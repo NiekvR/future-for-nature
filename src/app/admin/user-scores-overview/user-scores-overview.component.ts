@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject, takeUntil, combineLatest, take } from 'rxjs';
+import { ReplaySubject, takeUntil, combineLatest, take, Observable, map } from 'rxjs';
 import { AppUser } from '@app/models/app-user';
 import { Score } from '@app/models/score.model';
 import { UserService } from '@app/core/user.service';
@@ -80,12 +80,30 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
 
   private getAverageScores(applicants: Application[]) {
     return combineLatest(applicants.map(applicant =>
-      this.scoreCollectionService.getAllScoresForApplicant(applicant.id!)))
+      this.getAllScoresForApplicant(applicant)))
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(scoresPerApplicant =>
-        scoresPerApplicant.forEach(scores =>
-          scores.length > 0 ? this.totalScores[ scores[ 0 ].applicationId ] = scores
-            .reduce((previousValue, score) => previousValue + +score.total, 0) : null))
+      .subscribe(scoresPerApplicant => {
+          scoresPerApplicant.forEach(scores =>
+            scores.scores.length > 0 ? this.totalScores[ scores.id ] = scores.scores
+              .reduce((previousValue, score) => previousValue + +score.total, 0) : this.totalScores[ scores.id ] = 0);
+          this.sortApplicantsOnAverageScores();
+        });
   }
+
+  private getAllScoresForApplicant(applicant: Application): Observable<{ scores: Score[], id: string }> {
+    return this.scoreCollectionService.getAllScoresForApplicant(applicant.id!)
+      .pipe(map(scores => { return { scores: scores, id: applicant.id! }}));
+  }
+
+  private sortApplicantsOnAverageScores() {
+    this.applicants = this.applicants
+      .sort((a, b) =>
+        (this.getTotalScoreForApplicant(b) - this.getTotalScoreForApplicant(a)));
+  }
+
+  private getTotalScoreForApplicant(applicant: Application): number {
+    return !!this.totalScores[ applicant.id! ] ? Number(this.totalScores[ applicant.id! ]) : 0;
+  }
+
 
 }

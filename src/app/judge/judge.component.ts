@@ -220,6 +220,8 @@ export class JudgeComponent implements OnInit, OnDestroy {
 
   public submittedScores: { [ id: string]: Score } = {};
 
+  public statusSort: 'asc' | 'desc' | null = null;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private applicationCollectionService: ApplicationCollectionService, private afAuth: AngularFireAuth,
@@ -244,7 +246,9 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   public filterApplicationList(searchTerm: string) {
-    this.searchedApplications = this.applications.filter(application => application.name.fullName.includes(searchTerm))
+    this.searchedApplications = this.applications
+      .filter(application => application.name.fullName.includes(searchTerm) || application.ffnId.includes(searchTerm));
+    this.searchedApplications = this.sortApplicants(this.searchedApplications);
   }
 
   public openAllScores() {
@@ -259,13 +263,22 @@ export class JudgeComponent implements OnInit, OnDestroy {
       .subscribe(() => this.router.navigate(['/login']));
   }
 
+  public sortOnStatus() {
+    switch (this.statusSort) {
+      case 'asc': this.statusSort = 'desc'; break;
+      case 'desc': this.statusSort = null; break;
+      case null: this.statusSort = 'asc'; break;
+    }
+    this.searchedApplications = this.sortApplicants(this.searchedApplications);
+  }
+
   private getApplications() {
     this.applicationCollectionService.getAll()
       .pipe(
         takeUntil(this.destroyed$),
-        map(applicants => applicants.sort((a, b) => (a.name.surName > b.name.surName) ? 1 : -1)))
+        map(applicants => this.sortApplicants(applicants)))
       .subscribe(applications => {
-        this.applications = this.searchedApplications = applications;
+        this.applications = applications;
         this.getScores();
       });
   }
@@ -273,7 +286,42 @@ export class JudgeComponent implements OnInit, OnDestroy {
   private getScores() {
     this.scoreCollectionService.getAllScoresForCurrentUser()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(scores => scores.forEach(score => this.submittedScores[ score.applicationId! ] = score));
+      .subscribe(scores => {
+        scores.forEach(score => this.submittedScores[ score.applicationId! ] = score);
+        this.searchedApplications = this.sortApplicants(this.applications);
+      });
+  }
+
+  private sortApplicants(applicants: Application[]) {
+    return applicants.sort((a, b) => this.determineSortCriteria(a, b))
+  }
+
+  private determineSortCriteria(a: Application, b: Application): number {
+    let score = 0;
+    switch (this.statusSort) {
+      case 'asc': score = this.sortAscOnStatus(a, b) ; break;
+      case 'desc': score = this.sortDescOnStatus(a, b); break;
+      case null: score = (a.ffnId > b.ffnId) ? 1 : -1; break;
+    }
+    return score;
+  }
+
+  private sortAscOnStatus(a: Application, b: Application): number {
+    const scoreA = this.submittedScores[ a.id! ];
+    const scoreB = this.submittedScores[ b.id! ]
+    return scoreA?.submitted ? 1
+      : scoreB?.submitted ? - 1 :
+        scoreA?.skipped ? 1 :
+          scoreB?.skipped ? -1 : 0;
+  }
+
+  private sortDescOnStatus(a: Application, b: Application): number {
+    const scoreA = this.submittedScores[ a.id! ];
+    const scoreB = this.submittedScores[ b.id! ]
+    return scoreB?.submitted ? 1
+      : scoreA?.submitted ? - 1 :
+        scoreB?.skipped ? 1 :
+          scoreA?.skipped ? -1 : 0;
   }
 
 }

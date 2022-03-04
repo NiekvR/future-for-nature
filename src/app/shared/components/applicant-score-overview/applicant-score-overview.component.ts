@@ -12,9 +12,23 @@ export class ApplicantScoreOverviewComponent implements OnInit {
   @Input() applicants!: Application[];
   @Input() scores!: { [ id: string]: Score };
 
+  public sortedApplicants: Application[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
+    this.sortApplicantsByScore();
+  }
+
+  private sortApplicantsByScore() {
+    this.sortedApplicants = this.sortedApplicants.concat(this.applicants);
+    this.sortedApplicants = this.sortedApplicants
+      .sort((a, b) =>
+        (this.getTotalScoreForApplicant(b) - this.getTotalScoreForApplicant(a)));
+  }
+
+  private getTotalScoreForApplicant(applicant: Application): number {
+    return !!this.scores[ applicant.id! ] ? Number(this.scores[ applicant.id! ]?.total) : 0;
   }
 
 }

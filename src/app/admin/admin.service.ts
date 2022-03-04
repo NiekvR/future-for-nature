@@ -50,6 +50,7 @@ export class AdminService {
 
   private getApplicationDBOToApplication(applicationDBO: ApplicationDBO): Application {
     const application = {} as Application;
+    application.ffnId = applicationDBO['Entry Id'];
     application.name = this.getNameFromApplicationDBO(applicationDBO);
     application.postalAddress = this.getPostalAddressFromApplicationDBO(applicationDBO);
     application.nationality = applicationDBO.Nationality || '';
@@ -79,9 +80,9 @@ export class AdminService {
   private getReferee1FromApplicationDBO(applicationDBO: ApplicationDBO): Referee {
     const referee = {} as Referee;
     referee.name = this.getReferee1NameFromApplicationDBO(applicationDBO);
-    referee.position = applicationDBO.Position || '';
-    referee.organisation = applicationDBO.Organisation || '';
-    referee.statement = applicationDBO['Reference statement'] || '';
+    referee.position = applicationDBO['Position referee 1'] || '';
+    referee.organisation = applicationDBO['Organisation referee 1'] || '';
+    referee.statement = applicationDBO['Reference statement referee 1'] || '';
     return referee;
   }
 
@@ -98,9 +99,9 @@ export class AdminService {
   private getReferee2FromApplicationDBO(applicationDBO: ApplicationDBO): Referee {
     const referee = {} as Referee;
     referee.name = this.getReferee2NameFromApplicationDBO(applicationDBO);
-    // referee.position = applicationDBO.Position;
-    // referee.organisation = applicationDBO.Organisation;
-    // referee.statement = applicationDBO['Reference statement'];
+    referee.position = applicationDBO['Position referee 2'];
+    referee.organisation = applicationDBO['Organisation referee 2'];
+    referee.statement = applicationDBO['Reference statement referee 2'];
     return referee;
   }
 

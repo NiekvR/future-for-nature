@@ -9,6 +9,7 @@
          class="flex flex-1 cursor-pointer align-center justify-center overflow-hidden"
          [class.completed]="user.submitted"
          (click)="selectUser(user)">
+      <div *ngIf="user.submitted" class="completed-bar"></div>
       <div class="text-center ellipsis">
         {{user.name}}
       </div>

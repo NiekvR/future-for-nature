@@ -22,9 +22,11 @@ export interface ApplicationDBO {
   "How did you hear about Future For Nature?": string;
   Nationality: string;
   "Native language": string;
-  Organisation: string;
+  "Organisation referee 1": string;
+  "Organisation referee 2": string;
   "Other awards": string;
-  Position: string;
+  "Position referee 1": string;
+  "Position referee 2": string;
   "Postal address (Address Line 2)": string;
   "Postal address (City)": string;
   "Postal address (Country)": string;
@@ -41,6 +43,7 @@ export interface ApplicationDBO {
   "Referee 2 (Prefix)": string;
   "Referee 2 (Suffix)": string;
   "Referee 2 (Surname)": string;
-  "Reference statement": string;
+  "Reference statement referee 1": string;
+  "Reference statement referee 2": string;
   "Telephone number": string;
 }

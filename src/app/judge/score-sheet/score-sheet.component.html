@@ -12,6 +12,7 @@
     <div class="value">{{ score.total }}</div>
   </div>
 </div>
-<div class="flex flex-column">
-  <button *ngIf="!score?.submitted" (click)="submitScores()">Submit Scores</button>
+<div class="flex flex-column" *ngIf="canEdit">
+  <button *ngIf="!score?.submitted" (click)="skipScores()" class="secondary">Skip</button>
+  <button (click)="submitScores()" [disabled]="!canSubmit">{{ score?.submitted ? 'Edit' : 'Submit Scores'}}</button>
 </div>

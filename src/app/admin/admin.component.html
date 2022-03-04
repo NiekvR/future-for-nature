@@ -20,6 +20,7 @@
         <div class="flex flex-column">
           <div *ngFor="let user of users" class="flex">
             <span class="flex-1">{{ user.name }}</span>
+            <i class="fas fa-log-in m-r-5 cursor-pointer" (click)="updateUser(user)"></i>
             <i class="fas fa-edit m-r-5 cursor-pointer" (click)="updateUser(user)"></i>
             <i class="fas fa-trash cursor-pointer" (click)="deleteUser(user)"></i>
           </div>

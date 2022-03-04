@@ -1,5 +1,6 @@
 export interface Application {
   id?: string;
+  ffnId: string;
   name: Name;
   postalAddress: PostalAddress;
   nationality: string;

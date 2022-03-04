@@ -3,9 +3,13 @@
 :host {
   display: flex;
   justify-content: space-between;
+  padding-top: 7px;
   padding-bottom: 3px;
+
+
 
   input {
     flex: 0 0 50px;
+    height: 20px;
   }
 }

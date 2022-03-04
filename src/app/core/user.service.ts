@@ -3,7 +3,7 @@ import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AppUser } from '@app/models/app-user';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, map, Observable, combineLatest, switchMap } from 'rxjs';
+import { from, map, Observable, combineLatest, switchMap, forkJoin, take } from 'rxjs';
 import { Role } from '@app/models/role.enum';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
@@ -44,12 +44,15 @@ export class UserService extends FirebaseCollectionService<AppUser>  {
 
   public resetSubmitted(): Observable<AppUser[]> {
     return this.getAllAssessors()
-      .pipe(switchMap(users => this.resetSubmittedForAssessors(users)))
+      .pipe(
+        take(1),
+        switchMap(users => this.resetSubmittedForAssessors(users)))
   }
 
   private resetSubmittedForAssessors(users: AppUser[]): Observable<AppUser[]> {
     users.forEach(user => user.submitted = false);
-    return combineLatest(users.map(user => this.update(user)));
+    console.log('HELLO');
+    return forkJoin(users.map(user => this.update(user).pipe(take(1))));
   }
 
   private docSnapshotToItem(queryDocumentSnapshot: QueryDocumentSnapshot<any>): AppUser {

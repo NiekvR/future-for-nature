@@ -15,6 +15,13 @@
       flex: 0 0 200px;
       padding: 0 10px 0 20px;
     }
+
+    .completed-bar {
+      flex: 0 0 10px;
+      background-color: $primary;
+      height: 100%;
+      margin-right: 3px;
+    }
   }
 
   .first-column {

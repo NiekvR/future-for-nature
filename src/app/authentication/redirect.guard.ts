@@ -27,7 +27,6 @@ export class RedirectGuard implements CanActivate {
   }
 
   private isAdmin(user: User): Observable<boolean> {
-    console.log(user);
     return !user ? of(false) : this.userService.get(user!.uid)
       .pipe(map(appUser => appUser.role === Role.admin));
   }

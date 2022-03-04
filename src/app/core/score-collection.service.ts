@@ -77,7 +77,8 @@ export class ScoreCollectionService extends FirebaseCollectionService<Score> {
           id: '3.2',
         }
       },
-      submitted: false
+      submitted: false,
+      skipped: false
     }
 
     return this.add(newScore);

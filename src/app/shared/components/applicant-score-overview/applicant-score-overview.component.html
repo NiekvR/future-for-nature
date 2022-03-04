@@ -11,11 +11,12 @@
 </div>
 <div class="table-content">
   <ffn-applicant-list-item
-    *ngFor="let applicant of applicants; let i = index"
+    *ngFor="let applicant of sortedApplicants; let i = index"
     [applicantsList]="false"
     [applicant]="applicant"
     [score]="scores[ applicant.id! ]"
     [class.uneven]="i % 2 === 0"
-    [class.completed]="scores[ applicant.id! ]?.submitted">
+    [class.completed]="scores[ applicant.id! ]?.submitted"
+    [class.skipped]="scores[ applicant.id! ]?.skipped">
   </ffn-applicant-list-item>
 </div>
