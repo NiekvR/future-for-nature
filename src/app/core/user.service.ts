@@ -51,7 +51,6 @@ export class UserService extends FirebaseCollectionService<AppUser>  {
 
   private resetSubmittedForAssessors(users: AppUser[]): Observable<AppUser[]> {
     users.forEach(user => user.submitted = false);
-    console.log('HELLO');
     return forkJoin(users.map(user => this.update(user).pipe(take(1))));
   }
 

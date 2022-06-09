@@ -3,9 +3,8 @@ import { Application } from '@app/models/application.model';
 import { ScoreCategory } from '@app/models/score-category.model';
 import { Score } from '@app/models/score.model';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { SCORE_CATEGORIES } from '@app/judge/score-categories';
-import { AppUser } from '@app/models/app-user';
 import { UserService } from '@app/core/user.service';
 
 @Component({
@@ -34,11 +33,18 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes['application'].currentValue) {
-      this.getScores();
+      if(!!this.score) {
+        this.updateScores()
+          .pipe(take(1))
+          .subscribe(() => this.getScores());
+      } else {
+        this.getScores();
+      }
     }
   }
 
   ngOnDestroy() {
+    this.updateScores();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -56,6 +62,9 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
       totalScore += (totalCategoryScore / totalSubCategories) * category.relevance!
     });
     this.score.total = totalScore.toFixed(2);
+    if(this.score.pristine) {
+      this.score.pristine = false;
+    }
     this.everythingScored();
     this.updateScores().subscribe();
   }
@@ -71,16 +80,26 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
     this.scoreCollectionService.update(this.score).subscribe();
   }
 
+  public resetScores() {
+    this.categories.forEach(category => category.subs!
+      .forEach(subCategory => delete this.score.subScores[ subCategory.id ].score));
+    this.score.pristine = true;
+    this.score.total = '0.00'
+    this.updateScores().subscribe();
+  }
+
   private everythingScored() {
     this.canSubmit = !Object.values(this.score.subScores).find(subScore => !subScore.score);
   }
 
   private getScores() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+    this.destroyed$ = new ReplaySubject(1);
     this.scoreCollectionService.getScoresForApplication(this.application.id!)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(score => {
         this.score = score;
-        console.log(score);
         this.everythingScored();
       });
   }

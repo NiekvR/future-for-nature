@@ -1,3 +1,5 @@
+@import "~src/styles/variables";
+
 :host {
   display: flex;
   flex-direction: column;
@@ -10,6 +12,15 @@
     .value {
       flex: 0 0 50px;
       text-align: center;
+    }
+  }
+
+  .text-link {
+    color: $primary;
+    font-size: 12px;
+
+    &.disabled {
+      color: #dddedf;
     }
   }
 }

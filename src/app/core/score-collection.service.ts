@@ -53,7 +53,7 @@ export class ScoreCollectionService extends FirebaseCollectionService<Score> {
     const newScore: Score = {
       userId,
       applicationId,
-      total: '0',
+      total: '0.00',
       subScores: {
         1.1: {
           id: '1.1',
@@ -77,6 +77,7 @@ export class ScoreCollectionService extends FirebaseCollectionService<Score> {
           id: '3.2',
         }
       },
+      pristine: true,
       submitted: false,
       skipped: false
     }

@@ -1,6 +1,6 @@
 {
   "name": "future-for-nature",
-  "version": "0.1.0-Beta-0.4",
+  "version": "0.1.0-Beta-1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@ternwebdesign/firebase-store": "^0.2.4",
+    "@ternwebdesign/firebase-store": "^0.2.5",
     "csv-parser": "^3.0.0",
     "firebase": "^9.4.0",
     "fs-extra": "^10.0.0",

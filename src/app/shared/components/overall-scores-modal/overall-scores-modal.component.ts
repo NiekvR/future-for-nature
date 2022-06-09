@@ -25,6 +25,8 @@ export class OverallScoresModalComponent
 
   public categories: ScoreCategory[] = SCORE_CATEGORIES;
 
+  private scoredApplicants = 0;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private simpleModalService: SimpleModalService, private userService: UserService) {
@@ -33,7 +35,9 @@ export class OverallScoresModalComponent
 
   ngOnInit() {
     this.getMySelf();
-    this.readyToSubmit = this.getSubmittedScoresForApplicants().length === this.applicants.length;
+    this.getScoredApplicants();
+    this.readyToSubmit = this.getSubmittedScoresForApplicants().length === this.scoredApplicants;
+    console.log(this.readyToSubmit, this.getSubmittedScoresForApplicants().length);
   }
 
   ngOnDestroy() {
@@ -55,15 +59,26 @@ export class OverallScoresModalComponent
   }
 
   private getSubmittedScoresForApplicants(): Score[] {
-    return Object.values(this.scores)
-      .filter(score => this.applicants.map(applicant => applicant.id)
-          .includes(score.applicationId))
-      .filter(score => score.submitted)
+    return this.getScoresForApplicants()
+      .filter(score => {
+        console.log(score.submitted, score.pristine, score.submitted || score.pristine)
+        return score.submitted || score.pristine
+      })
   }
 
   private getMySelf() {
     this.userService.getMySelf()
       .pipe(takeUntil(this.destroyed$))
       .subscribe(user => this.user = user);
+  }
+
+  private getScoredApplicants() {
+    this.scoredApplicants = this.getScoresForApplicants().length;
+  }
+
+  private getScoresForApplicants(): Score[] {
+    return Object.values(this.scores)
+      .filter(score => this.applicants.map(applicant => applicant.id)
+        .includes(score.applicationId));
   }
 }

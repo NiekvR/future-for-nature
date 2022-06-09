@@ -11,6 +11,13 @@
     <div>Total score:</div>
     <div class="value">{{ score.total }}</div>
   </div>
+  <div class="flex flex-end m-t-5">
+    <div class="cursor-pointer text-underline text-link"
+         (click)="resetScores()"
+         *ngIf="score" [class.disabled]="score.pristine">Reset scores</div>
+  </div>
+  <p class="m-t-20 bold">Comments</p>
+  <textarea rows="5" [(ngModel)]="score.comments" *ngIf="score"></textarea>
 </div>
 <div class="flex flex-column" *ngIf="canEdit">
   <button *ngIf="!score?.submitted" (click)="skipScores()" class="secondary">Skip</button>

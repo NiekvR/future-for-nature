@@ -9,6 +9,9 @@
         {{error}}
       </div>
       <button (click)="login()" [disabled]="credentials.name.length === 0 || credentials.password.length === 0">Login</button>
+      <div class="flex flex-end">
+        <button class="bare" (click)="openPasswordModal()">Reset password</button>
+      </div>
     </form>
   </div>
 </div>

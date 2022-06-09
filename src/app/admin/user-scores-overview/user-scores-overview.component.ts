@@ -50,6 +50,11 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
     this.userScores = undefined;
   }
 
+  public desubmitScores() {
+    this.selectedUser!.submitted = false;
+    this.userService.update(this.selectedUser!).subscribe();
+  }
+
   private getUsers() {
     this.userService.getAllAssessors()
       .pipe(takeUntil(this.destroyed$))

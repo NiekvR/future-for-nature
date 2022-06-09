@@ -22,6 +22,9 @@ export class ScoreInputComponent implements OnChanges {
     if(!!changes['applicantId']?.currentValue) {
       this.validateScore();
     }
+    if(changes['subScore']?.currentValue !== changes['subScore']?.previousValue) {
+      this.validateScore();
+    }
   }
 
   public onBlur() {
@@ -30,7 +33,7 @@ export class ScoreInputComponent implements OnChanges {
   }
 
   private validateScore() {
-    if (this.subScore.score! < 0 || this.subScore.score! > 5) {
+    if (this.subScore.score! < 1 || this.subScore.score! > 5) {
       this.error = true;
       this.subScore.score = null;
     } else {

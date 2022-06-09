@@ -49,8 +49,9 @@ export class AdminService {
   }
 
   private getApplicationDBOToApplication(applicationDBO: ApplicationDBO): Application {
+    console.log(applicationDBO);
     const application = {} as Application;
-    application.ffnId = applicationDBO['Entry Id'];
+    application.ffnId = applicationDBO['Entry Id'] || '';
     application.name = this.getNameFromApplicationDBO(applicationDBO);
     application.postalAddress = this.getPostalAddressFromApplicationDBO(applicationDBO);
     application.nationality = applicationDBO.Nationality || '';

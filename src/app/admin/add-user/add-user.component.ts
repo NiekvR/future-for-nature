@@ -55,7 +55,6 @@ export class AddUserComponent extends SimpleModalComponent<{}, any> implements O
     return this.addUser()
       .pipe(
         filter(uid => !!uid),
-        tap(() => this.afAuth.sendPasswordResetEmail(this.email)),
         switchMap(uid => this.userService.createNewAssessor(uid, this.name, this.email)));
   }
 

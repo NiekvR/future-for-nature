@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from } from 'rxjs';
+import { filter, from, map, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
+import { SimpleModalService } from 'ngx-simple-modal';
+import { ForgotPasswordComponent } from '@app/authentication/forgot-password/forgot-password.component';
 
 @Component({
   selector: 'ffn-login',
@@ -17,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   public error!: string | null;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) { }
+  constructor(private afAuth: AngularFireAuth, private router: Router, private simpleModalService: SimpleModalService) { }
 
   ngOnInit(): void {
   }
@@ -30,9 +32,13 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/'])
         },
         error: () => {
-          this.error = 'Uw gebruikersnaam of wachtwoord is bij ons niet bekend.'
+          this.error = 'Username or password unknown.'
         }
       });
+  }
+
+  public openPasswordModal() {
+    this.simpleModalService.addModal(ForgotPasswordComponent,{}).subscribe();
   }
 
 }

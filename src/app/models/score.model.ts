@@ -4,8 +4,10 @@ export interface Score {
   userId: string;
   total: string;
   subScores: { [id: string]: SubScore };
+  pristine: boolean;
   submitted: boolean;
   skipped: boolean;
+  comments?: string;
 }
 
 export interface SubScore {

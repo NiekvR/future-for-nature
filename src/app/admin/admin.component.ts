@@ -77,10 +77,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public getAllUsers() {
     this.userService.getAllAssessors()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(users => {
-        console.log("FIRE", users);
-        this.users = users
-      });
+      .subscribe(users => this.users = users);
   }
 
   public deleteUser(user: AppUser) {
