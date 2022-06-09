@@ -7,4 +7,5 @@ export interface AppUser {
   submitted: boolean;
   email: string;
   name: string;
+  intro?: boolean;
 }

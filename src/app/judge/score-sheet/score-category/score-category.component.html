@@ -2,7 +2,7 @@
 <ffn-score-input *ngFor="let subCategory of category.subs"
                  [scoreCategory]="subCategory"
                  [subScore]="score.subScores[ subCategory.id ]"
-                 [canScore]="!score.submitted"
+                 [canScore]="!score.submitted && canEdit"
                  [applicantId]="score.applicationId"
                  (scoreChanged)="updateSubTotal()"></ffn-score-input>
 <div class="flex flex-end">

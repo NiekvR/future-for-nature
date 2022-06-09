@@ -11,6 +11,7 @@ export class ScoreCategoryComponent implements OnInit, OnChanges {
 
   @Input() category!: ScoreCategory;
   @Input() score!: Score;
+  @Input() canEdit!: boolean;
   @Output() categoryChanged = new EventEmitter<Score>();
   public subTotal = '0';
 
@@ -21,7 +22,7 @@ export class ScoreCategoryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!!changes['score'].currentValue) {
+    if (!!changes['score']?.currentValue) {
       this.calculateSubTotal();
     }
   }

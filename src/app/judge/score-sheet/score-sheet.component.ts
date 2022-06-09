@@ -111,6 +111,9 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
   private getCanEdit() {
     this.userService.getMySelf()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(user => this.canEdit = !user.submitted);
+      .subscribe(user => {
+        console.log(user);
+        this.canEdit = !user.submitted
+      });
   }
 }

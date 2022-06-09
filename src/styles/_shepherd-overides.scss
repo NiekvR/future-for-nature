@@ -1,0 +1,43 @@
+@import "variables";
+
+.shepherd-element {
+  &.shepherd-ffn-theme {
+    border-radius: 0;
+
+    .shepherd-content {
+      .shepherd-header {
+        background: white;
+        align-items: center;
+
+        h3 {
+          display: block;
+          text-align: center;
+          font-weight: bold;
+          font-size: 16px;
+          color: $black;
+        }
+      }
+      .shepherd-text {
+        color: $black;
+        text-align: center;
+        padding-top: 0;
+      }
+      .shepherd-footer {
+        padding: 0;
+
+        button {
+          flex: 1;
+          margin: 0;
+          border-radius: 0;
+          background-color: $primary;
+          color: $black;
+
+          &.shepherd-button-secondary {
+            background-color: $black;
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+}

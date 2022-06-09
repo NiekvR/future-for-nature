@@ -4,6 +4,7 @@
     <ffn-score-category *ngFor="let category of categories"
                         [category]="category"
                         [score]="score"
+                        [canEdit]="canEdit"
                         (categoryChanged)="calculateTotal()">
     </ffn-score-category>
   </ng-container>
@@ -17,7 +18,7 @@
          *ngIf="score" [class.disabled]="score.pristine">Reset scores</div>
   </div>
   <p class="m-t-20 bold">Comments</p>
-  <textarea rows="5" [(ngModel)]="score.comments" *ngIf="score"></textarea>
+  <textarea rows="5" [disabled]="score.submitted || !canEdit" [(ngModel)]="score.comments" *ngIf="score"></textarea>
 </div>
 <div class="flex flex-column" *ngIf="canEdit">
   <button *ngIf="!score?.submitted" (click)="skipScores()" class="secondary">Skip</button>

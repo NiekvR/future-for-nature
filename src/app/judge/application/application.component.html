@@ -35,25 +35,6 @@
         <label>English proficiency:</label>
         <p>{{ application.englishProficiency }}</p>
       </div>
-      <div class="application-part">
-        <label>Emailaddress:</label>
-        <p>{{ application.email }}</p>
-      </div>
-      <div class="application-part">
-        <label>Postal address:</label>
-        <div class="flex flex-column">
-          <p *ngIf="application.postalAddress.streetAddress">{{ application.postalAddress.streetAddress }}</p>
-          <p *ngIf="application.postalAddress.addressLine2">{{ application.postalAddress.addressLine2 }}</p>
-          <p *ngIf="application.postalAddress.postalCode">{{ application.postalAddress.postalCode }}</p>
-          <p *ngIf="application.postalAddress.city">{{ application.postalAddress.city }}</p>
-          <p *ngIf="application.postalAddress.state">{{ application.postalAddress.state }}</p>
-          <p *ngIf="application.postalAddress.country">{{ application.postalAddress.country }}</p>
-        </div>
-      </div>
-      <div class="application-part">
-        <label>Telephone number:</label>
-        <p>{{ application.telephoneNumber }}</p>
-      </div>
     </div>
   </div>
   <div class="application-part-row m-t-15">

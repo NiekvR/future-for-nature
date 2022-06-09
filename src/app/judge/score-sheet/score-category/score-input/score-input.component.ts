@@ -19,6 +19,7 @@ export class ScoreInputComponent implements OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(this.canScore);
     if(!!changes['applicantId']?.currentValue) {
       this.validateScore();
     }

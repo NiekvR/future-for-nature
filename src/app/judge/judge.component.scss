@@ -50,4 +50,13 @@
     background-color: white;
     box-shadow: inset 1px 0px 14px -3px #000000;
   }
+
+  button {
+    &.small {
+      flex: 0 0 35px;
+    }
+    &.border {
+      border-right: 1px solid $black;
+    }
+  }
 }

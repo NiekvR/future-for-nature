@@ -10,6 +10,8 @@ import {
 } from '@app/shared/components/overall-scores-modal/overall-scores-modal.component';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
+import { ShepherdService } from 'angular-shepherd';
+import { TOUR_STEPS } from '@app/tour-steps';
 
 @Component({
   selector: 'ffn-judge',
@@ -20,213 +22,19 @@ export class JudgeComponent implements OnInit, OnDestroy {
 
   public applications!: Application[];
   public searchedApplications!: Application[];
-  // public applications: Application[] = [
-  //   {
-  //     id: '1',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {
-  //       'proposal': 'Bacon ipsum dolor amet buffalo tail sausage, corned beef turkey fatback chicken pastrami leberkas filet mignon. Brisket cupim beef ribs filet mignon. Buffalo venison short ribs alcatra ribeye swine beef ribs t-bone pancetta turducken shoulder frankfurter beef. T-bone spare ribs pork, ribeye beef ribs frankfurter doner prosciutto burgdoggen tenderloin. Porchetta shankle chislic, pork belly kevin pork bacon venison tail kielbasa beef ribs. Pork belly corned beef doner rump, pork picanha shank salami kevin leberkas. Jowl t-bone cow venison jerky leberkas capicola spare ribs ball tip strip steak.'
-  //     }
-  //   },
-  //   {
-  //     id: '2',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '3',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '4',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '5',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '6',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '7',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '8',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '9',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '10',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '11',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '12',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '13',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '14',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '15',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '16',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '17',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '18',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '19',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '20',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '21',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '22',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '23',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '24',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '25',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   },
-  //   {
-  //     id: '26',
-  //     firstName: 'Test',
-  //     lastName: 'Test',
-  //     country: 'nl',
-  //     data: {}
-  //   }
-  // ]
-
   public selectedApplication!: Application | null;
-  // public selectedApplication: Application = {
-  //   id: '1',
-  //   firstName: 'Test',
-  //   lastName: 'Test',
-  //   country: 'nl',
-  //   data: {
-  //     'proposal': 'Bacon ipsum dolor amet buffalo tail sausage, corned beef turkey fatback chicken pastrami leberkas filet mignon. Brisket cupim beef ribs filet mignon. Buffalo venison short ribs alcatra ribeye swine beef ribs t-bone pancetta turducken shoulder frankfurter beef. T-bone spare ribs pork, ribeye beef ribs frankfurter doner prosciutto burgdoggen tenderloin. Porchetta shankle chislic, pork belly kevin pork bacon venison tail kielbasa beef ribs. Pork belly corned beef doner rump, pork picanha shank salami kevin leberkas. Jowl t-bone cow venison jerky leberkas capicola spare ribs ball tip strip steak.'
-  //   }
-  // };
 
   public submittedScores: { [ id: string]: Score } = {};
 
   public statusSort: 'asc' | 'desc' | null = null;
 
+  private steps = TOUR_STEPS;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private applicationCollectionService: ApplicationCollectionService, private afAuth: AngularFireAuth,
               private scoreCollectionService: ScoreCollectionService, private simpleModalService: SimpleModalService,
-              private router: Router) {}
+              private router: Router, private shepherdService: ShepherdService) {}
 
   ngOnInit() {
     this.getApplications();
@@ -270,6 +78,17 @@ export class JudgeComponent implements OnInit, OnDestroy {
       case null: this.statusSort = 'asc'; break;
     }
     this.searchedApplications = this.sortApplicants(this.searchedApplications);
+  }
+
+  public openTour() {
+    this.shepherdService.defaultStepOptions = {
+      classes: 'shepherd-ffn-theme'
+    };
+    this.shepherdService.modal = true;
+    this.shepherdService.confirmCancel = true;
+    // @ts-ignore
+    this.shepherdService.addSteps(this.steps);
+    this.shepherdService.start();
   }
 
   private getApplications() {

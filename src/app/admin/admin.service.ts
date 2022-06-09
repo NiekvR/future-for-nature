@@ -53,7 +53,6 @@ export class AdminService {
     const application = {} as Application;
     application.ffnId = applicationDBO['Entry Id'] || '';
     application.name = this.getNameFromApplicationDBO(applicationDBO);
-    application.postalAddress = this.getPostalAddressFromApplicationDBO(applicationDBO);
     application.nationality = applicationDBO.Nationality || '';
     application.countryOfWork = applicationDBO['Country of work'] || '';
     application.focalSpecies = applicationDBO['Focal species'] || '';
@@ -61,8 +60,6 @@ export class AdminService {
     application.gender = applicationDBO.Gender || '';
     application.nativeLanguage = applicationDBO['Native language'] || '';
     application.englishProficiency = applicationDBO['English proficiency'] || '';
-    application.email = applicationDBO['Email address (Enter Email)'] || '';
-    application.telephoneNumber = applicationDBO['Telephone number'] || '';
     application.formalEducation = applicationDBO['Formal education'] || '';
     application.employmentRecord = applicationDBO['Employment record'] || '';
     application.formerApplications = applicationDBO['Former FFN Award applications'] || '';

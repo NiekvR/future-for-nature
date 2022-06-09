@@ -13,7 +13,7 @@
     ></i>
   </div>
   <div class="flex flex-column overflow-hidden flex-1">
-    <div class="flex flex-column overflow-auto flex-1">
+    <div class="flex flex-column overflow-auto flex-1 applicant-list">
       <ffn-applicant-list-item
         *ngFor="let applicant of searchedApplications; let i = index"
         [applicant]="applicant"
@@ -28,7 +28,8 @@
       </ffn-applicant-list-item>
     </div>
     <div class="flex">
-      <button (click)="logOff()"><i class="fas fa-power-off"></i></button>
+      <button (click)="logOff()" class="border small"><i class="fas fa-power-off"></i></button>
+      <button (click)="openTour()" class="small"><i class="fas fa-question"></i></button>
       <button class="secondary flex-1" (click)="openAllScores()">Overall Scores</button>
     </div>
   </div>
