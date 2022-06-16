@@ -1,13 +1,13 @@
-<div class="flex flex-column p-10">
+<div class="flex flex-column p-10 overflow-hidden">
   <h1 class="m-b-10 text-center">Scores</h1>
-  <ng-container *ngIf="score">
+  <div *ngIf="score" class="flex flex-column overflow-auto">
     <ffn-score-category *ngFor="let category of categories"
                         [category]="category"
                         [score]="score"
                         [canEdit]="canEdit"
                         (categoryChanged)="calculateTotal()">
     </ffn-score-category>
-  </ng-container>
+  </div>
   <div class="flex justify-space-between total m-t-10" *ngIf="score">
     <div>Total score:</div>
     <div class="value">{{ score.total }}</div>
