@@ -7,7 +7,7 @@
   <ffn-applicant-score-overview *ngIf="applicants && scores" [applicants]="applicants" [scores]="scores"></ffn-applicant-score-overview>
 
   <div class="footer" *ngIf="user" [class.submitted]="user.submitted">
-    <button *ngIf="!user.submitted" [disabled]="!readyToSubmit" (click)="submitScores()">Submit scores</button>
+    <button *ngIf="!user.submitted" [disabled]="!readyToSubmit" (click)="submitScores()">Submit final scores to FFN</button>
     <span class="flex align-center justify-center bold" *ngIf="user.submitted">Scores submitted</span>
   </div>
 </div>
