@@ -132,7 +132,7 @@ const tourStepsTextAndTitle = [
   {
     id: 'step_20',
     title: 'General (20/24)',
-    text: 'Select this <i class="fas fa-question"> button to start the guidance through the webtool again any time while using the tool.'
+    text: 'Select this <i class="fas fa-question"></i> button to start the guidance through the webtool again any time while using the tool.'
   },
   {
     id: 'step_21',
@@ -440,6 +440,18 @@ export const TOUR_STEPS = [
   {
     ...tourStepsTextAndTitle[ 17 ],
     arrow: false,
+    buttons: [
+      {
+        ...builtInButtons.back,
+        secondary: true
+      },
+      builtInButtons.next
+    ],
+    scrollTo: false,
+  },
+  {
+    ...tourStepsTextAndTitle[ 18 ],
+    arrow: false,
     attachTo: {
       element: '.left-panel button.small.border',
       on: 'right'
@@ -454,19 +466,7 @@ export const TOUR_STEPS = [
     scrollTo: false,
   },
   {
-    ...tourStepsTextAndTitle[ 17 ],
-    arrow: false,
-    buttons: [
-      {
-        ...builtInButtons.back,
-        secondary: true
-      },
-      builtInButtons.next
-    ],
-    scrollTo: false,
-  },
-  {
-    ...tourStepsTextAndTitle[ 18 ],
+    ...tourStepsTextAndTitle[ 19 ],
     arrow: false,
     attachTo: {
       element: '.left-panel button.small:not(.border)',
@@ -482,7 +482,7 @@ export const TOUR_STEPS = [
     scrollTo: false,
   },
   {
-    ...tourStepsTextAndTitle[ 19 ],
+    ...tourStepsTextAndTitle[ 20 ],
     arrow: false,
     attachTo: {
       element: '.left-panel button:not(.small)',
@@ -502,7 +502,7 @@ export const TOUR_STEPS = [
     advanceOn: { selector: '.left-panel button:not(.small)', event: 'click' }
   },
   {
-    ...tourStepsTextAndTitle[ 20 ],
+    ...tourStepsTextAndTitle[ 21 ],
     arrow: false,
     attachTo: {
       element: 'ffn-overall-scores-modal',
@@ -518,7 +518,7 @@ export const TOUR_STEPS = [
     scrollTo: false,
   },
   {
-    ...tourStepsTextAndTitle[ 21 ],
+    ...tourStepsTextAndTitle[ 22 ],
     arrow: false,
     attachTo: {
       element: 'ffn-overall-scores-modal .footer button',
@@ -534,7 +534,7 @@ export const TOUR_STEPS = [
     scrollTo: false,
   },
   {
-    ...tourStepsTextAndTitle[ 22 ],
+    ...tourStepsTextAndTitle[ 23 ],
     arrow: false,
     buttons: [
       {
