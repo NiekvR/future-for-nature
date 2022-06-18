@@ -151,8 +151,8 @@ const tourStepsTextAndTitle = [
     id: 'step_23',
     title: 'Overall score (23/24)',
     text: 'When you have judged all applications (so all applications are either Submitted or Skipped) you will be ' +
-      'able to use this button to submit your final scores to the Future For Nature office. After submitting, all your' +
-      'scores will be frozen and you cannot adjust them anymore. You will still be able to log-in and read the ' +
+      'able to use this button to submit your final scores to the Future For Nature office. <b>After submitting, all your' +
+      'scores will be frozen and you cannot adjust them anymore.</b> You will still be able to log-in and read the ' +
       'applications and your comments.'
   },
   {
