@@ -1,5 +1,6 @@
 <ng-container *ngIf="!!applicantsList">
   <div class="ellipsis">{{  applicant.ffnId + ' - ' + applicant.name.fullName }}</div>
+  <i class="fa-solid fa-star selected" *ngIf="score?.favourite"></i>
 </ng-container>
 <ng-container *ngIf="!applicantsList">
   <div class="left-side">

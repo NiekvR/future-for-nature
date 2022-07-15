@@ -37,7 +37,6 @@ export class OverallScoresModalComponent
     this.getMySelf();
     this.getScoredApplicants();
     this.readyToSubmit = this.getSubmittedScoresForApplicants().length === this.scoredApplicants;
-    console.log(this.readyToSubmit, this.getSubmittedScoresForApplicants().length);
   }
 
   ngOnDestroy() {

@@ -171,6 +171,15 @@ i {
   background-color: $black;
   color: $primary;
   padding: 15px;
+
+  &.submitted {
+    color: $black;
+    background-color: $primary;
+  }
+
+  &.skipped:not(.submitted) {
+    background-color: grey;
+  }
 }
 
 .popperSpecialStyle {
@@ -179,5 +188,9 @@ i {
 
 .text-underline {
   text-decoration: underline;
+}
+
+.selected {
+  color: $primary;
 }
 

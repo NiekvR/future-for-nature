@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Application } from '@app/models/application.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { from, map, ReplaySubject, takeUntil } from 'rxjs';
@@ -27,6 +27,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
   public submittedScores: { [ id: string]: Score } = {};
 
   public statusSort: 'asc' | 'desc' | null = null;
+  public starSort = false;
 
   private steps = TOUR_STEPS;
 
@@ -34,7 +35,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
 
   constructor(private applicationCollectionService: ApplicationCollectionService, private afAuth: AngularFireAuth,
               private scoreCollectionService: ScoreCollectionService, private simpleModalService: SimpleModalService,
-              private router: Router, private shepherdService: ShepherdService) {}
+              private router: Router, private shepherdService: ShepherdService, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.getApplications();
@@ -46,6 +47,8 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   public selectApplicant(applicant: Application) {
+    this.selectedApplication = null;
+    this.cdRef.detectChanges();
     if (this.selectedApplication !== applicant) {
       this.selectedApplication = applicant;
     } else {
@@ -72,12 +75,27 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   public sortOnStatus() {
-    switch (this.statusSort) {
-      case 'asc': this.statusSort = 'desc'; break;
-      case 'desc': this.statusSort = null; break;
-      case null: this.statusSort = 'asc'; break;
+    if(!this.starSort) {
+      switch (this.statusSort) {
+        case 'asc':
+          this.statusSort = 'desc';
+          break;
+        case 'desc':
+          this.statusSort = null;
+          break;
+        case null:
+          this.statusSort = 'asc';
+          break;
+      }
+      this.searchedApplications = this.sortApplicants(this.searchedApplications);
     }
-    this.searchedApplications = this.sortApplicants(this.searchedApplications);
+  }
+
+  public sortOnStar() {
+    if(!this.statusSort) {
+      this.starSort = !this.starSort;
+      this.searchedApplications = this.sortApplicantsOnStar(this.searchedApplications);
+    }
   }
 
   public openTour() {
@@ -115,6 +133,10 @@ export class JudgeComponent implements OnInit, OnDestroy {
     return applicants.sort((a, b) => this.determineSortCriteria(a, b))
   }
 
+  private sortApplicantsOnStar(applicants: Application[]) {
+    return applicants.sort((a, b) => this.starSort ? this.sortAscOnStar(a, b) : (a.ffnId > b.ffnId) ? 1 : -1)
+  }
+
   private determineSortCriteria(a: Application, b: Application): number {
     let score = 0;
     switch (this.statusSort) {
@@ -143,4 +165,12 @@ export class JudgeComponent implements OnInit, OnDestroy {
           scoreA?.skipped ? -1 : 0;
   }
 
+  private sortAscOnStar(a: Application, b: Application): number {
+    const scoreA = this.submittedScores[ a.id! ];
+    const scoreB = this.submittedScores[ b.id! ]
+    return scoreB?.favourite ? 1
+      : scoreA?.favourite ? - 1 :
+        scoreA?.skipped ? 1 :
+          scoreB?.skipped ? -1 : 0;
+  }
 }
