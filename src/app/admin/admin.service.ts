@@ -1,75 +1,103 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage, AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { combineLatest, Observable, tap } from 'rxjs';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
-import { Application, Name, PostalAddress, Referee } from '@app/models/application.model';
+import { combineLatest, filter, forkJoin, Observable, Subject, take, tap } from 'rxjs';
+import { Application, Name, Referee } from '@app/models/application.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { ApplicationDBO } from '@app/models/applicationDBO.model';
+
+import * as Papa from 'papaparse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  constructor(private storage: AngularFireStorage, private angularFireFunctions: AngularFireFunctions,
-              private applicationCollectionService: ApplicationCollectionService) { }
+  constructor(private applicationCollectionService: ApplicationCollectionService) {
+  }
 
-  public uploadFile(file: File, path: string, metadata?: {}): Observable<string> {
-    return new Observable<string>(observer => {
-      this.storage.upload(path, file, metadata).then(
-        () => {
-          const fileRef = this.storage.ref(path);
-          fileRef.getMetadata().subscribe();
-          fileRef.getDownloadURL()
-            .subscribe((url) => {
-              observer.next(url);
-              observer.complete();
-            });
-        },
-        (error) => console.log(error)
-      );
+  public getApplicantsFromCSV(file: File): Observable<ApplicationDBO[]> {
+    const subject = new Subject<ApplicationDBO[]>();
+    Papa.parse<ApplicationDBO>(file, {
+      header: true,
+      transformHeader(header: string, index: number): string {
+        return header
+          .trim()
+          .replace(/\s/g, '')
+          .replace(/\(/g, '')
+          .replace(/\)/g, '')
+          .replace(/["']/g, '')
+          .replace(/\?/g, '')
+          .toLowerCase();
+      },
+      complete: function (results) {
+        subject.next(results.data);
+        subject.complete();
+      }
     });
+
+    return subject.asObservable().pipe(filter(applicants => !!applicants));
   }
 
-  public addApplicantsToStorage(link: string) {
-    const callable = this.angularFireFunctions.httpsCallable('uploadApplicants');
-    return callable({ csv: link } );
+  public applicantsDBOtoApplication(applicationDBOs: ApplicationDBO[]): Application[] {
+    return applicationDBOs
+      .map(applicationDBO => this.getApplicationDBOToApplication(applicationDBO))
+      .filter(application => application.name.fullName.trim().length > 0);
   }
 
-  public addApplicantsToDB(applicationDBOs: ApplicationDBO[]): Observable<any> {
-    return combineLatest(applicationDBOs.map(applicationDBO => this.addApplicantToDb(applicationDBO)));
+  public addApplicantsToDB(applications: Application[]): Observable<any> {
+    return combineLatest(applications.map(application => this.addApplicantToDb(application).pipe(take(1))));
+  }
+
+  public updateApplicantsToDB(applications: Application[]): Observable<any> {
+    return combineLatest(applications.map(application => this.updateApplicantToDb(application)));
   }
 
   public deleteApplicantsFromDB(): Observable<boolean> {
     return this.applicationCollectionService.clearCollection();
   }
 
-  private addApplicantToDb(applicationDBO: ApplicationDBO): Observable<Application> {
-    return this.applicationCollectionService.add(this.getApplicationDBOToApplication(applicationDBO));
+  public exportScoresAsCsv(scores: { [column: string]: string }[], userName: string) {
+    const csv = Papa.unparse(scores);
+
+    const csvData = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    let csvURL = window.URL.createObjectURL(csvData);
+
+    var tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute('download', `${userName}_scores_${this.getDate()}.csv`);
+    tempLink.click();
+  }
+
+  private addApplicantToDb(application: Application): Observable<Application> {
+    return this.applicationCollectionService.add(application);
+  }
+
+  private updateApplicantToDb(application: Application): Observable<Application> {
+    return this.applicationCollectionService.update(application)
   }
 
   private getApplicationDBOToApplication(applicationDBO: ApplicationDBO): Application {
     const application = {} as Application;
-    application.ffnId = applicationDBO['Entry Id'] || '';
+    application.ffnId = applicationDBO.entryid || '';
     application.name = this.getNameFromApplicationDBO(applicationDBO);
-    application.nationality = applicationDBO.Nationality || '';
-    application.countryOfWork = applicationDBO['Country of work'] || '';
-    application.focalSpecies = applicationDBO['Focal species'] || '';
-    application.dateOfBirth = applicationDBO['Date of birth'] || '';
-    application.gender = applicationDBO.Gender || '';
-    application.nativeLanguage = applicationDBO['Native language'] || '';
-    application.englishProficiency = applicationDBO['English proficiency'] || '';
-    application.formalEducation = applicationDBO['Formal education'] || '';
-    application.employmentRecord = applicationDBO['Employment record'] || '';
-    application.formerApplications = applicationDBO['Former FFN Award applications'] || '';
-    application.otherAwards = applicationDBO['Other awards'] || '';
-    application.achievements = applicationDBO['Candidate\'s achievements'] || '';
-    application.vision = applicationDBO['Conservation vision'] || '';
-    application.addedValue = applicationDBO['Added value of the FFN Award'] || '';
-    application.additionalInformation = applicationDBO['Additional information'] || '';
+    application.nationality = applicationDBO.nationality || '';
+    application.countryOfWork = applicationDBO.countryofwork || '';
+    application.focalSpecies = applicationDBO.focalspecies || '';
+    application.dateOfBirth = applicationDBO.dateofbirth || '';
+    application.gender = applicationDBO.gender || '';
+    application.nativeLanguage = applicationDBO.nativelanguage || '';
+    application.englishProficiency = applicationDBO.englishproficiency || '';
+    application.formalEducation = applicationDBO.formaleducation || '';
+    application.employmentRecord = applicationDBO.employmentrecord || '';
+    application.formerApplications = applicationDBO.formerffnawardapplications || '';
+    application.otherAwards = applicationDBO.otherawards || '';
+    application.achievements = applicationDBO.candidatesachievements || '';
+    application.vision = applicationDBO.conservationvision || '';
+    application.addedValue = applicationDBO.addedvalueoftheffnaward || '';
+    application.additionalInformation = applicationDBO.additionalinformation || '';
     application.referee = [
       this.getReferee1FromApplicationDBO(applicationDBO),
       this.getReferee2FromApplicationDBO(applicationDBO)];
+    application.checked = false;
 
     return application;
   }
@@ -77,64 +105,67 @@ export class AdminService {
   private getReferee1FromApplicationDBO(applicationDBO: ApplicationDBO): Referee {
     const referee = {} as Referee;
     referee.name = this.getReferee1NameFromApplicationDBO(applicationDBO);
-    referee.position = applicationDBO['Position referee 1'] || '';
-    referee.organisation = applicationDBO['Organisation referee 1'] || '';
-    referee.statement = applicationDBO['Reference statement referee 1'] || '';
+    referee.position = applicationDBO.positionreferee1 || '';
+    referee.organisation = applicationDBO.organisationreferee1 || '';
+    referee.statement = applicationDBO.referencestatementreferee1 || '';
     return referee;
   }
 
   private getReferee1NameFromApplicationDBO(applicationDBO: ApplicationDBO): Name {
     const refereeName = {} as Name;
-    refereeName.prefix = applicationDBO['Referee 1 (Prefix)'] || '';
-    refereeName.firstName = applicationDBO['Referee 1 (First name)'] || '';
-    refereeName.middleName = applicationDBO['Referee 1 (Middle)'] || '';
-    refereeName.surName = applicationDBO['Referee 1 (Surname)'] || '';
-    refereeName.suffix = applicationDBO['Referee 1 (Suffix)'] || '';
+    refereeName.prefix = applicationDBO.referee1prefix || '';
+    refereeName.firstName = applicationDBO.referee1firstname || '';
+    refereeName.middleName = applicationDBO.referee1middle || '';
+    refereeName.surName = applicationDBO.referee1surname || '';
+    refereeName.suffix = applicationDBO.referee1suffix || '';
     return this.getFullName(refereeName);
   }
 
   private getReferee2FromApplicationDBO(applicationDBO: ApplicationDBO): Referee {
     const referee = {} as Referee;
     referee.name = this.getReferee2NameFromApplicationDBO(applicationDBO);
-    referee.position = applicationDBO['Position referee 2'];
-    referee.organisation = applicationDBO['Organisation referee 2'];
-    referee.statement = applicationDBO['Reference statement referee 2'];
+    referee.position = applicationDBO.positionreferee2 || '';
+    referee.organisation = applicationDBO.organisationreferee2 || '';
+    referee.statement = applicationDBO.referencestatementreferee2 || '';
     return referee;
   }
 
   private getReferee2NameFromApplicationDBO(applicationDBO: ApplicationDBO): Name {
     const refereeName = {} as Name;
-    refereeName.prefix = applicationDBO['Referee 2 (Prefix)'] || '';
-    refereeName.firstName = applicationDBO['Referee 2 (First name)'] || '';
-    refereeName.middleName = applicationDBO['Referee 2 (Middle)'] || '';
-    refereeName.surName = applicationDBO['Referee 2 (Surname)'] || '';
-    refereeName.suffix = applicationDBO['Referee 2 (Suffix)'] || '';
+    refereeName.prefix = applicationDBO.referee2prefix || '';
+    refereeName.firstName = applicationDBO.referee2firstname || '';
+    refereeName.middleName = applicationDBO.referee2middle || '';
+    refereeName.surName = applicationDBO.referee2surname || '';
+    refereeName.suffix = applicationDBO.referee2suffix || '';
     return this.getFullName(refereeName);
   }
 
   private getNameFromApplicationDBO(applicationDBO: ApplicationDBO): Name {
     const name = {} as Name;
-    name.prefix = applicationDBO['" (Prefix)"'] || '';
-    name.firstName = applicationDBO[' (First name)'] || '';
-    name.middleName = applicationDBO[' (Middle)'] || '';
-    name.surName = applicationDBO[' (Surname)'] || '';
-    name.suffix = applicationDBO[' (Suffix)'] || '';
+    name.prefix = applicationDBO.prefix || '';
+    name.firstName = applicationDBO.firstname || '';
+    name.middleName = applicationDBO.middle || '';
+    name.surName = applicationDBO.surname || '';
+    name.suffix = applicationDBO.suffix || '';
     return this.getFullName(name);
-  }
-
-  private getPostalAddressFromApplicationDBO(applicationDBO: ApplicationDBO): PostalAddress {
-    const address = {} as PostalAddress;
-    address.streetAddress = applicationDBO['Postal address (Street Address)'] || '';
-    address.addressLine2 = applicationDBO['Postal address (Address Line 2)'] || '';
-    address.postalCode = applicationDBO['Postal address (ZIP / Postal Code)'] || '';
-    address.city = applicationDBO['Postal address (City)'] || '';
-    address.state = applicationDBO['Postal address (State / Province)'] || '';
-    address.country = applicationDBO['Postal address (Country)'] || '';
-    return address;
   }
 
   private getFullName(name: Name): Name {
     name.fullName = `${name.suffix} ${name.firstName} ${name.middleName} ${name.surName}`
     return name
+  }
+
+  private getDate(): string {
+    const d = new Date();
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 }

@@ -59,10 +59,7 @@ export class OverallScoresModalComponent
 
   private getSubmittedScoresForApplicants(): Score[] {
     return this.getScoresForApplicants()
-      .filter(score => {
-        console.log(score.submitted, score.pristine, score.submitted || score.pristine)
-        return score.submitted || score.pristine
-      })
+      .filter(score => score.submitted || score.pristine)
   }
 
   private getMySelf() {

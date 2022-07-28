@@ -194,7 +194,7 @@ export class HighlightService extends FirebaseCollectionService<Highlights> {
     Object.keys(application)
       .forEach(key => {
         // @ts-ignore
-        highlights[ key ] = this.createNewSelectedText(this.application[ key ]);
+        highlights[ key ] = this.createNewSelectedText(application[ key ]);
       });
     highlights[ 'name' ] = this.createNewSelectedText(application.name.fullName);
     highlights[ 'age' ] = this.createNewSelectedText('' + this.applicationService.getAge(application.dateOfBirth));
