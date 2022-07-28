@@ -1,6 +1,6 @@
 {
   "name": "future-for-nature",
-  "version": "0.1.0-Beta-1.5",
+  "version": "0.1.0-Beta-1.6",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -31,6 +31,7 @@
     "fs-extra": "^10.0.0",
     "ngx-popper": "^7.0.0",
     "ngx-simple-modal": "^1.4.17",
+    "papaparse": "^5.3.2",
     "popper.js": "^1.16.1",
     "rxfire": "^6.0.3",
     "rxjs": "~7.4.0",
@@ -44,6 +45,7 @@
     "@angular/compiler-cli": "~13.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@types/papaparse": "^5.3.2",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

@@ -110,7 +110,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   private getApplications() {
-    this.applicationCollectionService.getAll()
+    this.applicationCollectionService.getAllSelectedApplications()
       .pipe(
         takeUntil(this.destroyed$),
         map(applicants => this.sortApplicants(applicants)))

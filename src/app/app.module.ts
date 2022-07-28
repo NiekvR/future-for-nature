@@ -43,7 +43,7 @@ import { AuthenticationModule } from '@app/authentication/authentication.module'
     //     ssl: false
     //   }
     // },
-    // { provide: USE_EMULATOR, useValue: ['localhost', 5001] },
+    { provide: USE_EMULATOR, useValue: ['localhost', 5001] },
     {
       provide: DefaultSimpleModalOptionConfig,
       useValue: {...defaultSimpleModalOptions, ...{ closeOnEscape: true, closeOnClickOutside: true }}
