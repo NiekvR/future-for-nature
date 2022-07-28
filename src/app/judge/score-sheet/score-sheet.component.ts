@@ -57,9 +57,9 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
       category.subs!.forEach(subCategory => {
         totalCategoryScore += ( this.score.subScores[ subCategory.id ].score! || 0);
         totalSubCategories++;
-      })
+      });
 
-      totalScore += (totalCategoryScore / totalSubCategories) * category.relevance!
+      totalScore += (totalCategoryScore / totalSubCategories) * category.relevance!;
     });
     this.score.total = totalScore.toFixed(2);
     if(this.score.pristine) {
@@ -71,7 +71,13 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
 
   public submitScores() {
     this.score.skipped = false;
-    this.score.submitted = !this.score.submitted;
+    this.score.submitted = true;
+    this.scoreCollectionService.update(this.score).subscribe();
+  }
+
+  public editScores() {
+    this.score.skipped = false;
+    this.score.submitted = false;
     this.scoreCollectionService.update(this.score).subscribe();
   }
 
@@ -81,10 +87,17 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public resetScores() {
-    this.categories.forEach(category => category.subs!
-      .forEach(subCategory => delete this.score.subScores[ subCategory.id ].score));
-    this.score.pristine = true;
-    this.score.total = '0.00'
+    if(!this.score.submitted && !this.score.skipped) {
+      this.categories.forEach(category => category.subs!
+        .forEach(subCategory => delete this.score.subScores[subCategory.id].score));
+      this.score.pristine = true;
+      this.score.total = '0.00';
+      this.updateScores().subscribe();
+    }
+  }
+
+  public toggleFavourite() {
+    this.score.favourite = !this.score.favourite;
     this.updateScores().subscribe();
   }
 
@@ -111,9 +124,6 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
   private getCanEdit() {
     this.userService.getMySelf()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(user => {
-        console.log(user);
-        this.canEdit = !user.submitted
-      });
+      .subscribe(user => this.canEdit = !user.submitted);
   }
 }

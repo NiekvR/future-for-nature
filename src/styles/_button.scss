@@ -7,6 +7,7 @@ button {
   color: $black;
   cursor: pointer;
   font-weight: bold;
+  margin: 0;
 
   &.secondary {
     background-color: $black;

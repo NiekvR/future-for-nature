@@ -3,6 +3,7 @@ import { AdminComponent } from '@app/admin/admin.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { AddUserComponent } from './add-user/add-user.component';
 import { UserScoresOverviewComponent } from './user-scores-overview/user-scores-overview.component';
+import { SelectApplicationComponent } from './select-application/select-application.component';
 
 
 
@@ -10,7 +11,8 @@ import { UserScoresOverviewComponent } from './user-scores-overview/user-scores-
   declarations: [
     AdminComponent,
     AddUserComponent,
-    UserScoresOverviewComponent
+    UserScoresOverviewComponent,
+    SelectApplicationComponent
   ],
   imports: [
     SharedModule

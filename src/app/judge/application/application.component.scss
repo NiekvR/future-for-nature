@@ -6,6 +6,11 @@
   .application-part {
     display: flex;
     margin: 3px;
+    position: relative;
+
+    .highlight {
+      left: 150px;
+    }
 
     label {
       font-weight: bold;
@@ -17,11 +22,82 @@
   .application-part-row {
     display: flex;
     flex-direction: column;
+    position: relative;
+
+    .highlight {
+      top: 28px;
+    }
 
     label {
       font-weight: bold;
       font-style: italic;
       margin-bottom: 10px;
+    }
+  }
+
+  .highlight {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .hide {
+    color: white;
+  }
+
+  .indicator {
+    background-color: fade(gold, 10%);
+    position: absolute;
+    z-index: 2;
+
+    &__cta {
+      top: -20px;
+      left: 50%;
+      position: absolute;
+    }
+
+    &__cta-link {
+      background-color: #333333;
+      border-radius: 5px 5px 5px 5px;
+      bottom: 0px;
+      box-shadow: 2px 2px 5px fade(#000000, 30%);
+      color: #FFFFFF;
+      cursor: pointer;
+      left: 0px;
+      position: absolute;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      padding: 5px;
+      display: flex;
+
+      &:after {
+        bottom: -11px;
+        font-size: 15px;
+        left: 50%;
+        line-height: 15px;
+        content: "▼";
+        color: #333333;
+        position: absolute;
+        transform: translateX(-50%);
+      }
+
+      .link {
+        padding: 7px 0;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 32px;
+
+
+        &:hover {
+          background-color: gold;
+          color: #000000;
+
+          &:after {
+            color: gold;
+          }
+        }
+      }
     }
   }
 }

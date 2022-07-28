@@ -37,7 +37,6 @@ export class OverallScoresModalComponent
     this.getMySelf();
     this.getScoredApplicants();
     this.readyToSubmit = this.getSubmittedScoresForApplicants().length === this.scoredApplicants;
-    console.log(this.readyToSubmit, this.getSubmittedScoresForApplicants().length);
   }
 
   ngOnDestroy() {
@@ -60,10 +59,7 @@ export class OverallScoresModalComponent
 
   private getSubmittedScoresForApplicants(): Score[] {
     return this.getScoresForApplicants()
-      .filter(score => {
-        console.log(score.submitted, score.pristine, score.submitted || score.pristine)
-        return score.submitted || score.pristine
-      })
+      .filter(score => score.submitted || score.pristine)
   }
 
   private getMySelf() {

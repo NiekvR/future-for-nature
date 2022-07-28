@@ -10,7 +10,10 @@
        [class.fa-arrow-down-wide-short]="statusSort !== 'desc'"
        [class.fa-arrow-up-wide-short]="statusSort === 'desc'"
        [class.active]="!!statusSort"
+       [class.disabled]="starSort"
     ></i>
+    <i class="fa-solid fa-star cursor-pointer" [class.active]="starSort"
+       [class.disabled]="!!statusSort" (click)="sortOnStar()"></i>
   </div>
   <div class="flex flex-column overflow-hidden flex-1">
     <div class="flex flex-column overflow-auto flex-1 applicant-list">
@@ -38,7 +41,9 @@
 <div class="flex flex-column flex-1 overflow-hidden">
   <div *ngIf="!selectedApplication" class="text-center p-50">Click on an applicant to start.</div>
   <ng-container *ngIf="selectedApplication">
-    <div class="flex align-center justify-space-between app-header">
+    <div class="flex align-center justify-space-between app-header"
+         [class.submitted]="submittedScores[ selectedApplication.id! ].submitted"
+         [class.skipped]="submittedScores[ selectedApplication.id! ].skipped">
       <h1>Application:</h1>
       <h2>{{ selectedApplication?.name?.fullName + ' - ' + selectedApplication?.ffnId }}</h2>
     </div>

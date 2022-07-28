@@ -7,6 +7,7 @@ import { Application } from '@app/models/application.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { SCORE_CATEGORIES } from '@app/judge/score-categories';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
+import { AdminService } from '@app/admin/admin.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private userService: UserService, private applicationCollectionService: ApplicationCollectionService,
-              private scoreCollectionService: ScoreCollectionService) { }
+              private scoreCollectionService: ScoreCollectionService, private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -55,6 +56,22 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
     this.userService.update(this.selectedUser!).subscribe();
   }
 
+  public exportAsCsv() {
+    const exports: { [column: string ]: string }[] = [];
+    this.applicants.forEach(applicant => {
+      const csvRow: { [column: string ]: string } = {};
+      const applicantScores = this.scores[ this.selectedUser!.uid! ][ applicant.id! ];
+      csvRow[ 'id' ] = applicant.ffnId;
+      csvRow[ 'name' ] = applicant.name.fullName;
+      this.scoreCategories.forEach(category =>
+        category.subs!.forEach(sub => csvRow[ sub.id ] = '' + (applicantScores?.subScores[ sub.id ]?.score || 0)))
+      csvRow[ 'average' ] = applicantScores?.total || '0';
+      csvRow[ 'comments' ] = applicantScores?.comments || '';
+      exports.push(csvRow);
+    });
+    this.adminService.exportScoresAsCsv(exports, this.selectedUser!.name);
+  }
+
   private getUsers() {
     this.userService.getAllAssessors()
       .pipe(takeUntil(this.destroyed$))
@@ -65,7 +82,7 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getApplications() {
-    this.applicationCollectionService.getAll()
+    this.applicationCollectionService.getAllSelectedApplications()
       .pipe(takeUntil(this.destroyed$))
       .subscribe(applicants => {
         this.applicants = applicants;

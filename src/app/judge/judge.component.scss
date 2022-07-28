@@ -27,6 +27,10 @@
         &.active {
           background-color: $primary;
         }
+
+        &.disabled {
+          color: $disabled;
+        }
       }
     }
   }
