@@ -3,9 +3,9 @@
   <div class="flex flex-wrap justify-center overflow-auto">
     <div *ngFor="let application of applications"
          class="applicant flex cursor-pointer m-r-10 align-center overflow-hidden"
-         (click)="application.checked=!application.checked">
-      <i class="fas fa-square-check m-r-5" *ngIf="application.checked"></i>
-      <i class="fas fa-square m-r-5" *ngIf="!application.checked"></i>
+         (click)="selectApplication(application)">
+      <i class="fas fa-square-check m-r-5" *ngIf="application.checked === 'yes'"></i>
+      <i class="fas fa-square m-r-5" *ngIf="application.checked === 'no'"></i>
       <div class="ellipsis">{{  application.ffnId + ' - ' + application.name.fullName }}</div>
     </div>
   </div>

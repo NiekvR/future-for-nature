@@ -1,0 +1,18 @@
+<div class="input cursor-pointer m-t-10 m-b-10 p-3"
+     [popper]="selectContent"
+     [popperTrigger]="'click'"
+     [popperHideOnClickOutside]="true"
+     [popperPlacement]="'bottom'"
+     [popperApplyClass]="'popperSpecialPaddingStyle'"
+     [popperApplyArrowClass]="'popperArrowStyle'">
+  <div class="flex">{{ this.option }}</div>
+  <i class="fa-solid fa-sort fa-2xs"></i>
+</div>
+
+<popper-content #selectContent>
+  <div class="option-container">
+    <div class="cursor-pointer flex align-center justify-center p-l-5 p-r-5 p-b-3 p-t-3" [class.active]="opt === option" *ngFor="let opt of options" (click)="onSelect(opt); selectContent.hide()">
+      <span>{{ opt }}</span>
+    </div>
+  </div>
+</popper-content>

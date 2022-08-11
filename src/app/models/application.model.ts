@@ -21,7 +21,7 @@ export interface Application {
   addedValue: string;
   additionalInformation: string;
   referee: Referee[];
-  checked: boolean;
+  checked: string;
 }
 
 export interface Name {

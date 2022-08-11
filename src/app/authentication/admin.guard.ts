@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { map, Observable, switchMap, take, tap } from 'rxjs';
+import { map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { UserService } from '@app/core/user.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Role } from '@app/models/role.enum';
@@ -13,15 +13,15 @@ export class AdminGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return this.isAdmin().pipe(
-      tap(isAdmin => !isAdmin ? this.router.navigate(['/admin']) : isAdmin));
+      tap(isAdmin => !isAdmin ? this.router.navigate(['/login']) : isAdmin));
   }
 
   private isAdmin() {
     return this.afAuth.user
       .pipe(
         take(1),
-        switchMap(user => this.userService.get(user!.uid)),
-        map(appUser => appUser.role === Role.admin));
+        switchMap(user => !!user ? this.userService.get(user!.uid) : of(null)),
+        map(appUser => !!appUser && appUser.role === Role.admin));
   }
 
 }

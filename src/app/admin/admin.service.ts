@@ -97,7 +97,7 @@ export class AdminService {
     application.referee = [
       this.getReferee1FromApplicationDBO(applicationDBO),
       this.getReferee2FromApplicationDBO(applicationDBO)];
-    application.checked = false;
+    application.checked = 'no';
 
     return application;
   }

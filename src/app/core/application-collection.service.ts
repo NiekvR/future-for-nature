@@ -22,13 +22,12 @@ export class ApplicationCollectionService extends FirebaseCollectionService<Appl
   }
 
   public getAllSelectedApplications(): Observable<Application[]> {
-    return this.db.collection<Application>('application', ref => ref
-      .where('checked', '==', true))
-      .snapshotChanges().pipe(
-      map(list => list.map(docChangeAction => this.docSnapshotToItem(docChangeAction.payload.doc))));
+    return this.getAll()
+      .pipe(map(applications => applications.filter(application => application.checked === 'yes')));
   }
 
   private deleteAllDocsFromCollection(applications: Application[]): Observable<boolean> {
+
     return combineLatest(applications.map(application => this.deleteDoc(application)))
       .pipe(switchMap(results => results.filter(res => !res).length > 0 ?
         throwError(() => new Error('Not all docs deleted')) :

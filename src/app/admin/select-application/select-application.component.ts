@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Application } from '@app/models/application.model';
 import { SimpleModalComponent, SimpleModalService } from 'ngx-simple-modal';
-import { AddUserComponent } from '@app/admin/add-user/add-user.component';
 import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
 
 @Component({
@@ -19,6 +18,10 @@ export class SelectApplicationComponent extends SimpleModalComponent<{ applicati
 
   ngOnInit() {
     this.applications = this.applications.sort((a, b) => (a.ffnId > b.ffnId) ? 1 : -1);
+  }
+
+  public selectApplication(application: Application) {
+    application.checked = application.checked === 'yes' ? 'no' : 'yes';
   }
 
   public cancel() {

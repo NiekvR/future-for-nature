@@ -3,7 +3,7 @@ import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AppUser } from '@app/models/app-user';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, map, Observable, combineLatest, switchMap, forkJoin, take } from 'rxjs';
+import { from, map, Observable, combineLatest, switchMap, forkJoin, take, filter } from 'rxjs';
 import { Role } from '@app/models/role.enum';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
@@ -20,7 +20,9 @@ export class UserService extends FirebaseCollectionService<AppUser>  {
 
   public getMySelf(): Observable<AppUser> {
     return this.afAuth.user
-      .pipe(switchMap(user => this.get(user!.uid)));
+      .pipe(
+        filter(user => !!user),
+        switchMap(user => this.get(user!.uid)));
   }
 
   public getAllAssessors(): Observable<AppUser[]> {

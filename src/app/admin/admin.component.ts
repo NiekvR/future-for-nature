@@ -42,8 +42,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    this.destroyGetAll$.next(true);
-    this.destroyGetAll$.complete();
+    if(this.destroyGetAll$) {
+      this.destroyGetAll$.next(true);
+      this.destroyGetAll$.complete();
+    }
   }
 
   public uploadNewApplicants(event: Event, element: any) {

@@ -11,6 +11,7 @@ import {
 } from './components/applicant-score-overview/applicant-score-overview.component';
 import { NgxPopperModule } from 'ngx-popper';
 import { TextSelectDirective } from '@app/shared/pipes/highlight-text.pipe';
+import { SelectComponent } from './components/select/select.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { TextSelectDirective } from '@app/shared/pipes/highlight-text.pipe';
     ApplicantListItemComponent,
     ConfirmComponent,
     ApplicantScoreOverviewComponent,
-    TextSelectDirective
+    TextSelectDirective,
+    SelectComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { TextSelectDirective } from '@app/shared/pipes/highlight-text.pipe';
     ConfirmComponent,
     ApplicantScoreOverviewComponent,
     NgxPopperModule,
-    TextSelectDirective
+    TextSelectDirective,
+    SelectComponent
   ]
 })
 export class SharedModule {

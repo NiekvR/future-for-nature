@@ -12,6 +12,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { ShepherdService } from 'angular-shepherd';
 import { TOUR_STEPS } from '@app/tour-steps';
+import firebase from 'firebase/compat';
+import App = firebase.app.App;
 
 @Component({
   selector: 'ffn-judge',
@@ -19,6 +21,8 @@ import { TOUR_STEPS } from '@app/tour-steps';
   styleUrls: ['./judge.component.scss']
 })
 export class JudgeComponent implements OnInit, OnDestroy {
+  public SORT_OPTIONS = [ 'Id', 'First Name', 'Surname', 'Status', 'Favourite' ];
+  public ASC_OPTIONS = [ 'Ascending', 'Descending' ];
 
   public applications!: Application[];
   public searchedApplications!: Application[];
@@ -27,7 +31,10 @@ export class JudgeComponent implements OnInit, OnDestroy {
   public submittedScores: { [ id: string]: Score } = {};
 
   public statusSort: 'asc' | 'desc' | null = null;
-  public starSort = false;
+  public filter = false;
+
+  public option = this.SORT_OPTIONS[ 0 ];
+  public order = this.ASC_OPTIONS[ 0 ];
 
   private steps = TOUR_STEPS;
 
@@ -74,28 +81,23 @@ export class JudgeComponent implements OnInit, OnDestroy {
       .subscribe(() => this.router.navigate(['/login']));
   }
 
-  public sortOnStatus() {
-    if(!this.starSort) {
-      switch (this.statusSort) {
-        case 'asc':
-          this.statusSort = 'desc';
-          break;
-        case 'desc':
-          this.statusSort = null;
-          break;
-        case null:
-          this.statusSort = 'asc';
-          break;
-      }
-      this.searchedApplications = this.sortApplicants(this.searchedApplications);
+  public sortOnStar() {
+    if(!this.statusSort) {
+      this.filter = !this.filter;
     }
   }
 
-  public sortOnStar() {
-    if(!this.statusSort) {
-      this.starSort = !this.starSort;
-      this.searchedApplications = this.sortApplicantsOnStar(this.searchedApplications);
-    }
+  public selectOption() {
+    this.sortApplicants(this.searchedApplications);
+  }
+
+  public selectSortOrder() {
+    this.sortApplicants(this.searchedApplications);
+  }
+
+  public clearSort() {
+    this.option = this.SORT_OPTIONS[ 0 ];
+    this.order = this.ASC_OPTIONS[ 0 ];
   }
 
   public openTour() {
@@ -107,6 +109,28 @@ export class JudgeComponent implements OnInit, OnDestroy {
     // @ts-ignore
     this.shepherdService.addSteps(this.steps);
     this.shepherdService.start();
+  }
+
+  private sortOn(a: Application, b: Application): number {
+    let sort!: number;
+    switch (this.option) {
+      case this.SORT_OPTIONS[ 0 ]:
+        sort = this.order === this.ASC_OPTIONS[ 0 ] ? this.sortAscOnId(a, b) : this.sortDescOnId(a, b);
+        break;
+      case this.SORT_OPTIONS[ 1 ]:
+        sort = this.order === this.ASC_OPTIONS[ 0 ] ? this.sortAscOnFirstName(a, b) : this.sortDescOnFirstName(a, b);
+        break;
+      case this.SORT_OPTIONS[ 2 ]:
+        sort = this.order === this.ASC_OPTIONS[ 0 ] ? this.sortAscOnSurName(a, b) : this.sortDescOnSurName(a, b);
+        break;
+      case this.SORT_OPTIONS[ 3 ]:
+        sort = this.order === this.ASC_OPTIONS[ 0 ] ? this.sortAscOnStatus(a, b) : this.sortDescOnStatus(a, b);
+        break;
+      case this.SORT_OPTIONS[ 4 ]:
+        sort = this.order === this.ASC_OPTIONS[ 0 ] ? this.sortAscOnStar(a, b) : this.sortDescOnStar(a, b);
+        break;
+    }
+    return sort!;
   }
 
   private getApplications() {
@@ -130,39 +154,33 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   private sortApplicants(applicants: Application[]) {
-    return applicants.sort((a, b) => this.determineSortCriteria(a, b))
+    return applicants.sort((a, b) => this.sortOn(a, b))
   }
 
-  private sortApplicantsOnStar(applicants: Application[]) {
-    return applicants.sort((a, b) => this.starSort ? this.sortAscOnStar(a, b) : (a.ffnId > b.ffnId) ? 1 : -1)
+  private sortAscOnId(a: Application, b: Application): number {
+    return (a.ffnId > b.ffnId) ? 1 : -1;
   }
 
-  private determineSortCriteria(a: Application, b: Application): number {
-    let score = 0;
-    switch (this.statusSort) {
-      case 'asc': score = this.sortAscOnStatus(a, b) ; break;
-      case 'desc': score = this.sortDescOnStatus(a, b); break;
-      case null: score = (a.ffnId > b.ffnId) ? 1 : -1; break;
-    }
-    return score;
+  private sortDescOnId(a: Application, b: Application): number {
+    return (a.ffnId > b.ffnId) ? -1 : 1;
   }
 
   private sortAscOnStatus(a: Application, b: Application): number {
-    const scoreA = this.submittedScores[ a.id! ];
-    const scoreB = this.submittedScores[ b.id! ]
-    return scoreA?.submitted ? 1
-      : scoreB?.submitted ? - 1 :
-        scoreA?.skipped ? 1 :
-          scoreB?.skipped ? -1 : 0;
-  }
-
-  private sortDescOnStatus(a: Application, b: Application): number {
     const scoreA = this.submittedScores[ a.id! ];
     const scoreB = this.submittedScores[ b.id! ]
     return scoreB?.submitted ? 1
       : scoreA?.submitted ? - 1 :
         scoreB?.skipped ? 1 :
           scoreA?.skipped ? -1 : 0;
+  }
+
+  private sortDescOnStatus(a: Application, b: Application): number {
+    const scoreA = this.submittedScores[ a.id! ];
+    const scoreB = this.submittedScores[ b.id! ]
+    return scoreA?.submitted ? 1
+      : scoreB?.submitted ? - 1 :
+        scoreA?.skipped ? 1 :
+          scoreB?.skipped ? -1 : 0;
   }
 
   private sortAscOnStar(a: Application, b: Application): number {
@@ -172,5 +190,30 @@ export class JudgeComponent implements OnInit, OnDestroy {
       : scoreA?.favourite ? - 1 :
         scoreA?.skipped ? 1 :
           scoreB?.skipped ? -1 : 0;
+  }
+
+  private sortDescOnStar(a: Application, b: Application): number {
+    const scoreA = this.submittedScores[ a.id! ];
+    const scoreB = this.submittedScores[ b.id! ]
+    return scoreA?.favourite ? 1
+      : scoreB?.favourite ? - 1 :
+        scoreB?.skipped ? 1 :
+          scoreA?.skipped ? -1 : 0;
+  }
+
+  private sortAscOnFirstName(a: Application, b: Application): number {
+    return (a.name.firstName > b.name.firstName) ? 1 : -1;
+  }
+
+  private sortDescOnFirstName(a: Application, b: Application): number {
+    return (a.name.firstName > b.name.firstName) ? -1 : 1;
+  }
+
+  private sortAscOnSurName(a: Application, b: Application): number {
+    return (a.name.surName > b.name.surName) ? 1 : -1;
+  }
+
+  private sortDescOnSurName(a: Application, b: Application): number {
+    return (a.name.surName > b.name.surName) ? -1 : 1;
   }
 }
