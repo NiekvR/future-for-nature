@@ -42,7 +42,8 @@
 </div>
 <div class="flex p-15 flex-1 overflow-hidden flex-column" *ngIf="!!selectedUser">
   <ffn-applicant-score-overview class="flex-1" [applicants]="applicants!" [scores]="userScores!"></ffn-applicant-score-overview>
-  <div class="flex p-30 flex-end" *ngIf="selectedUser.submitted">
-    <button (click)="desubmitScores()">Reopen submitted scores</button>
+  <div class="flex p-30 flex-end">
+    <button (click)="desubmitScores()" *ngIf="selectedUser.submitted">Reopen submitted scores</button>
+    <button (click)="exportAsCsv()">Export scores for user</button>
   </div>
 </div>

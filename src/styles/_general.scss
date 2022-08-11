@@ -171,13 +171,48 @@ i {
   background-color: $black;
   color: $primary;
   padding: 15px;
+
+  &.submitted {
+    color: $black;
+    background-color: $primary;
+  }
+
+  &.skipped:not(.submitted) {
+    background-color: grey;
+  }
 }
 
 .popperSpecialStyle {
   background-color: white;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.popperSpecialSortStyle {
+  background-color: white;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.popperSpecialPaddingStyle {
+  background-color: white;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 10px 0 !important;
+  margin-top: 0 !important;
+  z-index: 1;
+}
+
+.popperArrowStyle {
+  border-color: transparent !important;
 }
 
 .text-underline {
   text-decoration: underline;
+}
+
+.selected {
+  color: $primary;
 }
 

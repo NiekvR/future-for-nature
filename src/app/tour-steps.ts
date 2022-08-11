@@ -36,10 +36,7 @@ const tourStepsTextAndTitle = [
   {
     id: 'step_3',
     title: 'Applicants (3/24)',
-    text: 'With this button you can sort the applicants differently, based on their status. An applicant can have the ' +
-      'following statuses: None, Skipped, Submitted. Clicking this button once sorts the applicants in this order: ' +
-      'None, Skipped, Submitted. Clicking again sorts them in the order Submitted, Skipped, None. Clicking a third ' +
-      'time sorts on the application number again (ascending).'
+    text: 'Clicking this button will open the sorting options. Here you can select the criteria. By default the list is sorted ascending on id. It possible to sort the list on id, first name, surname, status (submitted, skipped or none) and favourite (selected with a star, none or skipped) and in ascending or descending order.'
   },
   {
     id: 'step_4',
@@ -64,7 +61,7 @@ const tourStepsTextAndTitle = [
   {
     id: 'step_8',
     title: 'Application (8/24)',
-    text: 'In the centre of the screen, the application form of the applicant appears.'
+    text: 'In the centre of the screen, the application form of the applicant appears. It is possible to highlight important parts of the application. Select the part you want highlighted and press this button <i class="fas fa-highlighter"></i> that has appeared. Select a part of the highlight and press the cross to remove the highlight.'
   },
   {
     id: 'step_9',
@@ -197,7 +194,7 @@ export const TOUR_STEPS = [
     ...tourStepsTextAndTitle[ 2 ],
     arrow: false,
     attachTo: {
-      element: '.fa-arrow-down-wide-short',
+      element: '.fa-filter',
       on: 'right'
     },
     buttons: [

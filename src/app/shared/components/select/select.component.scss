@@ -1,0 +1,28 @@
+@import "~src/styles/variables";
+
+:host {
+  font-size: 14px;
+  .input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333;
+    border: #A0A0A0 1px solid;
+    border-radius: 2px;
+    position: relative;
+
+    i {
+      position: absolute;
+      right: 5px;
+      color: #A0A0A0;
+    }
+  }
+
+  .option-container {
+    min-width: 100px;
+
+    .active {
+      background-color: $primary;
+    }
+  }
+}

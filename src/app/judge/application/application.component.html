@@ -1,92 +1,140 @@
-<div class="flex flex-column overflow-auto p-15">
+<div class="flex flex-column overflow-auto p-15" *ngIf="!!highlights && !!highlights[ 'name' ]">
   <div class="flex">
     <div class="flex flex-column flex-50">
       <div class="application-part">
+        <label>Name:</label>
+        <p class="highlight" [innerHtml]="highlights[ 'name' ].text"></p>
+        <p class="hide" id="name" (textSelect)="openPopup($event)">{{ application.name.fullName }}</p>
+      </div>
+      <div class="application-part">
         <label>Country of work:</label>
-        <p>{{ application.countryOfWork }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'countryOfWork' ].text"></p>
+        <p class="hide" id="countryOfWork" (textSelect)="openPopup($event)">{{ application.countryOfWork }}</p>
       </div>
       <div class="application-part">
         <label>Focal species:</label>
-        <p>{{ application.focalSpecies }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'focalSpecies' ].text"></p>
+        <p class="hide" id="focalSpecies" (textSelect)="openPopup($event)">{{ application.focalSpecies }}</p>
       </div>
     </div>
     <div class="flex flex-column flex-50">
       <div class="application-part">
         <label>Nationality:</label>
-        <p>{{ application.nationality }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'nationality' ].text"></p>
+        <p class="hide" id="nationality" (textSelect)="openPopup($event)">{{ application.nationality }}</p>
       </div>
       <div class="application-part">
         <label>Date of birth:</label>
-        <p>{{ application.dateOfBirth }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'dateOfBirth' ].text"></p>
+        <p class="hide" id="dateOfBirth" (textSelect)="openPopup($event)">{{ application.dateOfBirth }}</p>
       </div>
       <div class="application-part">
         <label>Age:</label>
-        <p>{{ age }} yrs</p>
+        <p class="highlight" [innerHtml]="highlights[ 'age' ].text"></p>
+        <p class="hide" id="age" (textSelect)="openPopup($event)">{{ age }}</p>
       </div>
       <div class="application-part">
         <label>Gender:</label>
-        <p>{{ application.gender }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'gender' ].text"></p>
+        <p class="hide" id="gender" (textSelect)="openPopup($event)">{{ application.gender }}</p>
       </div>
       <div class="application-part">
         <label>Native language:</label>
-        <p>{{ application.nativeLanguage }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'nativeLanguage' ].text"></p>
+        <p class="hide" id="nativeLanguage" (textSelect)="openPopup($event)">{{ application.nativeLanguage }}</p>
       </div>
       <div class="application-part">
         <label>English proficiency:</label>
-        <p>{{ application.englishProficiency }}</p>
+        <p class="highlight" [innerHtml]="highlights[ 'englishProficiency' ].text"></p>
+        <p class="hide" id="englishProficiency" (textSelect)="openPopup($event)">{{ application.englishProficiency }}</p>
       </div>
     </div>
   </div>
   <div class="application-part-row m-t-15">
     <label>Formal education:</label>
-    <p>{{ application.formalEducation }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'formalEducation' ].text"></p>
+    <p class="hide" id="formalEducation" (textSelect)="openPopup($event)">{{ application.formalEducation }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Employment record:</label>
-    <p>{{ application.employmentRecord }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'employmentRecord' ].text"></p>
+    <p class="hide" id="employmentRecord" (textSelect)="openPopup($event)">{{ application.employmentRecord }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Former FFN award applications:</label>
-    <p>{{ application.formerApplications }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'formerApplications' ].text"></p>
+    <p class="hide" id="formerApplications" (textSelect)="openPopup($event)">{{ application.formerApplications }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Other awards:</label>
-    <p>{{ application.otherAwards }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'otherAwards' ].text"></p>
+    <p class="hide" id="otherAwards" (textSelect)="openPopup($event)">{{ application.otherAwards }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Candidates achievements:</label>
-    <p>{{ application.achievements }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'achievements' ].text"></p>
+    <p class="hide" id="achievements" (textSelect)="openPopup($event)">{{ application.achievements }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Conservation vision:</label>
-    <p>{{ application.vision }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'vision' ].text"></p>
+    <p class="hide" id="vision" (textSelect)="openPopup($event)">{{ application.vision }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Added value of the FFN award:</label>
-    <p>{{ application.addedValue }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'addedValue' ].text"></p>
+    <p class="hide" id="addedValue" (textSelect)="openPopup($event)">{{ application.addedValue }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Additional information:</label>
-    <p>{{ application.additionalInformation }}</p>
+    <p class="highlight" [innerHtml]="highlights[ 'additionalInformation' ].text"></p>
+    <p class="hide" id="additionalInformation" (textSelect)="openPopup($event)">{{ application.additionalInformation }}</p>
   </div>
   <div *ngFor="let referee of application.referee; let i = index" class="m-t-15">
     <div class="application-part">
       <label>Referee {{ i + 1 }}:</label>
-      <p>{{ referee.name.fullName }}</p>
+      <p class="highlight" [innerHtml]="highlights[ i + '-name' ].text"></p>
+      <p class="hide" [id]="i + '-name'" (textSelect)="openPopup($event)">{{ referee.name.fullName }}</p>
     </div>
     <div class="p-l-15">
       <div class="application-part">
         <label>Organisation:</label>
-        <p>{{ referee.organisation }}</p>
+        <p class="highlight" [innerHtml]="highlights[ i + '-organisation' ].text"></p>
+        <p class="hide" [id]="i + '-organisation'" (textSelect)="openPopup($event)">{{ referee.organisation }}</p>
       </div>
       <div class="application-part">
         <label>Position:</label>
-        <p>{{ referee.position }}</p>
+        <p class="highlight" [innerHtml]="highlights[ i + '-position' ].text"></p>
+        <p class="hide" [id]="i + '-position'" (textSelect)="openPopup($event)">{{ referee.position }}</p>
       </div>
       <div class="application-part-row">
         <label>Reference statement:</label>
-        <p>{{ referee.statement }}</p>
+        <p class="highlight" [innerHtml]="highlights[ i + '-statement' ].text"></p>
+        <p class="hide" id="i + '-statement'" (textSelect)="openPopup($event)">{{ referee.statement }}</p>
       </div>
     </div>
   </div>
+</div>
+
+<div
+  *ngIf="hostRectangle"
+  class="indicator"
+  [style.left.px]="hostRectangle.left"
+  [style.top.px]="hostRectangle.top"
+  [style.width.px]="hostRectangle.width"
+  [style.height.px]="0">
+
+  <div class="indicator__cta">
+    <div class="indicator__cta-link">
+      <div class="link" (mousedown)="$event.preventDefault()"
+           (mouseup)="$event.stopPropagation(); showSelectedText()">
+        <i class="fa-solid fa-highlighter"></i>
+      </div>
+      <div class="link" *ngIf="isHighlighted" (mousedown)="$event.preventDefault()"
+           (mouseup)="$event.stopPropagation(); removeSelection()">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+    </div>
+  </div>
+
 </div>

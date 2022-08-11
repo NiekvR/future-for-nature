@@ -8,6 +8,7 @@ export interface Score {
   submitted: boolean;
   skipped: boolean;
   comments?: string;
+  favourite?: boolean;
 }
 
 export interface SubScore {

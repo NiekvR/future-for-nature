@@ -6,11 +6,15 @@
   <div class="list-tools">
     <i class="fas fa-search"></i>
     <div class="flex-1 p-5"><ffn-search (searchTerm)="filterApplicationList($event)"></ffn-search></div>
-    <i class="fas cursor-pointer" (click)="sortOnStatus()"
-       [class.fa-arrow-down-wide-short]="statusSort !== 'desc'"
-       [class.fa-arrow-up-wide-short]="statusSort === 'desc'"
-       [class.active]="!!statusSort"
-    ></i>
+    <i class="fa-solid fa-filter cursor-pointer"
+       [class.active]="option !== 'Id' || order !== 'Ascending'"
+       [popper]="tooltipcontent"
+       [popperTrigger]="'click'"
+       [popperHideOnClickOutside]="true"
+       [popperPlacement]="'bottom'"
+       [popperApplyClass]="'popperSpecialSortStyle'"
+       [popperApplyArrowClass]="'popperArrowStyle'"
+       (click)="sortOnStar()"></i>
   </div>
   <div class="flex flex-column overflow-hidden flex-1">
     <div class="flex flex-column overflow-auto flex-1 applicant-list">
@@ -38,7 +42,9 @@
 <div class="flex flex-column flex-1 overflow-hidden">
   <div *ngIf="!selectedApplication" class="text-center p-50">Click on an applicant to start.</div>
   <ng-container *ngIf="selectedApplication">
-    <div class="flex align-center justify-space-between app-header">
+    <div class="flex align-center justify-space-between app-header"
+         [class.submitted]="submittedScores[ selectedApplication.id! ]?.submitted"
+         [class.skipped]="submittedScores[ selectedApplication.id! ]?.skipped">
       <h1>Application:</h1>
       <h2>{{ selectedApplication?.name?.fullName + ' - ' + selectedApplication?.ffnId }}</h2>
     </div>
@@ -53,3 +59,14 @@
     </div>
   </ng-container>
 </div>
+
+<popper-content #tooltipcontent>
+  <div class="sort-container p-10">
+    <span class="bold">Sort by:</span>
+    <ffn-select class="options" [options]="SORT_OPTIONS" [(option)]="option" (optionChange)="selectOption()"></ffn-select>
+    <ffn-select class="order" [options]="ASC_OPTIONS" [(option)]="order" (optionChange)="selectSortOrder()"></ffn-select>
+  </div>
+  <div class="flex flex-column">
+    <button (click)="clearSort()" [disabled]="option === 'Id' && order === 'Ascending'">Clear</button>
+  </div>
+</popper-content>

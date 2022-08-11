@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Application } from '@app/models/application.model';
 import { map, Observable, switchMap, combineLatest, catchError, throwError, of, tap, take } from 'rxjs';
 
@@ -21,7 +21,13 @@ export class ApplicationCollectionService extends FirebaseCollectionService<Appl
       of(true)))
   }
 
+  public getAllSelectedApplications(): Observable<Application[]> {
+    return this.getAll()
+      .pipe(map(applications => applications.filter(application => application.checked === 'yes')));
+  }
+
   private deleteAllDocsFromCollection(applications: Application[]): Observable<boolean> {
+
     return combineLatest(applications.map(application => this.deleteDoc(application)))
       .pipe(switchMap(results => results.filter(res => !res).length > 0 ?
         throwError(() => new Error('Not all docs deleted')) :
@@ -32,4 +38,10 @@ export class ApplicationCollectionService extends FirebaseCollectionService<Appl
     return this.delete(application).pipe(map(() => true), catchError(map(() => false)));
   }
 
+  private docSnapshotToItem(queryDocumentSnapshot: QueryDocumentSnapshot<Application>): Application {
+    let item = queryDocumentSnapshot.data() as Application;
+    (item as any).id = queryDocumentSnapshot.id;
+    item = this.convertItem(item);
+    return item;
+  }
 }

@@ -1,5 +1,9 @@
 <div class="flex flex-column p-10 overflow-hidden">
-  <h1 class="m-b-10 text-center">Scores</h1>
+  <h1 class="m-b-10 flex justify-space-between">
+    Scores
+    <i class="fa-regular fa-star cursor-pointer" *ngIf="!score?.favourite" (click)="toggleFavourite()"></i>
+    <i class="fa-solid fa-star selected cursor-pointer" *ngIf="score?.favourite" (click)="toggleFavourite()"></i>
+  </h1>
   <div *ngIf="score" class="flex flex-column overflow-auto">
     <ffn-score-category *ngFor="let category of categories"
                         [category]="category"
@@ -18,9 +22,10 @@
          *ngIf="score" [class.disabled]="score.pristine">Reset scores</div>
   </div>
   <p class="m-t-20 bold">Comments</p>
-  <textarea rows="5" [disabled]="score.submitted || !canEdit" [(ngModel)]="score.comments" *ngIf="score"></textarea>
+  <textarea rows="5" [disabled]="score.submitted || score.skipped || !canEdit" [(ngModel)]="score.comments" *ngIf="score"></textarea>
 </div>
 <div class="flex flex-column" *ngIf="canEdit">
-  <button *ngIf="!score?.submitted" (click)="skipScores()" class="secondary">Skip</button>
-  <button (click)="submitScores()" [disabled]="!canSubmit">{{ score?.submitted ? 'Edit' : 'Submit Scores'}}</button>
+  <button *ngIf="!score?.submitted && !score?.skipped" (click)="skipScores()" class="secondary">Skip</button>
+  <button *ngIf="!score?.submitted && !score?.skipped" (click)="submitScores()" [disabled]="!canSubmit">{{ 'Submit Scores'}}</button>
+  <button *ngIf="score?.submitted || score?.skipped" (click)="editScores()">{{ 'Edit'}}</button>
 </div>

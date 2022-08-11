@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ScoreCategory } from '@app/models/score-category.model';
 import { SubScore } from '@app/models/score.model';
 
@@ -7,7 +7,7 @@ import { SubScore } from '@app/models/score.model';
   templateUrl: './score-input.component.html',
   styleUrls: ['./score-input.component.scss']
 })
-export class ScoreInputComponent implements OnChanges {
+export class ScoreInputComponent implements OnChanges, OnInit {
 
   @Input() scoreCategory!: ScoreCategory;
   @Input() subScore!: SubScore;
@@ -16,16 +16,25 @@ export class ScoreInputComponent implements OnChanges {
   public error = false;
   @Output() scoreChanged = new EventEmitter<SubScore>();
 
-  constructor() { }
+  private inputEl!: HTMLElement;
+
+  constructor(private el: ElementRef) { }
+
+  ngOnInit() {
+    this.inputEl = this.el.nativeElement.querySelector('input');
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.canScore);
     if(!!changes['applicantId']?.currentValue) {
       this.validateScore();
     }
     if(changes['subScore']?.currentValue !== changes['subScore']?.previousValue) {
       this.validateScore();
     }
+  }
+
+  public focus() {
+    this.inputEl.focus();
   }
 
   public onBlur() {
