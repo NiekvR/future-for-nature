@@ -62,7 +62,7 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
       totalScore += (totalCategoryScore / totalSubCategories) * category.relevance!;
     });
     this.score.total = totalScore.toFixed(2);
-    if(this.score.pristine) {
+    if(this.score.pristine && this.score.total !== '0.00') {
       this.score.pristine = false;
     }
     this.everythingScored();

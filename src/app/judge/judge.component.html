@@ -63,8 +63,8 @@
 <popper-content #tooltipcontent>
   <div class="sort-container p-10">
     <span class="bold">Sort by:</span>
-    <ffn-select [options]="SORT_OPTIONS" [(option)]="option" (optionChange)="selectOption()"></ffn-select>
-    <ffn-select [options]="ASC_OPTIONS" [(option)]="order" (optionChange)="selectSortOrder()"></ffn-select>
+    <ffn-select class="options" [options]="SORT_OPTIONS" [(option)]="option" (optionChange)="selectOption()"></ffn-select>
+    <ffn-select class="order" [options]="ASC_OPTIONS" [(option)]="order" (optionChange)="selectSortOrder()"></ffn-select>
   </div>
   <div class="flex flex-column">
     <button (click)="clearSort()" [disabled]="option === 'Id' && order === 'Ascending'">Clear</button>

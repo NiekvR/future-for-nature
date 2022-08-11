@@ -98,6 +98,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
   public clearSort() {
     this.option = this.SORT_OPTIONS[ 0 ];
     this.order = this.ASC_OPTIONS[ 0 ];
+    this.sortApplicants(this.searchedApplications);
   }
 
   public openTour() {
