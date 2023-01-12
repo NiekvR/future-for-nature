@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Application } from '@app/models/application.model';
 import { SelectedText } from '@app/models/text-select.model';
 import { SelectionRectangle, TextSelectEvent } from '@app/shared/pipes/highlight-text.pipe';
@@ -19,14 +19,18 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   public hostRectangle: SelectionRectangle | undefined;
   public isHighlighted = false;
 
+  public hostPosition = { left: 0, top: 0 };
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private highlightService: HighlightService, private applicationService: ApplicationService) {
+  constructor(private highlightService: HighlightService, private applicationService: ApplicationService,
+              private el: ElementRef, private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     this.dateOfBirthToAge();
     this.getHighlights();
+    this.hostPosition = this.el.nativeElement.getBoundingClientRect();
   }
 
   ngOnDestroy() {
@@ -45,6 +49,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   public openPopup(event: TextSelectEvent) {
+    console.log('TEST', event.viewportRectangle);
     if (event.viewportRectangle) {
       this.isHighlighted = this.highlightService.isSelectionHighlighted(this.application.id!, event.id);
       this.hostRectangle = event.viewportRectangle;

@@ -101,16 +101,17 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
     this.updateScores().subscribe();
   }
 
+  public updateComments() {
+    this.updateScores().subscribe();
+  }
+
   private everythingScored() {
     this.canSubmit = !Object.values(this.score.subScores).find(subScore => !subScore.score);
   }
 
   private getScores() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-    this.destroyed$ = new ReplaySubject(1);
     this.scoreCollectionService.getScoresForApplication(this.application.id!)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(take(1))
       .subscribe(score => {
         this.score = score;
         this.everythingScored();

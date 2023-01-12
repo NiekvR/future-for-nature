@@ -80,6 +80,16 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
     this.adminService.exportScoresAsCsv(exports, this.selectedUser!.name);
   }
 
+  public showNotCorrectApplicants(userId: string) {
+    console.log(this.getNotSubmittedScoresForApplicants(userId));
+  }
+
+  private getNotSubmittedScoresForApplicants(userId: string): (Application | undefined)[] {
+    return this.getScoresForApplicants(userId)
+      .filter(score => !score.submitted && !score.pristine)
+      .map(score => this.applicants.find(applicant => applicant.id === score.applicationId))
+  }
+
   private getUsers() {
     this.userService.getAllAssessors()
       .pipe(takeUntil(this.destroyed$))
@@ -133,6 +143,12 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
 
   private getTotalScoreForApplicant(applicant: Application): number {
     return !!this.totalScores[ applicant.id! ] ? Number(this.totalScores[ applicant.id! ]) : 0;
+  }
+
+  private getScoresForApplicants(userId: string): Score[] {
+    return Object.values(this.scores[ userId ])
+      .filter(score => this.applicants.map(applicant => applicant.id)
+        .includes(score.applicationId));
   }
 
 

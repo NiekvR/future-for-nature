@@ -17,6 +17,7 @@ export class ApplicantListItemComponent implements OnInit {
   @Input() applicant!: Application;
   @Input() score!: Score;
   @Input() applicantsList = true;
+  @Input() index!: number;
 
   public categories: ScoreCategory[] = SCORE_CATEGORIES;
 

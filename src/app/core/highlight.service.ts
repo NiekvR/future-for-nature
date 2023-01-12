@@ -169,7 +169,7 @@ export class HighlightService extends FirebaseCollectionService<Highlights> {
     return { start: startIndex + start, end: startIndex + end };
   }
 
-  public addNewHighlights(applicationId: string, highlights: { [ id: string]: SelectedText }): Observable<Highlights> {
+  private addNewHighlights(applicationId: string, highlights: { [ id: string]: SelectedText }): Observable<Highlights> {
     return this.afAuth.user.pipe(
       take(1),
       map(user => {

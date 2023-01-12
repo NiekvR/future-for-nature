@@ -4,17 +4,23 @@
     <div class="image-placeholder"></div>
   </div>
   <div class="list-tools">
-    <i class="fas fa-search"></i>
-    <div class="flex-1 p-5"><ffn-search (searchTerm)="filterApplicationList($event)"></ffn-search></div>
-    <i class="fa-solid fa-filter cursor-pointer"
-       [class.active]="option !== 'Id' || order !== 'Ascending'"
-       [popper]="tooltipcontent"
-       [popperTrigger]="'click'"
-       [popperHideOnClickOutside]="true"
-       [popperPlacement]="'bottom'"
-       [popperApplyClass]="'popperSpecialSortStyle'"
-       [popperApplyArrowClass]="'popperArrowStyle'"
-       (click)="sortOnStar()"></i>
+    <div class="flex">
+      <i class="fas fa-search"></i>
+      <div class="flex-1 p-5"><ffn-search (searchTerm)="filterApplicationList($event)"></ffn-search></div>
+      <i class="fa-solid fa-filter cursor-pointer"
+         [class.active]="option !== 'Id' || order !== 'Ascending'"
+         [popper]="tooltipcontent"
+         [popperTrigger]="'click'"
+         [popperHideOnClickOutside]="true"
+         [popperPlacement]="'bottom'"
+         [popperApplyClass]="'popperSpecialSortStyle'"
+         [popperApplyArrowClass]="'popperArrowStyle'"
+         (click)="sortOnStar()"></i>
+    </div>
+    <div class="progress-bar">
+      <div class="done" [style.width.%]="percentageComplete"></div>
+      <span class="percentage">{{ percentageComplete + '%' }}</span>
+    </div>
   </div>
   <div class="flex flex-column overflow-hidden flex-1">
     <div class="flex flex-column overflow-auto flex-1 applicant-list">
@@ -22,6 +28,7 @@
         *ngFor="let applicant of searchedApplications; let i = index"
         [applicant]="applicant"
         [score]="submittedScores[ applicant.id! ]"
+        [index]="i + 1"
         [class.selected]="applicant.id === selectedApplication?.id"
         [class.completed]="submittedScores[ applicant.id! ]?.submitted"
         [class.skipped]="submittedScores[ applicant.id! ]?.skipped"
@@ -49,7 +56,7 @@
       <h2>{{ selectedApplication?.name?.fullName + ' - ' + selectedApplication?.ffnId }}</h2>
     </div>
     <div class="flex flex-1 overflow-hidden">
-      <div class="flex flex-column flex-1">
+      <div class="flex flex-column flex-1 overflow-hidden">
         <ffn-application *ngIf="selectedApplication" [application]="selectedApplication"></ffn-application>
       </div>
 

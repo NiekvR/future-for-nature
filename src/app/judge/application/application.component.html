@@ -1,5 +1,5 @@
 <div class="flex flex-column overflow-auto p-15" *ngIf="!!highlights && !!highlights[ 'name' ]">
-  <div class="flex">
+  <div class="flex personal-details">
     <div class="flex flex-column flex-50">
       <div class="application-part">
         <label>Name:</label>
@@ -110,7 +110,7 @@
       <div class="application-part-row">
         <label>Reference statement:</label>
         <p class="highlight" [innerHtml]="highlights[ i + '-statement' ].text"></p>
-        <p class="hide" id="i + '-statement'" (textSelect)="openPopup($event)">{{ referee.statement }}</p>
+        <p class="hide" [id]="i + '-statement'" (textSelect)="openPopup($event)">{{ referee.statement }}</p>
       </div>
     </div>
   </div>
@@ -127,11 +127,11 @@
   <div class="indicator__cta">
     <div class="indicator__cta-link">
       <div class="link" (mousedown)="$event.preventDefault()"
-           (mouseup)="$event.stopPropagation(); showSelectedText()">
+           (mouseup)="$event.stopImmediatePropagation(); showSelectedText()">
         <i class="fa-solid fa-highlighter"></i>
       </div>
       <div class="link" *ngIf="isHighlighted" (mousedown)="$event.preventDefault()"
-           (mouseup)="$event.stopPropagation(); removeSelection()">
+           (mouseup)="$event.stopImmediatePropagation(); removeSelection()">
         <i class="fa-solid fa-xmark"></i>
       </div>
     </div>

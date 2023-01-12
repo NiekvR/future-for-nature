@@ -1,10 +1,11 @@
 <ng-container *ngIf="!!applicantsList">
-  <div class="ellipsis">{{  applicant.ffnId + ' - ' + applicant.name.fullName }}</div>
+  <span class="index">{{ index  + ' - '}}</span>
+  <div class="ellipsis flex-1">{{  applicant.ffnId + ' - ' + applicant.name.fullName }}</div>
   <i class="fa-solid fa-star selected" *ngIf="score?.favourite"></i>
 </ng-container>
 <ng-container *ngIf="!applicantsList">
   <div class="left-side">
-    <div class="ellipsis text-left">{{  applicant.ffnId + ' - ' + applicant.name.fullName }}</div>
+    <div class="ellipsis text-left"><span>{{ index  + ' - ' }}</span>{{  applicant.ffnId + ' - ' + applicant.name.fullName }}</div>
   </div>
   <ng-container *ngFor="let category of categories">
     <div *ngFor="let sub of category.subs" class="score">

@@ -2,7 +2,9 @@
 
 :host {
   display: flex;
-  width: 100%;
+  flex: 0 0 100%;
+  overflow: hidden;
+  max-width: 100%;
 
   .top-panel {
     flex: 0 0 131px;
@@ -15,8 +17,10 @@
 
     .list-tools {
       display: flex;
-      flex: 0 0 30px;
+      flex: 0 0 50px;
+      flex-direction: column;
       overflow: hidden;
+      border-bottom: 1px solid black;
 
       i {
         padding: 5px;
@@ -31,6 +35,23 @@
 
         &.disabled {
           color: $disabled;
+        }
+      }
+
+      .progress-bar {
+        flex: 0 0 20px;
+        position: relative;
+
+        .done {
+          height: 100%;
+          background-color: #b3d33b;
+          transition: width 300ms;
+        }
+
+        .percentage {
+          position: absolute;
+          right: 3px;
+          top: 0;
         }
       }
     }

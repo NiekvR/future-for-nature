@@ -36,6 +36,8 @@ export class JudgeComponent implements OnInit, OnDestroy {
   public option = this.SORT_OPTIONS[ 0 ];
   public order = this.ASC_OPTIONS[ 0 ];
 
+  public percentageComplete = 0;
+
   private steps = TOUR_STEPS;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -151,6 +153,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
       .subscribe(scores => {
         scores.forEach(score => this.submittedScores[ score.applicationId! ] = score);
         this.searchedApplications = this.sortApplicants(this.applications);
+        this.percentageComplete = Math.ceil(scores.filter(score => score.submitted || score.skipped).length / this.applications.length * 100);
       });
   }
 
