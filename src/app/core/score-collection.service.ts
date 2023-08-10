@@ -70,11 +70,17 @@ export class ScoreCollectionService extends FirebaseCollectionService<Score> {
         2.2: {
           id: '2.2',
         },
+        2.3: {
+          id: '2.3',
+        },
         3.1: {
           id: '3.1',
         },
         3.2: {
           id: '3.2',
+        },
+        3.3: {
+          id: '3.3',
         }
       },
       pristine: true,

@@ -220,3 +220,16 @@ i {
   position: relative;
 }
 
+popper-content {
+  .ngxp__container {
+    display: block!important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+
+    &[aria-hidden="true"] {
+      visibility: hidden;
+    }
+  }
+}

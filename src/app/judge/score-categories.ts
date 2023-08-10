@@ -14,30 +14,35 @@ export const SCORE_CATEGORIES: ScoreCategory[] = [
       },
       {
         id: '1.2',
-        name: 'Passion',
-        info: 'Has passion for species / nature conservation, and shows motivation / perseverance to continue.'
+        name: 'Vision',
+        info: 'Has a clear view / vision on conservation.'
       },
       {
         id: '1.3',
-        name: 'Vision',
-        info: 'Has a clear view on conservation (conservation vision).'
+        name: 'Passion',
+        info: 'Shows determination / able to overcome obstacles.'
       }
     ]
   },
   {
     id: '2',
-    name: 'Achievements',
+    name: 'Project',
     relevance: 0.4,
     subs: [
       {
         id: '2.1',
         name: 'Species protection',
-        info: 'Substantial and long term benefit to species protection.'
+        info: 'Effectiveness of the approach (current or potential) on species protection.'
       },
       {
         id: '2.2',
-        name: 'Innovation',
-        info: 'Creativity and innovativeness in the work performed.'
+        name: 'Impact',
+        info: 'Is the project/ approach scalable? (Can it grow in impact / can it be copied / etc.).'
+      },
+      {
+        id: '2.3',
+        name: 'Conditions',
+        info: 'Working under difficult circumstances (social, political, endangeredness of target species, etc).'
       }
     ]
   },
@@ -49,12 +54,17 @@ export const SCORE_CATEGORIES: ScoreCategory[] = [
       {
         id: '3.1',
         name: 'Award',
-        info: 'Added value of the Award (recognition and money) for the person and project as presented.'
+        info: 'Added value of the Award (recognition and money) for the candidate.'
       },
       {
         id: '3.2',
         name: 'Project',
-        info: 'Relevance of the proposed project activities for the focal species/system.'
+        info: 'Added value of the proposed project to the target species / area / habitat.'
+      },
+      {
+        id: '3.3',
+        name: 'Relevance',
+        info: 'innovativeness and relevance of the planned activities.'
       }
     ]
   }
