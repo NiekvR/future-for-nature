@@ -82,7 +82,6 @@ export class AdminService {
     application.nationality = applicationDBO.nationality || '';
     application.countryOfWork = applicationDBO.countryofwork || '';
     application.focalSpecies = applicationDBO.focalspecies || '';
-    application.dateOfBirth = applicationDBO.dateofbirth || '';
     application.gender = applicationDBO.gender || '';
     application.nativeLanguage = applicationDBO.nativelanguage || '';
     application.englishProficiency = applicationDBO.englishproficiency || '';

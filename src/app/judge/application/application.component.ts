@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Application } from '@app/models/application.model';
 import { SelectedText } from '@app/models/text-select.model';
 import { SelectionRectangle, TextSelectEvent } from '@app/shared/pipes/highlight-text.pipe';
 import { HighlightService } from '@app/core/highlight.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { ApplicationService } from '@app/core/application.service';
 
 @Component({
   selector: 'ffn-application',
@@ -14,7 +13,6 @@ import { ApplicationService } from '@app/core/application.service';
 export class ApplicationComponent implements OnInit, OnDestroy {
 
   @Input() application!: Application;
-  public age!: number;
   public highlights!: { [id: string]: SelectedText };
   public hostRectangle: SelectionRectangle | undefined;
   public isHighlighted = false;
@@ -23,12 +21,10 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private highlightService: HighlightService, private applicationService: ApplicationService,
-              private el: ElementRef, private cdRef: ChangeDetectorRef) {
+  constructor(private highlightService: HighlightService, private el: ElementRef) {
   }
 
   ngOnInit(): void {
-    this.dateOfBirthToAge();
     this.getHighlights();
     this.hostPosition = this.el.nativeElement.getBoundingClientRect();
   }
@@ -55,10 +51,6 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     } else {
       this.hostRectangle = undefined;
     }
-  }
-
-  private dateOfBirthToAge() {
-    this.age = this.applicationService.getAge(this.application.dateOfBirth);
   }
 
   private getHighlights() {

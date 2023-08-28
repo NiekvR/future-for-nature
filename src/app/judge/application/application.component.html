@@ -24,16 +24,6 @@
         <p class="hide" id="nationality" (textSelect)="openPopup($event)">{{ application.nationality }}</p>
       </div>
       <div class="application-part">
-        <label>Date of birth:</label>
-        <p class="highlight" [innerHtml]="highlights[ 'dateOfBirth' ].text"></p>
-        <p class="hide" id="dateOfBirth" (textSelect)="openPopup($event)">{{ application.dateOfBirth }}</p>
-      </div>
-      <div class="application-part">
-        <label>Age:</label>
-        <p class="highlight" [innerHtml]="highlights[ 'age' ].text"></p>
-        <p class="hide" id="age" (textSelect)="openPopup($event)">{{ age }}</p>
-      </div>
-      <div class="application-part">
         <label>Gender:</label>
         <p class="highlight" [innerHtml]="highlights[ 'gender' ].text"></p>
         <p class="hide" id="gender" (textSelect)="openPopup($event)">{{ application.gender }}</p>

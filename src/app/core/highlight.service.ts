@@ -8,7 +8,6 @@ import { SelectedText } from '@app/models/text-select.model';
 import { DivSelection } from '@app/models/div-selection.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { Application } from '@app/models/application.model';
-import { ApplicationService } from '@app/core/application.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class HighlightService extends FirebaseCollectionService<Highlights> {
 
   private highlights: { [ applicationId: string ]: BehaviorSubject<Highlights | null> } = {};
 
-  constructor(private db: AngularFirestore, private afAuth: AngularFireAuth, private applicationService: ApplicationService,
+  constructor(private db: AngularFirestore, private afAuth: AngularFireAuth,
               private applicationCollectionService: ApplicationCollectionService) {
     super();
     this.setCollection(db.collection<Highlights>('highlights'));
@@ -197,7 +196,6 @@ export class HighlightService extends FirebaseCollectionService<Highlights> {
         highlights[ key ] = this.createNewSelectedText(application[ key ]);
       });
     highlights[ 'name' ] = this.createNewSelectedText(application.name.fullName);
-    highlights[ 'age' ] = this.createNewSelectedText('' + this.applicationService.getAge(application.dateOfBirth));
     application.referee.forEach((referee, index) => {
       Object.keys(referee)
         .forEach(key => {

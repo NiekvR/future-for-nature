@@ -6,7 +6,6 @@ export interface Application {
   nationality: string;
   countryOfWork: string;
   focalSpecies: string;
-  dateOfBirth: string;
   gender: string;
   nativeLanguage: string;
   englishProficiency: string;
