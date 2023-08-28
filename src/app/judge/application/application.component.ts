@@ -49,7 +49,6 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   public openPopup(event: TextSelectEvent) {
-    console.log('TEST', event.viewportRectangle);
     if (event.viewportRectangle) {
       this.isHighlighted = this.highlightService.isSelectionHighlighted(this.application.id!, event.id);
       this.hostRectangle = event.viewportRectangle;
