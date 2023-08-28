@@ -8,6 +8,7 @@ import { ApplicationCollectionService } from '@app/core/application-collection.s
 import { SCORE_CATEGORIES } from '@app/judge/score-categories';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
 import { AdminService } from '@app/admin/admin.service';
+import { ApplicationService } from '@app/core/application.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private userService: UserService, private applicationCollectionService: ApplicationCollectionService,
-              private scoreCollectionService: ScoreCollectionService, private adminService: AdminService) { }
+              private scoreCollectionService: ScoreCollectionService, private adminService: AdminService,
+              private applicationService: ApplicationService) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -67,6 +69,8 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
       csvRow[ 'gender' ] = applicant.gender;
       csvRow[ 'species' ] = applicant.focalSpecies;
       csvRow[ 'work country' ] = applicant.countryOfWork;
+      csvRow[ 'age' ] = '' + this.applicationService.getAge(applicant.dateOfBirth);
+      csvRow[ 'dateOfBirth' ] = applicant.dateOfBirth;
       this.scoreCategories.forEach(category =>
         category.subs!.forEach(sub => csvRow[ sub.id ] = '' + (applicantScores?.subScores[ sub.id ]?.score || 0)))
       csvRow[ 'average' ] = applicantScores?.total || '0';
