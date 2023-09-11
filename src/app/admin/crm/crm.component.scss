@@ -1,0 +1,38 @@
+@import "~src/styles/variables";
+
+:host {
+  display: flex;
+  width: 100%;
+
+  .left-panel {
+    flex: 0 0 220px;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+
+    border: 1px solid $black;
+    border-radius: 5px;
+
+    padding: 10px;
+
+    .title, .sub-title {
+      position: absolute;
+      background: white;
+      padding: 0 5px;
+
+      top: -10px;
+    }
+
+    .title {
+      left: 8px;
+    }
+
+    .sub-title {
+      right: 8px;
+    }
+  }
+}

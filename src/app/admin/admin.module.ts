@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
 import { AdminComponent } from '@app/admin/admin.component';
 import { SharedModule } from '@app/shared/shared.module';
-import { AddUserComponent } from './add-user/add-user.component';
-import { UserScoresOverviewComponent } from './user-scores-overview/user-scores-overview.component';
-import { SelectApplicationComponent } from './select-application/select-application.component';
+import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.component';
+import { UserScoresOverviewComponent } from '@app/admin/applicants-overview/user-scores-overview/user-scores-overview.component';
+import { SelectApplicationComponent } from '@app/admin/applicants-overview/select-application/select-application.component';
+import { ApplicantsOverviewComponent } from '@app/admin/applicants-overview/applicants-overview.component';
+import { ManageUsersComponent } from '@app/admin/manage-users/manage-users.component';
+import { CardComponent } from './card/card.component';
+import { CrmComponent } from './crm/crm.component';
 
 
 
@@ -12,7 +16,11 @@ import { SelectApplicationComponent } from './select-application/select-applicat
     AdminComponent,
     AddUserComponent,
     UserScoresOverviewComponent,
-    SelectApplicationComponent
+    SelectApplicationComponent,
+    ApplicantsOverviewComponent,
+    ManageUsersComponent,
+    CardComponent,
+    CrmComponent
   ],
   imports: [
     SharedModule

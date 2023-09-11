@@ -10,6 +10,9 @@ import {
 } from '@angular/fire/compat/auth-guard';
 import { AdminGuard } from '@app/authentication/admin.guard';
 import { RedirectGuard } from '@app/authentication/redirect.guard';
+import { ManageUsersComponent } from '@app/admin/manage-users/manage-users.component';
+import { ApplicantsOverviewComponent } from '@app/admin/applicants-overview/applicants-overview.component';
+import { CrmComponent } from '@app/admin/crm/crm.component';
 
 const redirectLoggedInToItems = () => redirectLoggedInTo(['']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
@@ -17,6 +20,30 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   { path: '', component: JudgeComponent, canActivate: [RedirectGuard] },
   { path: 'login', component: LoginComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectLoggedInToItems } },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    children: [
+      {
+        path: '',
+        component: AdminComponent
+      },
+      {
+        path: 'users',
+        component: ManageUsersComponent
+      },
+      {
+        path: 'applicants',
+        component: ApplicantsOverviewComponent
+      },
+      {
+        path: 'crm',
+        component: CrmComponent
+      }
+    ]
+  },
+  { path: 'admin/', component: AdminComponent, canActivate: [AdminGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
 ];
 
