@@ -67,6 +67,29 @@ export class AdminService {
     tempLink.click();
   }
 
+  public getRelationsFromCSV(file: File): Observable<any[]> {
+    const subject = new Subject<any[]>();
+    Papa.parse<ApplicationDBO>(file, {
+      header: true,
+      transformHeader(header: string, index: number): string {
+        return header
+          .trim()
+          .replace(/\s/g, '')
+          .replace(/\(/g, '')
+          .replace(/\)/g, '')
+          .replace(/["']/g, '')
+          .replace(/\?/g, '')
+          .toLowerCase();
+      },
+      complete: function (results) {
+        subject.next(results.data);
+        subject.complete();
+      }
+    });
+
+    return subject.asObservable().pipe(filter(applicants => !!applicants));
+  }
+
   private addApplicantToDb(application: Application): Observable<Application> {
     return this.applicationCollectionService.add(application);
   }

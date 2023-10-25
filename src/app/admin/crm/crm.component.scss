@@ -8,31 +8,18 @@
     flex: 0 0 220px;
   }
 
-  .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
+  .app-header {
+    padding: 0;
 
-    border: 1px solid $black;
-    border-radius: 5px;
-
-    padding: 10px;
-
-    .title, .sub-title {
-      position: absolute;
-      background: white;
-      padding: 0 5px;
-
-      top: -10px;
+    h1 {
+      padding: 15px;
     }
 
-    .title {
-      left: 8px;
-    }
-
-    .sub-title {
-      right: 8px;
+    button {
+      &.big {
+        flex: 0 0 67px;
+        height: 67px;
+      }
     }
   }
 }

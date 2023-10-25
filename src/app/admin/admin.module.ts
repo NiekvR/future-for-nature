@@ -8,6 +8,7 @@ import { ApplicantsOverviewComponent } from '@app/admin/applicants-overview/appl
 import { ManageUsersComponent } from '@app/admin/manage-users/manage-users.component';
 import { CardComponent } from './card/card.component';
 import { CrmComponent } from './crm/crm.component';
+import { FileImportComponent } from './crm/file-import/file-import.component';
 
 
 
@@ -20,7 +21,8 @@ import { CrmComponent } from './crm/crm.component';
     ApplicantsOverviewComponent,
     ManageUsersComponent,
     CardComponent,
-    CrmComponent
+    CrmComponent,
+    FileImportComponent
   ],
   imports: [
     SharedModule

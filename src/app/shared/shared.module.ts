@@ -12,6 +12,7 @@ import {
 import { NgxPopperModule } from 'ngx-popper';
 import { TextSelectDirective } from '@app/shared/pipes/highlight-text.pipe';
 import { SelectComponent } from './components/select/select.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SelectComponent } from './components/select/select.component';
     CommonModule,
     FontAwesomeModule,
     FormsModule,
-    NgxPopperModule.forRoot({placement: 'bottom'})
+    NgxPopperModule.forRoot({placement: 'bottom'}),
+    AgGridModule
   ],
   exports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { SelectComponent } from './components/select/select.component';
     ApplicantScoreOverviewComponent,
     NgxPopperModule,
     TextSelectDirective,
-    SelectComponent
+    SelectComponent,
+    AgGridModule
   ]
 })
 export class SharedModule {

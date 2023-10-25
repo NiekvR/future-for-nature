@@ -14,7 +14,7 @@
     "@angular/common": "~13.0.0",
     "@angular/compiler": "~13.0.0",
     "@angular/core": "~13.0.0",
-    "@angular/fire": "^7.1.1",
+    "@angular/fire": "^7.3.0",
     "@angular/forms": "~13.0.0",
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
@@ -25,10 +25,13 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@ternwebdesign/firebase-store": "^0.2.6",
+    "ag-grid-angular": "^30.2.0",
+    "ag-grid-community": "^30.2.0",
     "angular-shepherd": "^13.0.1",
     "csv-parser": "^3.0.0",
     "firebase": "^9.4.0",
     "fs-extra": "^10.0.0",
+    "moment": "^2.29.4",
     "ngx-popper": "^7.0.0",
     "ngx-simple-modal": "^1.4.17",
     "papaparse": "^5.3.2",
@@ -52,6 +55,6 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.4.3"
+    "typescript": "^4.6.2"
   }
 }

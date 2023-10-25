@@ -13,5 +13,22 @@
 </div>
 
 <div class="flex flex-column flex-1 overflow-hidden">
-  CRM WORKS!
+  <div class="flex align-center justify-space-between app-header">
+    <h1>Customer Relationship Management Portal</h1>
+    <button class="border big" (click)="openFileImport()"><i class="fas fa-file-import fa-2x"></i></button>
+  </div>
+  <!-- Button to clear selection -->
+  <button (click)="clearSelection()">Clear Selection</button>
+  <!-- AG Grid Angular Component -->
+  <ag-grid-angular
+    style="width: 100%; height: 100%"
+    class="ag-theme-alpine"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowData]="rowData$ | async"
+    [rowSelection]="'multiple'"
+    [animateRows]="true"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
 </div>
