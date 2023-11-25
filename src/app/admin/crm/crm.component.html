@@ -5,6 +5,8 @@
   </div>
   <div class="flex flex-column flex-1 justify-space-between">
     <div class="flex flex-column">
+      <button class="flex-1" (click)="applyFilter()">Apply Saved Filter</button>
+      <button class="flex-1 m-t-10" (click)="createInviteCSV()">Generate Invite CSV</button>
     </div>
     <div class="flex">
       <button class="secondary flex-1" (click)="logOut()"><i class="fas fa-power-off m-r-10"></i>Log Out</button>
@@ -17,18 +19,31 @@
     <h1>Customer Relationship Management Portal</h1>
     <button class="border big" (click)="openFileImport()"><i class="fas fa-file-import fa-2x"></i></button>
   </div>
-  <!-- Button to clear selection -->
-  <button (click)="clearSelection()">Clear Selection</button>
-  <!-- AG Grid Angular Component -->
-  <ag-grid-angular
-    style="width: 100%; height: 100%"
-    class="ag-theme-alpine"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    [rowData]="rowData$ | async"
-    [rowSelection]="'multiple'"
-    [animateRows]="true"
-    (gridReady)="onGridReady($event)"
-    (cellClicked)="onCellClicked($event)"
-  ></ag-grid-angular>
+  <ag-grid-angular *ngIf="selectedTab === 'Relations' && !!relationData"
+                    style="width: 100%; height: 100%"
+                    class="ag-theme-alpine"
+                    [columnDefs]="relationColumnDefs"
+                    [defaultColDef]="defaultColDef"
+                    [rowData]="relationData"
+                    [rowSelection]="'multiple'"
+                    [animateRows]="true"
+                    (cellClicked)="onCellClicked($event)"
+                    (filterChanged)="onFilterChanged($event)">
+  </ag-grid-angular>
+  <ag-grid-angular *ngIf="selectedTab === 'Registrations' && !!registrationData"
+                   style="width: 100%; height: 100%"
+                   class="ag-theme-alpine"
+                   [columnDefs]="registrationColumnDefs"
+                   [defaultColDef]="defaultColDef"
+                   [rowData]="registrationData"
+                   [rowSelection]="'multiple'"
+                   [animateRows]="true"
+                   (cellClicked)="onCellClicked($event)"
+                   (filterChanged)="onFilterChanged($event)">
+  </ag-grid-angular>
+  <div class="tab-container flex p-l-50">
+    <div class="tab m-r-10" *ngFor="let tab of tabs" [class.active]="selectedTab === tab" (click)="selectedTab=tab">
+      {{ tab }}
+    </div>
+  </div>
 </div>

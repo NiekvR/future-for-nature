@@ -2,11 +2,22 @@ import { Component } from '@angular/core';
 import { SimpleModalComponent, SimpleModalService } from 'ngx-simple-modal';
 import { AdminService } from '@app/admin/admin.service';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { Membership, ReasonNonActive, Relation, RelationStatus, RelationType } from '@app/admin/crm/relation.model';
-import { RelationDso } from '@app/admin/crm/relation-dso.model';
+import { Membership, ReasonNonActive, Relation, RelationStatus, RelationType } from '@app/models/relation.model';
+import { RelationDso } from '@app/models/relation-dso.model';
 import { DateService } from '@app/core/date.service';
 import { Valuable } from '@app/admin/crm/file-import/valuable.model';
-import { map, Observable, of, take, tap } from 'rxjs';
+import { EMPTY, expand, from, map, Observable, of, reduce, switchMap, take, tap } from 'rxjs';
+import { EventInviteDSO } from '@app/models/event-invite-dso.model';
+import { EventInvite, InviteType } from '@app/models/event-invite.model';
+import { Event } from '@app/models/event.model';
+import { EventCollectionService } from '@app/core/event-collection.service';
+import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
+import { EventAttendanceDso } from '@app/models/event-attendance-dso.model';
+import { DeregisteredType, EventAttendance, Placement } from '@app/models/event-attendance.model';
+import { EventAttendanceCollectionService } from '@app/core/even-attendance-collection.service';
+import { InviteCategory, Registration } from '@app/models/event-registration.model';
+import { RegistrationCollectionService } from '@app/core/registration-collection.service';
+import { FileImportService } from '@app/core/file-import.service';
 
 @Component({
   selector: 'ffn-file-import',
@@ -14,31 +25,91 @@ import { map, Observable, of, take, tap } from 'rxjs';
   styleUrls: ['./file-import.component.scss']
 })
 export class FileImportComponent extends SimpleModalComponent<{ }, any> {
-  private file!: File;
+  public file!: File;
 
   public uploading = false;
 
-  constructor(private simpleModalService: SimpleModalService, private adminService: AdminService, private db: AngularFirestore,
-              private dateService: DateService) { super(); }
+  public selected: string | undefined;
 
-  public saveFile(event: any) {
-    console.log(event);
-    this.file = event?.target?.files[ 0 ];
-    console.log(this.file);
+  constructor(private simpleModalService: SimpleModalService, private adminService: AdminService, private db: AngularFirestore,
+              private dateService: DateService, private eventCollectionService: EventCollectionService,
+              private eventInviteCollectionService: EventInviteCollectionService,
+              private eventAttendanceCollectionService: EventAttendanceCollectionService,
+              private fileImportService: FileImportService) { super(); }
+
+  public setSelected(value: string) {
+    this.selected = value;
   }
 
-  public upload() {
+  public uploadFromCsv() {
     if(!this.uploading) {
       this.uploading = true;
-      this.updateRelations()
+      this.adminService.getFromCSV<EventAttendanceDso>(this.file)
+        .pipe(tap(inviteDsos => this.importAllEventAttendees(inviteDsos)))
         .subscribe(data => {
+          console.log(data);
           this.uploading = false;
         });
     }
   }
 
-  private updateRelations(): Observable<RelationDso[]> {
+  public upload() {
+    if(!this.uploading) {
+      this.uploading = true;
+      this.mergeInvitesAndAttendance()
+        .subscribe(data => {
+          console.log('DONE');
+          this.uploading = false;
+        });
+    }
+  }
 
+  private importAllEventInvites(eventInviteDSOs: EventInviteDSO[]) {
+    let index = 0;
+    this.eventCollectionService.getAll()
+      .pipe(take(1))
+      .subscribe(events => {
+        eventInviteDSOs.forEach(eventInviteDSO => {
+          const invite = this.inviteDsoToInvite(eventInviteDSO, events)
+          console.log(invite);
+          this.eventInviteCollectionService.add(invite).subscribe(() => console.log(++index));
+        });
+      });
+  }
+
+  private importAllEventAttendees(eventAttendanceDSOs: EventAttendanceDso[]) {
+    let index = 0;
+    this.eventCollectionService.getAll()
+      .pipe(take(1))
+      .subscribe(events => {
+        eventAttendanceDSOs
+          .filter(eventAttendanceDSO => eventAttendanceDSO.relatiecode.length > 0)
+          .forEach(eventAttendanceDSO => {
+            const attendance = this.attendanceDsoToAttendance(eventAttendanceDSO, events)
+            console.log(attendance);
+            this.eventAttendanceCollectionService.add(attendance).subscribe(() => console.log(++index));
+          });
+      });
+  }
+
+  private mergeInvitesAndAttendance(): Observable<Registration[]> {
+    return this.eventInviteCollectionService.getAll()
+      .pipe(
+        take(1),
+        switchMap(invites => this.combineInvitesAndAttendance(invites)),
+        switchMap(object => this.eventInvitesToRegistrations(object.invites.slice(0, 5), object.attendance)))
+  }
+
+  private combineInvitesAndAttendance(eventInvites: EventInvite[]): Observable<{ invites: EventInvite[], attendance: EventAttendance[] }> {
+    return this.eventAttendanceCollectionService.getAll()
+      .pipe(take(1),map(attendances => { return { invites: eventInvites, attendance: attendances }}));
+  }
+
+  private eventInvitesToRegistrations(eventInvites: EventInvite[], eventAttendances: EventAttendance[]): Observable<Registration[]> {
+    return this.fileImportService.eventInvitesToRegistrations(eventInvites, eventAttendances);
+  }
+
+  private updateRelations(): Observable<RelationDso[]> {
     const database:AngularFirestoreCollection<Relation> = this.db.collection('relations');
     let index = 0;
     return this.getRelationDSOFromDB()
@@ -56,6 +127,30 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
   private getRelationDSOFromDB(): Observable<RelationDso[]> {
     const databaseDSO:AngularFirestoreCollection<RelationDso> = this.db.collection('relation');
     return databaseDSO.valueChanges();
+  }
+
+  private inviteDsoToInvite(inviteDso: EventInviteDSO, events: Event[]): EventInvite {
+    const invite: EventInvite = {
+      relationCode: Number(inviteDso.relatiecode),
+      event: events.find(event => event.name.toLowerCase() === inviteDso.event.toLowerCase())!.id!,
+      type: this.stringToInviteType(inviteDso.soortuitnodiging),
+      personsEvent: this.toNumber(inviteDso.aantalpersonenevent),
+      personsDiner: this.toNumber(inviteDso.aantalpersonendiner),
+    }
+    return this.getValuable(invite);
+  }
+
+  private attendanceDsoToAttendance(attendanceDso: EventAttendanceDso, events: Event[]): EventAttendance {
+    const invite: EventAttendance = {
+      relationCode: Number(attendanceDso.relatiecode),
+      event: events.find(event => event.name.toLowerCase() === attendanceDso.event.toLowerCase())!.id!,
+      personsEvent: this.toNumber(attendanceDso.aantalpersonenevent),
+      personsDiner: this.toNumber(attendanceDso.aantalpersonendiner),
+      placement: this.stringToPlacement(attendanceDso.placering),
+      deregistered: this.stringToDeregisteredType(attendanceDso),
+      present: this.stringNumberToBoolean(attendanceDso.aanwezigopevent)
+    }
+    return this.getValuable(invite);
   }
 
   private relationDsoToRelation(relationDso: RelationDso): Relation {
@@ -144,7 +239,7 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
   }
 
   private stringNumberToBoolean(num: string): boolean {
-    return num === '1';
+    return num !== '0';
   }
 
   private stringNumberToReasonNonActive(num: string): ReasonNonActive {
@@ -181,6 +276,31 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
 
   private toNumber(value: string): number | undefined {
     return isNaN(+value) ? undefined : Number(value);
+  }
+
+  private stringToInviteType(type: string): InviteType {
+    type = type.toLowerCase();
+    return type === 'vip' ? InviteType.vip :
+      type === 'invite' ? InviteType.invite : InviteType.unknown;
+  }
+
+  private stringToDeregisteredType(attendanceDSO: EventAttendanceDso): DeregisteredType | undefined {
+    return (attendanceDSO.afgemeldvoordefinitiefticket === '1' || attendanceDSO.afgemeldvoordefinitiefticket === '2') ?
+      DeregisteredType.beforeTicket :
+      (attendanceDSO.afgemeldnadefinitiefticket === '1' || attendanceDSO.afgemeldnadefinitiefticket === '2') ?
+         DeregisteredType.afterTicket : undefined;
+  }
+
+  private stringToPlacement(placementString: string): Placement | undefined {
+
+    let placement: Placement;
+    switch (placementString.toLowerCase()) {
+      case 'zaal': placement = Placement.hall; break;
+      case 'op naam': placement = Placement.byName; break;
+      case 'gereserveerd': placement = Placement.reserved; break;
+    }
+    // @ts-ignore
+    return placement;
   }
 
 }

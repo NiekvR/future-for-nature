@@ -5,11 +5,14 @@ import { ApplicationService } from '@app/core/application.service';
 import { HighlightService } from '@app/core/highlight.service';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
 import { UserService } from '@app/core/user.service';
+import { RelationsCollectionService } from '@app/core/relations-collection.service';
+import { EventCollectionService } from '@app/core/event-collection.service';
+import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
+import { EventAttendanceCollectionService } from '@app/core/even-attendance-collection.service';
 
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule
   ],
@@ -18,7 +21,11 @@ import { UserService } from '@app/core/user.service';
     ApplicationService,
     HighlightService,
     ScoreCollectionService,
-    UserService
+    UserService,
+    RelationsCollectionService,
+    EventCollectionService,
+    EventInviteCollectionService,
+    EventAttendanceCollectionService
   ]
 })
 export class CoreModule { }

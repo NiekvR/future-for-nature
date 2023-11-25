@@ -9,6 +9,8 @@ import { ManageUsersComponent } from '@app/admin/manage-users/manage-users.compo
 import { CardComponent } from './card/card.component';
 import { CrmComponent } from './crm/crm.component';
 import { FileImportComponent } from './crm/file-import/file-import.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RegistrationImportComponent } from './crm/file-import/attendance-import/registration-import.component';
 
 
 
@@ -22,10 +24,12 @@ import { FileImportComponent } from './crm/file-import/file-import.component';
     ManageUsersComponent,
     CardComponent,
     CrmComponent,
-    FileImportComponent
+    FileImportComponent,
+    RegistrationImportComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ]
 })
 export class AdminModule { }

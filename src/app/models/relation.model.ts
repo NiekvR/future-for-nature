@@ -23,7 +23,7 @@ export enum ReasonNonActive {
 }
 
 export interface Relation {
-  relationType: RelationType;
+  relationType?: RelationType;
   relationStatus: RelationStatus;
   relationCode: number;
   relationName: string;

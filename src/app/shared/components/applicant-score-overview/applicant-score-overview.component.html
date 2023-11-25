@@ -16,7 +16,7 @@
     [applicant]="applicant"
     [score]="scores[ applicant.id! ]"
     [class.uneven]="i % 2 === 0"
-    [class.completed]="scores[ applicant.id! ]?.submitted"
-    [class.skipped]="scores[ applicant.id! ]?.skipped">
+    [class.completed]="scores[ applicant.id! ].submitted"
+    [class.skipped]="scores[ applicant.id! ].skipped">
   </ffn-applicant-list-item>
 </div>

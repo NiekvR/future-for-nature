@@ -67,9 +67,9 @@ export class AdminService {
     tempLink.click();
   }
 
-  public getRelationsFromCSV(file: File): Observable<any[]> {
+  public getFromCSV<T>(file: File): Observable<T[]> {
     const subject = new Subject<any[]>();
-    Papa.parse<ApplicationDBO>(file, {
+    Papa.parse<T>(file, {
       header: true,
       transformHeader(header: string, index: number): string {
         return header
