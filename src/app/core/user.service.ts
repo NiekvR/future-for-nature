@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AppUser } from '@app/models/app-user';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -7,11 +6,12 @@ import { from, map, Observable, combineLatest, switchMap, forkJoin, take, filter
 import { Role } from '@app/models/role.enum';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
+import { CollectionService } from '@app/core/collection.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends FirebaseCollectionService<AppUser>  {
+export class UserService extends CollectionService<AppUser>  {
 
   constructor(private db: AngularFirestore, private afAuth: AngularFireAuth) {
     super();

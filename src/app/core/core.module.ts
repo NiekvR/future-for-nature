@@ -9,6 +9,7 @@ import { RelationsCollectionService } from '@app/core/relations-collection.servi
 import { EventCollectionService } from '@app/core/event-collection.service';
 import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
 import { EventAttendanceCollectionService } from '@app/core/even-attendance-collection.service';
+import { CollectionService } from '@app/core/collection.service';
 
 
 
@@ -25,7 +26,8 @@ import { EventAttendanceCollectionService } from '@app/core/even-attendance-coll
     RelationsCollectionService,
     EventCollectionService,
     EventInviteCollectionService,
-    EventAttendanceCollectionService
+    EventAttendanceCollectionService,
+    CollectionService
   ]
 })
 export class CoreModule { }

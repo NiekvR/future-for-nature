@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Highlights } from '@app/models/highlights.model';
@@ -9,11 +8,12 @@ import { DivSelection } from '@app/models/div-selection.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { Application } from '@app/models/application.model';
 import { ApplicationService } from '@app/core/application.service';
+import { CollectionService } from '@app/core/collection.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HighlightService extends FirebaseCollectionService<Highlights> {
+export class HighlightService extends CollectionService<Highlights> {
 
   private highlights: { [ applicationId: string ]: BehaviorSubject<Highlights | null> } = {};
 

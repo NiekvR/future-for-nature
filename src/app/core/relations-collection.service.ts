@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { Relation } from '@app/models/relation.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { CollectionService } from '@app/core/collection.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RelationsCollectionService extends FirebaseCollectionService<Relation> {
+export class RelationsCollectionService extends CollectionService<Relation> {
 
   constructor(private db: AngularFirestore) {
     super();

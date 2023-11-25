@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
 import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Application } from '@app/models/application.model';
 import { map, Observable, switchMap, combineLatest, catchError, throwError, of, tap, take } from 'rxjs';
+import { CollectionService } from '@app/core/collection.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApplicationCollectionService extends FirebaseCollectionService<Application> {
+export class ApplicationCollectionService extends CollectionService<Application> {
 
   constructor(private db: AngularFirestore) {
     super();

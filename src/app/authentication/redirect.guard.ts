@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Router } from '@angular/router';
 import { from, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { UserService } from '@app/core/user.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -10,7 +10,7 @@ import User = firebase.User;
 @Injectable({
   providedIn: 'root'
 })
-export class RedirectGuard implements CanActivate {
+export class RedirectGuard {
   constructor(private userService: UserService, private router: Router, private afAuth: AngularFireAuth) { }
 
   canActivate(): Observable<boolean> {
