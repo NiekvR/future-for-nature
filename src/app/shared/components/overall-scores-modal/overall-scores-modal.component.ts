@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SimpleModalComponent, SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalComponent, NgxModalService } from 'ngx-modalview';
 import { Application } from '@app/models/application.model';
 import { Score } from '@app/models/score.model';
 import { ScoreCategory } from '@app/models/score-category.model';
@@ -16,7 +16,7 @@ import { AppUser } from '@app/models/app-user';
   styleUrls: ['./overall-scores-modal.component.scss']
 })
 export class OverallScoresModalComponent
-  extends SimpleModalComponent<{ applicants: Application[], scores: { [ id: string]: Score } }, any>
+  extends NgxModalComponent<{ applicants: Application[], scores: { [ id: string]: Score } }, any>
   implements OnInit, OnDestroy {
   public applicants!: Application[];
   public scores!: { [ id: string]: Score };
@@ -29,7 +29,7 @@ export class OverallScoresModalComponent
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private simpleModalService: SimpleModalService, private userService: UserService) {
+  constructor(private modalService: NgxModalService, private userService: UserService) {
     super();
   }
 
@@ -45,7 +45,7 @@ export class OverallScoresModalComponent
   }
 
   public submitScores() {
-    this.simpleModalService.addModal(ConfirmComponent, {
+    this.modalService.addModal(ConfirmComponent, {
       title: 'Submit scores?',
       message: 'Are you sure you want to submit your scores?'
     })

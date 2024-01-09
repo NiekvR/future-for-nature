@@ -9,10 +9,11 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
 import {
   ApplicantScoreOverviewComponent
 } from './components/applicant-score-overview/applicant-score-overview.component';
-import { NgxPopperModule } from 'ngx-popper';
 import { TextSelectDirective } from '@app/shared/pipes/highlight-text.pipe';
 import { SelectComponent } from './components/select/select.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { NgxPopperjsModule } from 'ngx-popperjs';
+
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { AgGridModule } from 'ag-grid-angular';
     CommonModule,
     FontAwesomeModule,
     FormsModule,
-    NgxPopperModule.forRoot({placement: 'bottom'}),
+    // @ts-ignore
+    NgxPopperjsModule.forRoot({placement: 'bottom', trigger: 'click'}),
     AgGridModule
   ],
   exports: [
@@ -41,10 +43,10 @@ import { AgGridModule } from 'ag-grid-angular';
     ApplicantListItemComponent,
     ConfirmComponent,
     ApplicantScoreOverviewComponent,
-    NgxPopperModule,
     TextSelectDirective,
     SelectComponent,
-    AgGridModule
+    AgGridModule,
+    NgxPopperjsModule
   ]
 })
 export class SharedModule {

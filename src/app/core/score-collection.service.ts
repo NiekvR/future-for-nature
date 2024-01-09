@@ -1,18 +1,20 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { inject, Injectable } from '@angular/core';
+import { AngularFirestore, DocumentData, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Score } from '@app/models/score.model';
 import { filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { CollectionService } from '@app/core/collection.service';
+import { collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScoreCollectionService extends CollectionService<Score> {
+  private firestore: Firestore = inject(Firestore);
 
   constructor(private db: AngularFirestore, private afAuth: AngularFireAuth) {
     super();
-    this.setCollection(db.collection<Score>('score'));
+    this.setCollection(collection(this.firestore, 'score') as CollectionReference<Score, DocumentData>);
   }
 
   public getScoresForApplication(applicationId: string): Observable<Score> {
@@ -89,12 +91,5 @@ export class ScoreCollectionService extends CollectionService<Score> {
     }
 
     return this.add(newScore);
-  }
-
-  private docSnapshotToItem(queryDocumentSnapshot: QueryDocumentSnapshot<Score>): Score {
-    let item = queryDocumentSnapshot.data() as Score;
-    (item as any).id = queryDocumentSnapshot.id;
-    item = this.convertItem(item);
-    return item;
   }
 }

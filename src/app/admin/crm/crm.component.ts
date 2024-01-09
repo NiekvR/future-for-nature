@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import {
   OverallScoresModalComponent
 } from '@app/shared/components/overall-scores-modal/overall-scores-modal.component';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import { FileImportComponent } from '@app/admin/crm/file-import/file-import.component';
 import { CellClickedEvent, ColDef, FilterChangedEvent, GridReadyEvent } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -89,8 +89,8 @@ export class CrmComponent implements OnInit {
     { field: 'action', headerName: 'Action'},
     { field: 'category', headerName: 'Category'},
     { field: 'persons', headerName: '# persons'},
-    { field: 'registered', headerName: 'Registered'},
-    { field: 'present', headerName: 'Present'},
+    { field: 'registered', headerName: 'Registered', type: 'boolean'},
+    { field: 'present', headerName: '# Present'},
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -118,30 +118,30 @@ export class CrmComponent implements OnInit {
   // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private simpleModalService: SimpleModalService,
+  constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgxModalService,
               private relationsCollectionService: RelationsCollectionService, private eventCollectionService: EventCollectionService,
               private registrationCollectionService: RegistrationCollectionService, private fileExportService: FileExportService) { }
 
   ngOnInit(): void {
-    // this.relationsCollectionService.getAll()
-    //   .pipe(
-    //     take(1),
-    //     tap(relations => {
-    //       this.relationData = relations;
-    //       this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
-    //     }),
-    //     switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
-    //     tap(events => this.events = events),
-    //     switchMap(() => this.registrationCollectionService.getAll().pipe(take(1))),
-    //     tap(registrations => {
-    //       this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
-    //       this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
-    //     }))
-    //   .subscribe()
+    this.relationsCollectionService.getLimitNumberOfItems(50)
+      .pipe(
+        take(1),
+        tap(relations => {
+          this.relationData = relations;
+          this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
+        }),
+        switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
+        tap(events => this.events = events),
+        switchMap(() => this.registrationCollectionService.getLimitNumberOfItems(50).pipe(take(1))),
+        tap(registrations => {
+          this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
+          this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
+        }))
+      .subscribe()
   }
 
   public openFileImport() {
-    this.simpleModalService.addModal(FileImportComponent, {}).subscribe();
+    this.modalService.addModal(FileImportComponent, {}).subscribe();
   }
 
   public createInviteCSV() {
@@ -155,45 +155,35 @@ export class CrmComponent implements OnInit {
   }
 
   // Example of consuming Grid Event
-  public onCellClicked( e: CellClickedEvent): void {
-    console.log('cellClicked', e);
-  }
-  public onFilterChanged( e: FilterChangedEvent): void {
-    console.log('filterChanged', e);
-    console.log('RFilterModel', this.agGrid.api.getFilterModel());
-    if(!this.apply) {
-      this.filterModel = this.agGrid.api.getFilterModel();
-      this.apply = true;
-    }
-    console.log(this.filterModel);
-  }
+  // public onCellClicked( e: CellClickedEvent): void {
+  //   console.log('cellClicked', e);
+  // }
+  // public onFilterChanged( e: FilterChangedEvent): void {
+  //   console.log('filterChanged', e);
+  //   console.log('RFilterModel', this.agGrid.api.getFilterModel());
+  //   if(!this.apply) {
+  //     this.filterModel = this.agGrid.api.getFilterModel();
+  //     this.apply = true;
+  //   }
+  //   console.log(this.filterModel);
+  // }
 
   public applyFilter() {
     this.agGrid.api.setFilterModel(this.filterModel);
   }
 
   // Example using Grid's API
-  public  clearSelection(): void {
-    console.log('CLEAR')
-    this.agGrid.api.clearRangeSelection();
-  }
+  // public  clearSelection(): void {
+  //   console.log('CLEAR')
+  //   this.agGrid.api.clearRangeSelection();
+  // }
 
   private sortOnRelationCodeAndEvent(a: RegistrationData, b: RegistrationData): number {
     return a.relationCode === b.relationCode ? a.year - b.year : a.relationCode - b.relationCode;
   }
 
-  private mapInviteToInviteData(invite: EventInvite): EventInviteData {
-    const event = this.events.find(event => event.id === invite.event)!
-    return {
-      ...invite,
-      relationName: this.relationData.find(relation => relation.relationCode === invite.relationCode)!.relationName,
-      year: event.year,
-      event: event.name
-    }
-  }
-
   private mapInviteToRegistration(registration: Registration): RegistrationData {
-    const event = this.events.find(event => event.id === registration.event)!
+    const event = this.events.find(event => event.uid === registration.event)!
     return {
       ...registration,
       relationName: this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName,

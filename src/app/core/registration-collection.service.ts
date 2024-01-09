@@ -1,37 +1,32 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { inject, Injectable } from '@angular/core';
+import { AngularFirestore, DocumentData } from '@angular/fire/compat/firestore';
 import { Registration } from '@app/models/event-registration.model';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { from, map, Observable } from 'rxjs';
 import { CollectionService } from '@app/core/collection.service';
+import { CollectionReference, Firestore, limit } from '@angular/fire/firestore';
+import { Relation } from '@app/models/relation.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrationCollectionService extends CollectionService<Registration> {
+  private firestore: Firestore = inject(Firestore);
 
   constructor(private db: AngularFirestore) {
     super();
-    this.setCollection(db.collection<Registration>('registration'));
+    this.setCollection(collection(this.firestore, 'registration') as CollectionReference<Registration, DocumentData>);
   }
 
   public getAllFromEvent(eventId: string): Observable<Registration[]> {
-    this.db.collection('registration')
+    const q = query(collection(this.firestore, 'registration'), where("event", '==', eventId));
 
-    const q = query(collection(this.db.firestore, 'registration'), where("event", '==', eventId));
+    return this.queryCollection(q)
+  }
 
-    return from(getDocs(q))
-      .pipe(map(snapshot => {
-        console.log(snapshot);
-        const registrations: Registration[] = [];
+  public getLimitNumberOfItems(max: number): Observable<Registration[]> {
+    const q = query(collection(this.firestore, 'registration'), limit(max));
 
-        snapshot.forEach(doc => {
-          const reg = doc.data() as Registration;
-          reg.id = doc.id;
-          registrations.push(reg);
-        })
-
-        return registrations;
-      }));
+    return this.queryCollection(q)
   }
 }

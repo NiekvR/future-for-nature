@@ -3,7 +3,7 @@ import { ConfirmComponent } from '@app/shared/components/confirm/confirm.compone
 import { from, map, Observable, ReplaySubject, switchMap, takeUntil, tap, throwError } from 'rxjs';
 import { Application } from '@app/models/application.model';
 import { AdminService } from '@app/admin/admin.service';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { UserService } from '@app/core/user.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
@@ -24,9 +24,8 @@ export class ApplicantsOverviewComponent implements OnDestroy{
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private destroyGetAll$!: ReplaySubject<boolean>;
 
-  constructor(private adminService: AdminService, private simpleModalService: SimpleModalService,
-              private afAuth: AngularFireAuth, private userService: UserService,
-              private angularFireFunctions: AngularFireFunctions, private router: Router,
+  constructor(private adminService: AdminService, private modalService: NgxModalService,
+              private afAuth: AngularFireAuth, private userService: UserService, private router: Router,
               private applicationCollectionService: ApplicationCollectionService) { }
 
   ngOnDestroy() {
@@ -42,7 +41,7 @@ export class ApplicantsOverviewComponent implements OnDestroy{
     // @ts-ignore
     const applicantsCsv = event?.target?.files[ 0 ];
 
-    this.simpleModalService.addModal(ConfirmComponent, {
+    this.modalService.addModal(ConfirmComponent, {
       title: 'Upload new applicants?',
       message: 'Are you sure you want to upload new applicants? Present scores will be deleted and you will not be able to retrieve them.'
     }).subscribe(ok => {
@@ -69,7 +68,7 @@ export class ApplicantsOverviewComponent implements OnDestroy{
   }
 
   public openSelectUsersModal(applications: Application[]): Observable<Application[]> {
-    return this.simpleModalService.addModal(SelectApplicationComponent, { applications: applications });
+    return this.modalService.addModal(SelectApplicationComponent, { applications: applications });
   }
 
   public logOut() {
@@ -92,7 +91,7 @@ export class ApplicantsOverviewComponent implements OnDestroy{
   }
 
   private applicantsUploaded(): Observable<boolean> {
-    return this.simpleModalService.addModal(ConfirmComponent, {
+    return this.modalService.addModal(ConfirmComponent, {
       title: 'Applicants uploaded'
     })
   }

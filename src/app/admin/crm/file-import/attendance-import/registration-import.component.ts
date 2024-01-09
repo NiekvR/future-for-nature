@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import { AdminService } from '@app/admin/admin.service';
 import { switchMap, take, tap } from 'rxjs';
 import { RegistrationCollectionService } from '@app/core/registration-collection.service';
@@ -22,7 +22,7 @@ export class RegistrationImportComponent implements OnInit {
 
   public uploading = false;
 
-  constructor(private simpleModalService: SimpleModalService, private fileImportService: FileImportService,
+  constructor(private modalService: NgxModalService, private fileImportService: FileImportService,
               private eventCollectionService: EventCollectionService) { }
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class RegistrationImportComponent implements OnInit {
   }
 
   public close() {
-    this.simpleModalService.removeAll();
+    this.modalService.removeAll();
   }
 
   public uploadFromCsv() {
@@ -46,11 +46,10 @@ export class RegistrationImportComponent implements OnInit {
       this.eventCollectionService.get('TwUocYVmBgNqupRvHqrv')
         .pipe(
           take(1),
-          switchMap(event => this.fileImportService.getRegistration2023DsoFromCSV(this.file, event.id!)),
+          switchMap(event => this.fileImportService.getRegistration2023DsoFromCSV(this.file, event.uid!)),
           switchMap(data => this.fileImportService.getRegistrationsFromEvent(data.eventId, data.registrationDsos)),
           switchMap(data => this.fileImportService.changeAll2023Registrations(data.registrationDsos, data.registrations)))
         .subscribe(data => {
-          console.log(data);
           this.uploading = false;
         });
     }

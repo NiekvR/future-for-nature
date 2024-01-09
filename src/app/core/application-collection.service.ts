@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { inject, Injectable } from '@angular/core';
+import { AngularFirestore, DocumentData, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Application } from '@app/models/application.model';
 import { map, Observable, switchMap, combineLatest, catchError, throwError, of, tap, take } from 'rxjs';
 import { CollectionService } from '@app/core/collection.service';
+import { collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationCollectionService extends CollectionService<Application> {
+  private firestore: Firestore = inject(Firestore);
 
-  constructor(private db: AngularFirestore) {
+  constructor(private afs: AngularFirestore) {
     super();
-    this.setCollection(db.collection<Application>('application'));
+    this.afs.collection('application').snapshotChanges()
+    this.setCollection(collection(this.firestore, 'application') as CollectionReference<Application, DocumentData>);
   }
 
   public clearCollection(): Observable<boolean> {
@@ -36,12 +39,5 @@ export class ApplicationCollectionService extends CollectionService<Application>
 
   private deleteDoc(application: Application): Observable<boolean> {
     return this.delete(application).pipe(map(() => true), catchError(map(() => false)));
-  }
-
-  private docSnapshotToItem(queryDocumentSnapshot: QueryDocumentSnapshot<Application>): Application {
-    let item = queryDocumentSnapshot.data() as Application;
-    (item as any).id = queryDocumentSnapshot.id;
-    item = this.convertItem(item);
-    return item;
   }
 }

@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegistrationImportComponent } from './crm/file-import/attendance-import/registration-import.component';
 
 
-
 @NgModule({
   declarations: [
     AdminComponent,

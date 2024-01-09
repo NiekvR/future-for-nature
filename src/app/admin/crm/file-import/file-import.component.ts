@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SimpleModalComponent, SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalComponent, NgxModalService } from 'ngx-modalview';
 import { AdminService } from '@app/admin/admin.service';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Membership, ReasonNonActive, Relation, RelationStatus, RelationType } from '@app/models/relation.model';
@@ -24,14 +24,14 @@ import { FileImportService } from '@app/core/file-import.service';
   templateUrl: './file-import.component.html',
   styleUrls: ['./file-import.component.scss']
 })
-export class FileImportComponent extends SimpleModalComponent<{ }, any> {
+export class FileImportComponent extends NgxModalComponent<{ }, any> {
   public file!: File;
 
   public uploading = false;
 
   public selected: string | undefined;
 
-  constructor(private simpleModalService: SimpleModalService, private adminService: AdminService, private db: AngularFirestore,
+  constructor(private modalService: NgxModalService, private adminService: AdminService, private db: AngularFirestore,
               private dateService: DateService, private eventCollectionService: EventCollectionService,
               private eventInviteCollectionService: EventInviteCollectionService,
               private eventAttendanceCollectionService: EventAttendanceCollectionService,
@@ -47,7 +47,6 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
       this.adminService.getFromCSV<EventAttendanceDso>(this.file)
         .pipe(tap(inviteDsos => this.importAllEventAttendees(inviteDsos)))
         .subscribe(data => {
-          console.log(data);
           this.uploading = false;
         });
     }
@@ -71,7 +70,6 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
       .subscribe(events => {
         eventInviteDSOs.forEach(eventInviteDSO => {
           const invite = this.inviteDsoToInvite(eventInviteDSO, events)
-          console.log(invite);
           this.eventInviteCollectionService.add(invite).subscribe(() => console.log(++index));
         });
       });
@@ -118,7 +116,6 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
         tap(relationDsos => {
           relationDsos.forEach(relationDso => {
             const relation = this.relationDsoToRelation(relationDso);
-            console.log(relation);
             database.add(relation).then(() => console.log(++index));
           })
       }))
@@ -132,7 +129,7 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
   private inviteDsoToInvite(inviteDso: EventInviteDSO, events: Event[]): EventInvite {
     const invite: EventInvite = {
       relationCode: Number(inviteDso.relatiecode),
-      event: events.find(event => event.name.toLowerCase() === inviteDso.event.toLowerCase())!.id!,
+      event: events.find(event => event.name.toLowerCase() === inviteDso.event.toLowerCase())!.uid!,
       type: this.stringToInviteType(inviteDso.soortuitnodiging),
       personsEvent: this.toNumber(inviteDso.aantalpersonenevent),
       personsDiner: this.toNumber(inviteDso.aantalpersonendiner),
@@ -143,7 +140,7 @@ export class FileImportComponent extends SimpleModalComponent<{ }, any> {
   private attendanceDsoToAttendance(attendanceDso: EventAttendanceDso, events: Event[]): EventAttendance {
     const invite: EventAttendance = {
       relationCode: Number(attendanceDso.relatiecode),
-      event: events.find(event => event.name.toLowerCase() === attendanceDso.event.toLowerCase())!.id!,
+      event: events.find(event => event.name.toLowerCase() === attendanceDso.event.toLowerCase())!.uid!,
       personsEvent: this.toNumber(attendanceDso.aantalpersonenevent),
       personsDiner: this.toNumber(attendanceDso.aantalpersonendiner),
       placement: this.stringToPlacement(attendanceDso.placering),

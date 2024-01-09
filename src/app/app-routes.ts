@@ -17,7 +17,7 @@ import { CrmComponent } from '@app/admin/crm/crm.component';
 const redirectLoggedInToItems = () => redirectLoggedInTo(['']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
-const routes: Routes = [
+export const  routes: Routes = [
   { path: '', component: JudgeComponent, canActivate: [RedirectGuard] },
   { path: 'login', component: LoginComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectLoggedInToItems } },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
@@ -46,9 +46,3 @@ const routes: Routes = [
   { path: 'admin/', component: AdminComponent, canActivate: [AdminGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

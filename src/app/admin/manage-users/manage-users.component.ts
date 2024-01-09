@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppUser } from '@app/models/app-user';
-import { filter, from, Observable, ReplaySubject, switchMap, takeUntil } from 'rxjs';
+import { filter, from, map, Observable, ReplaySubject, switchMap, take, takeUntil } from 'rxjs';
 import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
-import { AdminService } from '@app/admin/admin.service';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { UserService } from '@app/core/user.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
@@ -18,9 +17,7 @@ import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.comp
 export class ManageUsersComponent implements OnInit {
   public users!: AppUser[];
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private adminService: AdminService, private simpleModalService: SimpleModalService,
+  constructor(private modalService: NgxModalService,
               private afAuth: AngularFireAuth, private userService: UserService,
               private angularFireFunctions: AngularFireFunctions, private router: Router) { }
 
@@ -29,28 +26,31 @@ export class ManageUsersComponent implements OnInit {
   }
 
   public addNewUser() {
-    this.simpleModalService.addModal(AddUserComponent).subscribe();
+    this.modalService.addModal(AddUserComponent).subscribe(() => this.getAllUsers());;
   }
 
   public updateUser(user: AppUser) {
-    this.simpleModalService.addModal(AddUserComponent, { user: user }).subscribe();
+    this.modalService.addModal(AddUserComponent, { user: user }).subscribe(() => this.getAllUsers());;
   }
 
   public getAllUsers() {
     this.userService.getAllAssessors()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(
+        take(1),
+        map(users => users.sort((a,b) => (a.name > b.name) ? 1 : -1)))
       .subscribe(users => this.users = users);
   }
 
   public deleteUser(user: AppUser) {
-    this.simpleModalService.addModal(ConfirmComponent, {
+    this.modalService.addModal(ConfirmComponent, {
       title: 'Delete User',
       message: 'Are you sure you want to delete ' + user.name + '?'
     }).pipe(
       filter(ok => ok),
       switchMap(() => this.callDeleteUser(user.uid!)),
-      switchMap(() => this.userService.delete(user)))
-      .subscribe();
+      switchMap(() => this.userService.delete(user))
+    )
+      .subscribe(() => this.getAllUsers());
   }
 
   public logOut() {

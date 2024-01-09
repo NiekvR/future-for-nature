@@ -10,9 +10,7 @@
       <i class="fa-solid fa-filter cursor-pointer"
          [class.active]="option !== 'Id' || order !== 'Ascending'"
          [popper]="tooltipcontent"
-         [popperTrigger]="'click'"
          [popperHideOnClickOutside]="true"
-         [popperPlacement]="'bottom'"
          [popperApplyClass]="'popperSpecialSortStyle'"
          [popperApplyArrowClass]="'popperArrowStyle'"
          (click)="sortOnStar()"></i>
@@ -30,8 +28,8 @@
         [score]="submittedScores[ applicant.id! ]"
         [index]="i + 1"
         [class.selected]="applicant.id === selectedApplication?.id"
-        [class.completed]="submittedScores[ applicant.id! ].submitted"
-        [class.skipped]="submittedScores[ applicant.id! ].skipped"
+        [class.completed]="submittedScores[ applicant.id! ]?.submitted"
+        [class.skipped]="submittedScores[ applicant.id! ]?.skipped"
         [class.uneven]="i % 2 === 0"
         [class.selectable]="true"
         (click)="selectApplicant(applicant)">
@@ -50,8 +48,8 @@
   <div *ngIf="!selectedApplication" class="text-center p-50">Click on an applicant to start.</div>
   <ng-container *ngIf="selectedApplication">
     <div class="flex align-center justify-space-between app-header"
-         [class.submitted]="submittedScores[ selectedApplication.id! ].submitted"
-         [class.skipped]="submittedScores[ selectedApplication.id! ].skipped">
+         [class.submitted]="submittedScores[ selectedApplication.id! ]?.submitted"
+         [class.skipped]="submittedScores[ selectedApplication.id! ]?.skipped">
       <h1>Application:</h1>
       <h2>{{ selectedApplication.name.fullName + ' - ' + selectedApplication.ffnId }}</h2>
     </div>
