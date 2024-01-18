@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, isDevMode, OnInit, ViewChild } from '@angular/core';
 import { from, map, Observable, switchMap, take, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
@@ -125,8 +125,9 @@ export class CrmComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit(): void {
-    this.relationsCollectionService.getLimitNumberOfItems(50)
-      .pipe(
+    const relationObservable = isDevMode() ? this.relationsCollectionService.getLimitNumberOfItems(50) : this.relationsCollectionService.getAll();
+    const registrationObservable = isDevMode() ? this.registrationCollectionService.getLimitNumberOfItems(50) : this.registrationCollectionService.getAll();
+    relationObservable.pipe(
         take(1),
         tap(relations => {
           this.relationData = relations;
@@ -134,7 +135,7 @@ export class CrmComponent implements OnInit {
         }),
         switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
         tap(events => this.events = events),
-        switchMap(() => this.registrationCollectionService.getLimitNumberOfItems(50).pipe(take(1))),
+        switchMap(() => registrationObservable.pipe(take(1))),
         tap(registrations => {
           this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
           this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
