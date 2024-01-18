@@ -92,6 +92,7 @@ export class ScoreSheetComponent implements OnInit, OnChanges, OnDestroy {
         .forEach(subCategory => delete this.score.subScores[subCategory.id].score));
       this.score.pristine = true;
       this.score.total = '0.00';
+      this.score = { ...this.score }
       this.updateScores().subscribe();
     }
   }

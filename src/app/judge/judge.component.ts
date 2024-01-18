@@ -4,7 +4,7 @@ import { ApplicationCollectionService } from '@app/core/application-collection.s
 import { from, map, ReplaySubject, takeUntil } from 'rxjs';
 import { ScoreCollectionService } from '@app/core/score-collection.service';
 import { Score } from '@app/models/score.model';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import {
   OverallScoresModalComponent
 } from '@app/shared/components/overall-scores-modal/overall-scores-modal.component';
@@ -12,8 +12,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { ShepherdService } from 'angular-shepherd';
 import { TOUR_STEPS } from '@app/tour-steps';
-import firebase from 'firebase/compat';
-import App = firebase.app.App;
 
 @Component({
   selector: 'ffn-judge',
@@ -26,7 +24,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
 
   public applications!: Application[];
   public searchedApplications!: Application[];
-  public selectedApplication!: Application | null;
+  public selectedApplication: Application | null | undefined;
 
   public submittedScores: { [ id: string]: Score } = {};
 
@@ -43,7 +41,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private applicationCollectionService: ApplicationCollectionService, private afAuth: AngularFireAuth,
-              private scoreCollectionService: ScoreCollectionService, private simpleModalService: SimpleModalService,
+              private scoreCollectionService: ScoreCollectionService, private modalService: NgxModalService,
               private router: Router, private shepherdService: ShepherdService, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
@@ -72,7 +70,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   public openAllScores() {
-    this.simpleModalService.addModal(OverallScoresModalComponent, {
+    this.modalService.addModal(OverallScoresModalComponent, {
       applicants: this.applications,
       scores: this.submittedScores
     }).subscribe();

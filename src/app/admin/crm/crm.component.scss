@@ -1,0 +1,50 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  width: 100%;
+
+  .left-panel {
+    flex: 0 0 220px;
+  }
+
+  .app-header {
+    padding: 0;
+
+    h1 {
+      padding: 15px;
+    }
+
+    button {
+      &.big {
+        flex: 0 0 67px;
+        height: 67px;
+      }
+    }
+  }
+
+  .tab-container {
+    flex: 0 0 35.5px;
+    background-color: #f8f8f8;
+
+    .tab {
+      background-color: $black;
+      color: $primary;
+      margin-top: 5px;
+      padding: 5px 20px;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      border-bottom: 3px solid $black;
+
+      &:hover {
+        border-color: $primary;
+      }
+
+      &.active {
+        background-color: $primary;
+        color: $black;
+        border-color: $primary;
+      }
+    }
+  }
+}

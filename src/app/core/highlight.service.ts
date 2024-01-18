@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { FirebaseCollectionService } from '@ternwebdesign/firebase-store';
-import { AngularFirestore, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { inject, Injectable } from '@angular/core';
+import { AngularFirestore, DocumentData, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Highlights } from '@app/models/highlights.model';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
@@ -9,18 +8,21 @@ import { DivSelection } from '@app/models/div-selection.model';
 import { ApplicationCollectionService } from '@app/core/application-collection.service';
 import { Application } from '@app/models/application.model';
 import { ApplicationService } from '@app/core/application.service';
+import { CollectionService } from '@app/core/collection.service';
+import { collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HighlightService extends FirebaseCollectionService<Highlights> {
+export class HighlightService extends CollectionService<Highlights> {
+  private firestore: Firestore = inject(Firestore);
 
   private highlights: { [ applicationId: string ]: BehaviorSubject<Highlights | null> } = {};
 
   constructor(private db: AngularFirestore, private afAuth: AngularFireAuth, private applicationService: ApplicationService,
               private applicationCollectionService: ApplicationCollectionService) {
     super();
-    this.setCollection(db.collection<Highlights>('highlights'));
+    this.setCollection(collection(this.firestore, 'highlights') as CollectionReference<Highlights, DocumentData>);
   }
 
   public getHighlights(applicationId: string): Observable<{ [ id: string ]: SelectedText }> {
@@ -211,13 +213,6 @@ export class HighlightService extends FirebaseCollectionService<Highlights> {
 
   private createNewSelectedText(originalText: string): SelectedText {
     return { text: originalText, originalText: originalText, selected: [] };
-  }
-
-  private docSnapshotToItem(queryDocumentSnapshot: QueryDocumentSnapshot<Highlights>): Highlights {
-    let item = queryDocumentSnapshot.data() as Highlights;
-    (item as any).id = queryDocumentSnapshot.id;
-    item = this.convertItem(item);
-    return item;
   }
 
   private exists(applicationId: string): boolean {

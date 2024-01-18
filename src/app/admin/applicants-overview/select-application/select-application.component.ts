@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Application } from '@app/models/application.model';
-import { SimpleModalComponent, SimpleModalService } from 'ngx-simple-modal';
 import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
+import { NgxModalComponent, NgxModalService } from 'ngx-modalview';
 
 @Component({
   selector: 'ffn-select-application',
   templateUrl: './select-application.component.html',
   styleUrls: ['./select-application.component.scss']
 })
-export class SelectApplicationComponent extends SimpleModalComponent<{ applications: Application[] }, Application[]> implements OnInit{
+export class SelectApplicationComponent extends NgxModalComponent<{ applications: Application[] }, Application[]> implements OnInit{
 
   public applications!: Application[];
 
-  constructor(private simpleModalService: SimpleModalService) {
+  constructor(private modalService: NgxModalService) {
     super();
   }
 
@@ -25,7 +25,7 @@ export class SelectApplicationComponent extends SimpleModalComponent<{ applicati
   }
 
   public cancel() {
-    this.simpleModalService.addModal(ConfirmComponent, {
+    this.modalService.addModal(ConfirmComponent, {
       title: 'Stop uploading new applicants?',
       message: 'Are you sure you want to cancel? These applicants won\'t be uploaded and can not be used.'
     }).subscribe(ok => {
@@ -36,7 +36,7 @@ export class SelectApplicationComponent extends SimpleModalComponent<{ applicati
   }
 
   public confirm() {
-    this.simpleModalService.addModal(ConfirmComponent, {
+    this.modalService.addModal(ConfirmComponent, {
       title: 'Are you sure?',
       message: 'Are you sure all selected applicants are open for scoring? After this step the applicants will be uploaded and visible for the jury.'
     }).subscribe(ok => {

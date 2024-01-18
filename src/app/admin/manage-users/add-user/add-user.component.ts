@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { SimpleModalComponent } from 'ngx-simple-modal';
+import { NgxModalComponent } from 'ngx-modalview';
 import { UserService } from '@app/core/user.service';
 import { filter, map, Observable, switchMap, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { AppUser } from '@app/models/app-user';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ffn-add-user',
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss']
 })
-export class AddUserComponent extends SimpleModalComponent<{}, any> implements OnInit{
+export class AddUserComponent extends NgxModalComponent<{}, any> implements OnInit{
   public email!: string;
   public name!: string;
   public user!: AppUser;
@@ -39,8 +39,6 @@ export class AddUserComponent extends SimpleModalComponent<{}, any> implements O
         }
       });
   }
-
-
 
   private setUp() {
     if(!!this.user) {

@@ -1,0 +1,22 @@
+<div class="content">
+  <h4>Import registrations</h4>
+  <div class="body">
+    <form #form class="flex flex-column m-t-0 w-100">
+      <input type="text" name="event-name" [(ngModel)]="eventName" placeholder="Event name" required>
+      <input type="number" name="event-year" [(ngModel)]="year" placeholder="Event year" required>
+      <input
+        required
+        placeholder="Add attendance csv"
+        type="file"
+        (change)="saveFile($event)"
+        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+      <div class="error-message" *ngIf="!!error">
+        {{error}}
+      </div>
+    </form>
+  </div>
+  <div class="footer">
+    <button type="button" class="secondary" (click)="close()" >Cancel</button>
+    <button type="button" (click)="uploadFromCsv()" [class.disabled]="uploading || !file">Upload</button>
+  </div>
+</div>

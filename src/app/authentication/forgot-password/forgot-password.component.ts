@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SimpleModalComponent } from 'ngx-simple-modal';
+import { NgxModalComponent } from 'ngx-modalview';
 import { from } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat';
@@ -10,7 +10,7 @@ import FirebaseError = firebase.FirebaseError;
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })
-export class ForgotPasswordComponent extends SimpleModalComponent<{}, boolean> {
+export class ForgotPasswordComponent extends NgxModalComponent<{}, boolean> {
 
   public email!: string;
 

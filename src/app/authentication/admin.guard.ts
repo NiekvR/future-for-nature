@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Router } from '@angular/router';
 import { map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { UserService } from '@app/core/user.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -8,7 +8,7 @@ import { Role } from '@app/models/role.enum';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class AdminGuard {
   constructor(private userService: UserService, private router: Router, private afAuth: AngularFireAuth) { }
 
   canActivate(): Observable<boolean> {
