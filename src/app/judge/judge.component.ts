@@ -24,7 +24,7 @@ export class JudgeComponent implements OnInit, OnDestroy {
 
   public applications!: Application[];
   public searchedApplications!: Application[];
-  public selectedApplication!: Application | null;
+  public selectedApplication: Application | null | undefined;
 
   public submittedScores: { [ id: string]: Score } = {};
 
