@@ -12,6 +12,7 @@ import { ApplicationCollectionService } from '@app/core/application-collection.s
 import {
   SelectApplicationComponent
 } from '@app/admin/applicants-overview/select-application/select-application.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'ffn-applicants-overview',
@@ -24,7 +25,7 @@ export class ApplicantsOverviewComponent implements OnDestroy{
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private destroyGetAll$!: ReplaySubject<boolean>;
 
-  constructor(private adminService: AdminService, private modalService: NgxModalService,
+  constructor(private adminService: AdminService, private modalService: NgxModalService, private location: Location,
               private afAuth: AngularFireAuth, private userService: UserService, private router: Router,
               private applicationCollectionService: ApplicationCollectionService) { }
 
@@ -35,6 +36,10 @@ export class ApplicantsOverviewComponent implements OnDestroy{
       this.destroyGetAll$.next(true);
       this.destroyGetAll$.complete();
     }
+  }
+
+  public back() {
+    this.location.back();
   }
 
   public uploadNewApplicants(event: Event, element: any) {

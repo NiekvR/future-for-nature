@@ -21,6 +21,7 @@ import { RegistrationCollectionService } from '@app/core/registration-collection
 import { InviteAction, InviteCategory, Registration } from '@app/models/event-registration.model';
 import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { FileExportService } from '@app/core/file-export.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'ffn-crm',
@@ -120,7 +121,8 @@ export class CrmComponent implements OnInit {
 
   constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgxModalService,
               private relationsCollectionService: RelationsCollectionService, private eventCollectionService: EventCollectionService,
-              private registrationCollectionService: RegistrationCollectionService, private fileExportService: FileExportService) { }
+              private registrationCollectionService: RegistrationCollectionService, private fileExportService: FileExportService,
+              private location: Location) { }
 
   ngOnInit(): void {
     this.relationsCollectionService.getLimitNumberOfItems(50)
@@ -152,6 +154,10 @@ export class CrmComponent implements OnInit {
   public logOut() {
     from(this.afAuth.signOut())
       .subscribe(() => this.router.navigate(['/login']));
+  }
+
+  public back() {
+    this.location.back();
   }
 
   // Example of consuming Grid Event

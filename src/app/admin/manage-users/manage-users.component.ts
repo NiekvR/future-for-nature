@@ -8,6 +8,7 @@ import { UserService } from '@app/core/user.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { Router } from '@angular/router';
 import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'ffn-manage-users',
@@ -17,12 +18,16 @@ import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.comp
 export class ManageUsersComponent implements OnInit {
   public users!: AppUser[];
 
-  constructor(private modalService: NgxModalService,
+  constructor(private modalService: NgxModalService, private location: Location,
               private afAuth: AngularFireAuth, private userService: UserService,
               private angularFireFunctions: AngularFireFunctions, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllUsers();
+  }
+
+  public back() {
+    this.location.back();
   }
 
   public addNewUser() {
