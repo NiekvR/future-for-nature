@@ -39,6 +39,7 @@
     "ngx-modalview": "^16.0.1",
     "ngx-popperjs": "^17.0.0",
     "papaparse": "^5.4.1",
+    "pdf-lib": "^1.17.1",
     "rxfire": "^6.0.5",
     "rxjs": "~7.8.1",
     "stream-browserify": "^3.0.0",

@@ -13,6 +13,7 @@ import { RedirectGuard } from '@app/authentication/redirect.guard';
 import { ManageUsersComponent } from '@app/admin/manage-users/manage-users.component';
 import { ApplicantsOverviewComponent } from '@app/admin/applicants-overview/applicants-overview.component';
 import { CrmComponent } from '@app/admin/crm/crm.component';
+import { PdfMergeComponent } from '@app/admin/pdf-merge/pdf-merge.component';
 
 const redirectLoggedInToItems = () => redirectLoggedInTo(['']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
@@ -37,10 +38,14 @@ export const  routes: Routes = [
         path: 'applicants',
         component: ApplicantsOverviewComponent
       },
+      // {
+      //   path: 'crm',
+      //   component: CrmComponent
+      // }
       {
-        path: 'crm',
-        component: CrmComponent
-      }
+        path: 'pdf',
+        component: PdfMergeComponent
+      },
     ]
   },
   { path: 'admin/', component: AdminComponent, canActivate: [AdminGuard] },
