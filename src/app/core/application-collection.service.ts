@@ -24,11 +24,6 @@ export class ApplicationCollectionService extends CollectionService<Application>
       of(true)))
   }
 
-  public getAllSelectedApplications(): Observable<Application[]> {
-    return this.getAll()
-      .pipe(map(applications => applications.filter(application => application.checked === 'yes')));
-  }
-
   private deleteAllDocsFromCollection(applications: Application[]): Observable<boolean> {
 
     return combineLatest(applications.map(application => this.deleteDoc(application)))

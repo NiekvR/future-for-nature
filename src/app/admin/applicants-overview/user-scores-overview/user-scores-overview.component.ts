@@ -100,7 +100,7 @@ export class UserScoresOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getApplications() {
-    this.applicationCollectionService.getAllSelectedApplications()
+    this.applicationCollectionService.getAll()
       .pipe(takeUntil(this.destroyed$))
       .subscribe(applicants => {
         this.applicants = applicants;
