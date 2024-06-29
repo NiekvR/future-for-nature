@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SimpleModalComponent } from 'ngx-simple-modal';
+import { NgxModalComponent } from 'ngx-modalview';
 export interface ConfirmModel {
   title:string;
   message?:string;
@@ -10,7 +10,7 @@ export interface ConfirmModel {
   templateUrl: './confirm.component.html',
   styleUrls: ['./confirm.component.scss']
 })
-export class ConfirmComponent extends SimpleModalComponent<ConfirmModel, boolean> implements ConfirmModel {
+export class ConfirmComponent extends NgxModalComponent<ConfirmModel, boolean> implements ConfirmModel {
   public title!: string;
   public message!: string;
 

@@ -1,0 +1,11 @@
+<div class="content" *ngIf="!selected">
+  <h4>Import</h4>
+  <div class="body">
+    <button *ngIf="!selected" type="button" class="secondary" (click)="setSelected('attendance')" >Import event attendance</button>
+  </div>
+  <div class="footer">
+    <button type="button" class="secondary" (click)="close()" >Cancel</button>
+  </div>
+</div>
+<ffn-attendance-import *ngIf="selected === 'attendance'"></ffn-attendance-import>
+

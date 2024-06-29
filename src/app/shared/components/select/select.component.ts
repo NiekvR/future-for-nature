@@ -10,7 +10,6 @@ export class SelectComponent {
   @Input() option!: string;
   @Output() optionChange = new EventEmitter<string>();
 
-
   constructor() { }
 
   public onSelect(option: string) {

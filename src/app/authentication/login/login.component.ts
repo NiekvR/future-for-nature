@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { filter, from, map, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
-import { SimpleModalService } from 'ngx-simple-modal';
+import { NgxModalService } from 'ngx-modalview';
 import { ForgotPasswordComponent } from '@app/authentication/forgot-password/forgot-password.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   public error!: string | null;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private simpleModalService: SimpleModalService) { }
+  constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgxModalService) { }
 
   ngOnInit(): void {
   }
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   public openPasswordModal() {
-    this.simpleModalService.addModal(ForgotPasswordComponent,{}).subscribe();
+    this.modalService.addModal(ForgotPasswordComponent,{}).subscribe();
   }
 
 }

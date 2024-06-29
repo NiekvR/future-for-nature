@@ -1,38 +1,27 @@
-@import "~src/styles/variables";
-
 :host {
-  display: flex;
   width: 100%;
 
-  .left-panel {
-    flex: 0 0 220px;
-  }
+  .bg-img {
+    background-image: url('~src/assets/img/jaguar-ffn.png');
+    height: 100%;
 
-  .card {
-    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
     display: flex;
     flex-direction: column;
-    margin: 10px;
 
-    border: 1px solid $black;
-    border-radius: 5px;
-
-    padding: 10px;
-
-    .title, .sub-title {
-      position: absolute;
-      background: white;
-      padding: 0 5px;
-
-      top: -10px;
+    .logo {
+      width: 100px;
+      background-color: white;
     }
+  }
 
-    .title {
-      left: 8px;
-    }
-
-    .sub-title {
-      right: 8px;
-    }
+  .card-container {
+    display: flex;
+    width: 50%;
+    flex: 0 0 250px;
+    overflow: hidden;
   }
 }

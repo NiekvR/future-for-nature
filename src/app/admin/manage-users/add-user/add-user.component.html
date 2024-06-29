@@ -1,5 +1,5 @@
 <div class="content">
-  <h4>Add new user</h4>
+  <h4>{{ !!user ? 'Edit user' : 'Add new user' }}</h4>
   <div class="body">
     <form #form class="flex flex-column">
       <input type="email" name="email" [(ngModel)]="email" placeholder="email" required>
@@ -11,6 +11,6 @@
   </div>
   <div class="footer">
     <button type="button" class="secondary" (click)="close()" >Cancel</button>
-    <button type="button" (click)="confirm()" [disabled]="!this.email || !this.name">Add User</button>
+    <button type="button" (click)="confirm()" [disabled]="!this.email || !this.name">{{ !!user ? 'Edit user' : 'Add user' }}</button>
   </div>
 </div>

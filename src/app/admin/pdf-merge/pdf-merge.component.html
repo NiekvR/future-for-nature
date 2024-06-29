@@ -1,0 +1,78 @@
+<div class="left-panel">
+  <div class="header">
+    <img class="logo" src="assets/svg/future-for-nature-logo.svg">
+    <div class="image-placeholder"></div>
+  </div>
+  <div class="flex flex-column flex-1 justify-space-between">
+    <div class="flex flex-column">
+      <button class="flex-1">PDF merge</button>
+      <!--      <button class="flex-1 m-t-10" (click)="createInviteCSV()">Generate Invite CSV</button>-->
+    </div>
+    <div class="flex">
+      <button class="secondary flex-1" (click)="logOut()"><i class="fas fa-power-off m-r-10"></i>Log Out</button>
+      <button (click)="back()" class="flex-1"><i class="fas fa-angle-left m-r-10"></i>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-column flex-1 overflow-hidden">
+  <div class="flex align-center justify-space-between app-header">
+    <h1>PDF tools</h1>
+  </div>
+  <div class="p-30">
+    <input
+      multiple
+      type="file"
+      accept="application/pdf"
+      (change)="uploadFiles($event)"
+    />
+    <h3>{{ uploadedPdfs.length }} {{ uploadedPdfs.length === 1 ? 'File' : 'Files'}} to be merged</h3>
+<!--    <div [dndDraggable]="uploadedPdfs">-->
+
+<!--    </div>-->
+    <table class="table" *ngIf="(uploadedPdfs && uploadedPdfs.length > 0) && !mergedPdf">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Size</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of uploadedPdfs;let i=index;">
+          <td>
+            <strong>{{ item.name }}</strong>
+          </td>
+          <td nowrap>
+            {{ item.type }}
+          </td>
+          <td nowrap>
+            {{ item.size/1024/1024 | number:'.2' }} MB
+          </td>
+          <td>
+            <button *ngIf="i !== (uploadedPdfs.length - 1)" (click)="moveFile(i, 1)" class="bare"><i class="fas fa-arrow-down"></i></button>
+          </td>
+          <td>
+            <button *ngIf="i !== 0" (click)="moveFile(i, -1)" class="bare"><i class="fas fa-arrow-up"></i></button>
+          </td>
+          <td>
+            <button (click)="removeFile(i)"><i class="fas fa-xmark"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!!mergedPdf" class="flex w-100 justify-center">
+      <form class="flex flex-column align-center m-0">
+        <label class="m-b-10">Merged file name:</label>
+        <input type="text" name="newFileName" [(ngModel)]="newFileName">
+      </form>
+    </div>
+    <div [class]="!!mergedPdf ? 'flex justify-center' : 'flex flex-end'">
+      <button *ngIf="!mergedPdf" [disabled]="uploadedPdfs.length < 2" (click)="mergeFiles()" class="m-r-10">Merge files</button>
+      <button *ngIf="!!mergedPdf" [disabled]="!mergedPdf" (click)="downloadMergedPDF()">Download PDF</button>
+    </div>`
+  </div>
+
+</div>
