@@ -3,6 +3,7 @@ import { from, ReplaySubject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AppUser } from '@app/models/app-user';
 import { Router } from '@angular/router';
+import { NgxPopperjsTriggers } from 'ngx-popperjs';
 
 @Component({
   selector: 'ffn-admin',
@@ -10,8 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit, OnDestroy {
-
-  public uploading = false;
+  public HOVER = NgxPopperjsTriggers.hover;
   public users!: AppUser[];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

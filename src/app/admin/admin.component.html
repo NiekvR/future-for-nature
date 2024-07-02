@@ -1,4 +1,8 @@
 <div class="bg-img">
+  <div class="logout" popper="Logout" [popperTrigger]="HOVER" [popperApplyClass]="'popperSpecialStyle'"
+       [popperApplyArrowClass]="'popperArrowStyle'" (click)="logOut()">
+    <i class="fas fa-2x" ngClass="fa-power-off"></i>
+  </div>
   <div class="flex flex-column align-center justify-center h-100">
     <img class="logo" src="assets/svg/future-for-nature-logo.svg">
 
