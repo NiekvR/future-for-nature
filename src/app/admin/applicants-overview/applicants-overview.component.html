@@ -8,16 +8,10 @@
       <div class="card">
         <div class="title">Upload new applications</div>
         <div class="flex">
-          <input type="file" #fileInput name="applications" (change)="uploadNewApplicants($event, fileInput)">
+          <input type="file" #fileInput name="applications" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="uploadNewApplicants($event, fileInput)">
           <div class="flex align-center">
             <i class="fas fa-spinner fa-pulse cursor-pointer" *ngIf="uploading"></i>
           </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="title">Reselect applications</div>
-        <div class="flex">
-          <button class="secondary flex-1" (click)="reselectApplicants()">Reselect applicants</button>
         </div>
       </div>
     </div>
