@@ -54,12 +54,14 @@ export class JudgeComponent implements OnInit, OnDestroy {
   }
 
   public selectApplicant(applicant: Application) {
-    this.selectedApplication = null;
-    this.cdRef.detectChanges();
-    if (this.selectedApplication !== applicant) {
-      this.selectedApplication = applicant;
-    } else {
+    if(applicant.id !== this.selectedApplication?.id) {
       this.selectedApplication = null;
+      this.cdRef.detectChanges();
+      if (this.selectedApplication !== applicant) {
+        this.selectedApplication = applicant;
+      } else {
+        this.selectedApplication = null;
+      }
     }
   }
 
