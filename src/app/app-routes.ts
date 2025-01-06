@@ -41,7 +41,7 @@ export const  routes: Routes = [
       {
         path: 'crm',
         component: CrmComponent
-      }
+      },
       {
         path: 'pdf',
         component: PdfMergeComponent
