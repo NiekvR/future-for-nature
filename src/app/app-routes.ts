@@ -38,10 +38,10 @@ export const  routes: Routes = [
         path: 'applicants',
         component: ApplicantsOverviewComponent
       },
-      // {
-      //   path: 'crm',
-      //   component: CrmComponent
-      // }
+      {
+        path: 'crm',
+        component: CrmComponent
+      }
       {
         path: 'pdf',
         component: PdfMergeComponent
