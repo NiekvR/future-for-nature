@@ -1,0 +1,5 @@
+<div class="flex justify-space-between align-center p-15 w-100 color-primary cursor-pointer" (click)="closed=!closed">
+  <i class="fa-solid status" [class.fa-angle-up]="closed" [class.fa-angle-down]="!closed"></i>
+  <p>{{ title }}</p>
+</div>
+<ng-content></ng-content>

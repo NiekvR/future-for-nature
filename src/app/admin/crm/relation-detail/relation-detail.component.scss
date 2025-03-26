@@ -1,0 +1,16 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  .status {
+    &.active {
+      color: $primary;
+    }
+    &.non-active {
+      color: $error;
+    }
+  }
+}

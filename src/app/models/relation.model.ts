@@ -73,4 +73,5 @@ export interface Relation {
   iban?: string;
   headFamilyCode?: number;
   headFamilieName?: string;
+  id?: string;
 }

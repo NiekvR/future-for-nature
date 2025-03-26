@@ -1,24 +1,17 @@
 import { Component, isDevMode, OnInit, ViewChild } from '@angular/core';
-import { from, map, Observable, switchMap, take, tap } from 'rxjs';
+import { from, switchMap, take, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import {
-  OverallScoresModalComponent
-} from '@app/shared/components/overall-scores-modal/overall-scores-modal.component';
 import { NgxModalService } from 'ngx-modalview';
 import { FileImportComponent } from '@app/admin/crm/file-import/file-import.component';
-import { CellClickedEvent, ColDef, FilterChangedEvent, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, RowClickedEvent } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { RelationsCollectionService } from '@app/core/relations-collection.service';
-import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
-import { EventInvite, InviteType } from '@app/models/event-invite.model';
 import { Event } from '@app/models/event.model';
-import { EventInviteDSO } from '@app/models/event-invite-dso.model';
 import { EventCollectionService } from '@app/core/event-collection.service';
-import { Relation } from '@app/models/relation.model';
-import { EventInviteData } from '@app/admin/crm/event-invite-data.model';
+import { Relation, RelationStatus, RelationType } from '@app/models/relation.model';
 import { RegistrationCollectionService } from '@app/core/registration-collection.service';
-import { InviteAction, InviteCategory, Registration } from '@app/models/event-registration.model';
+import { Registration } from '@app/models/event-registration.model';
 import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { FileExportService } from '@app/core/file-export.service';
 import { Location } from '@angular/common';
@@ -115,6 +108,37 @@ export class CrmComponent implements OnInit {
   ]
 
   public selectedTab = this.tabs[ 0 ];
+  public selectedRelation?: Relation = {
+    callSign: "Pamela",
+    dayOfBirth: new Date('1968-05-11'),
+    dutchSalutation: "mevrouw Van Dolderen",
+    email: "pamela@pamadvocaat.nl",
+    englishSalutation: "Mrs Van Dolderen",
+    extraFamilyInvite: false,
+    firstNames: "Pamela",
+    headBusinessRelation: true,
+    id: "01YTYbGtnfUFYhzayj85",
+    infix: "van",
+    lastName: "Dolderen",
+    nameBusinessRelation: "PAM Advocaat & Mediator",
+    natureOrganisation: false,
+    oldDonors: false,
+    phone: "026 - 4952691",
+    phone2: "06-51418903",
+    post_address: "Eusebiusbuitensingel 8",
+    post_city: "Arnhem",
+    post_landcode: "NL",
+    post_postcode: "6828 HT ",
+    relationCode: 100169,
+    relationCodeBusinessRelation: 101221,
+    relationName: "Pamela van Dolderen",
+    relationStatus: RelationStatus.active,
+    relationType: RelationType.personal,
+    visit_address: "Ursula van Raesfeltlaan 29",
+    visit_city: "De Steeg",
+    visit_landcode: "NL",
+    visit_postcode: "6994 BA"
+  }
 
   // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -162,9 +186,10 @@ export class CrmComponent implements OnInit {
   }
 
   // Example of consuming Grid Event
-  // public onCellClicked( e: CellClickedEvent): void {
-  //   console.log('cellClicked', e);
-  // }
+  public onRowClicked( e: RowClickedEvent): void {
+    console.log('row', e.data);
+    this.selectedRelation = e.data;
+  }
   // public onFilterChanged( e: FilterChangedEvent): void {
   //   console.log('filterChanged', e);
   //   console.log('RFilterModel', this.agGrid.api.getFilterModel());

@@ -11,6 +11,7 @@ import { FileImportComponent } from './crm/file-import/file-import.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistrationImportComponent } from './crm/file-import/attendance-import/registration-import.component';
 import { PdfMergeComponent } from '@app/admin/pdf-merge/pdf-merge.component';
+import { RelationDetailComponent } from '@app/admin/crm/relation-detail/relation-detail.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { PdfMergeComponent } from '@app/admin/pdf-merge/pdf-merge.component';
   ],
   imports: [
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    RelationDetailComponent
   ]
 })
 export class AdminModule { }
