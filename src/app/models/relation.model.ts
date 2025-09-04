@@ -19,7 +19,8 @@ export enum Membership {
 
 export enum ReasonNonActive {
   noContact = 'no contact',
-  decedent = 'decedent'
+  decedent = 'decedent',
+  other = 'other'
 }
 
 export interface Relation {

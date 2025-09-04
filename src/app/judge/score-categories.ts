@@ -26,7 +26,7 @@ export const SCORE_CATEGORIES: ScoreCategory[] = [
   },
   {
     id: '2',
-    name: 'Project',
+    name: 'Conservation work',
     relevance: 0.4,
     subs: [
       {

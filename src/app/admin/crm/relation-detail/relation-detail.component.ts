@@ -3,6 +3,10 @@ import { Relation, RelationStatus } from '@app/models/relation.model';
 import { DropoutComponent } from '@app/admin/crm/relation-detail/dropout/dropout.component';
 import { NgIf } from '@angular/common';
 import * as moment from 'moment';
+import { AppUser } from '@app/models/app-user';
+import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.component';
+import { NgxModalService } from 'ngx-modalview';
+import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
 
 @Component({
   selector: 'ffn-relation-detail',
@@ -21,7 +25,7 @@ export class RelationDetailComponent implements OnInit {
 
   public RelationStatus = RelationStatus;
 
-  constructor() { }
+  constructor(private modalService: NgxModalService) { }
 
   ngOnInit(): void {
     this.hasRelationToFFN = this.relationHasRelationToFFN();
@@ -33,5 +37,9 @@ export class RelationDetailComponent implements OnInit {
 
   public relationHasRelationToFFN() {
     return !!this.relation.board && !!this.relation.team && !!this.relation.nsc && !!this.relation.isc && !!this.relation.rva && !!this.relation.ffnFriend && !!this.relation.globeGuard;
+  }
+
+  public updateRelation(relation: Relation) {
+    this.modalService.addModal(EditRelationComponent, { relation: relation }).subscribe(relation => this.relation = relation);
   }
 }

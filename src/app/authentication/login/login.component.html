@@ -3,8 +3,8 @@
     <img class="logo" src="assets/svg/future-for-nature-logo.svg">
 
     <form class="flex flex-column">
-      <input type="email" name="name" [(ngModel)]="credentials.name" placeholder="email">
-      <input type="password" name="password" [(ngModel)]="credentials.password" placeholder="password">
+      <input class="special" type="email" name="name" [(ngModel)]="credentials.name" placeholder="email">
+      <input class="special" type="password" name="password" [(ngModel)]="credentials.password" placeholder="password">
       <div class="error-message" *ngIf="!!error">
         {{error}}
       </div>

@@ -15,6 +15,7 @@ import { Registration } from '@app/models/event-registration.model';
 import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { FileExportService } from '@app/core/file-export.service';
 import { Location } from '@angular/common';
+import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
 
 @Component({
   selector: 'ffn-crm',
@@ -108,37 +109,7 @@ export class CrmComponent implements OnInit {
   ]
 
   public selectedTab = this.tabs[ 0 ];
-  public selectedRelation?: Relation = {
-    callSign: "Pamela",
-    dayOfBirth: new Date('1968-05-11'),
-    dutchSalutation: "mevrouw Van Dolderen",
-    email: "pamela@pamadvocaat.nl",
-    englishSalutation: "Mrs Van Dolderen",
-    extraFamilyInvite: false,
-    firstNames: "Pamela",
-    headBusinessRelation: true,
-    id: "01YTYbGtnfUFYhzayj85",
-    infix: "van",
-    lastName: "Dolderen",
-    nameBusinessRelation: "PAM Advocaat & Mediator",
-    natureOrganisation: false,
-    oldDonors: false,
-    phone: "026 - 4952691",
-    phone2: "06-51418903",
-    post_address: "Eusebiusbuitensingel 8",
-    post_city: "Arnhem",
-    post_landcode: "NL",
-    post_postcode: "6828 HT ",
-    relationCode: 100169,
-    relationCodeBusinessRelation: 101221,
-    relationName: "Pamela van Dolderen",
-    relationStatus: RelationStatus.active,
-    relationType: RelationType.personal,
-    visit_address: "Ursula van Raesfeltlaan 29",
-    visit_city: "De Steeg",
-    visit_landcode: "NL",
-    visit_postcode: "6994 BA"
-  }
+  public selectedRelation?: Relation;
 
   // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -149,26 +120,34 @@ export class CrmComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit(): void {
+
+  }
+
+  public getData() {
     const relationObservable = isDevMode() ? this.relationsCollectionService.getLimitNumberOfItems(50) : this.relationsCollectionService.getAll();
     const registrationObservable = isDevMode() ? this.registrationCollectionService.getLimitNumberOfItems(50) : this.registrationCollectionService.getAll();
     relationObservable.pipe(
-        take(1),
-        tap(relations => {
-          this.relationData = relations;
-          this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
-        }),
-        switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
-        tap(events => this.events = events),
-        switchMap(() => registrationObservable.pipe(take(1))),
-        tap(registrations => {
-          this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
-          this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
-        }))
+      take(1),
+      tap(relations => {
+        this.relationData = relations;
+        this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
+      }),
+      switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
+      tap(events => this.events = events),
+      switchMap(() => registrationObservable.pipe(take(1))),
+      tap(registrations => {
+        this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
+        this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
+      }))
       .subscribe()
   }
 
   public openFileImport() {
     this.modalService.addModal(FileImportComponent, {}).subscribe();
+  }
+
+  public openAddRelationImport() {
+    this.modalService.addModal(EditRelationComponent, {}).subscribe();
   }
 
   public createInviteCSV() {
@@ -203,12 +182,6 @@ export class CrmComponent implements OnInit {
   public applyFilter() {
     this.agGrid.api.setFilterModel(this.filterModel);
   }
-
-  // Example using Grid's API
-  // public  clearSelection(): void {
-  //   console.log('CLEAR')
-  //   this.agGrid.api.clearRangeSelection();
-  // }
 
   private sortOnRelationCodeAndEvent(a: RegistrationData, b: RegistrationData): number {
     return a.relationCode === b.relationCode ? a.year - b.year : a.relationCode - b.relationCode;
