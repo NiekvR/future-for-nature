@@ -475,7 +475,7 @@ export class EditRelationComponent extends NgxModalComponent<{}, any> implements
     relationForm.relationName = relationForm.callSign.replace(/^\s+|\s+$/g, '') + ' ' + relationForm.infix.replace(/^\s+|\s+$/g, '') + ' ' + relationForm.lastName.replace(/^\s+|\s+$/g, '');
     console.log(relationForm);
 
-    this.relationsCollectionService.update(relationForm)
+    (!!relationForm.relationCode ? this.relationsCollectionService.update(relationForm) : this.relationsCollectionService.add(relationForm))
       .subscribe(relation => {
         this.result = relation;
         this.close()

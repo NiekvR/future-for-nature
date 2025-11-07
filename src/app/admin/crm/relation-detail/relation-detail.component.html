@@ -101,7 +101,7 @@
         <div>{{ relation.infix }}</div>
       </div>
       <div class="flex justify-space-between" *ngIf="relation.lastName">
-        <div>Last name:</div>
+        <div>Last relationName:</div>
         <div>{{ relation.lastName }}</div>
       </div>
       <div class="flex justify-space-between" *ngIf="relation.dayOfBirth">
@@ -226,6 +226,6 @@
 </div>
 <div class="flex">
   <button (click)="updateRelation(relation)" class="flex-1"><i class="fas fa-edit m-r-10"></i>Edit user</button>
-  <button class="error flex-1"><i class="fas fa-trash m-r-10"></i>Remove user</button>
+  <button (click)="deleteRelation()" class="error flex-1"><i class="fas fa-trash m-r-10"></i>Remove user</button>
 </div>
 

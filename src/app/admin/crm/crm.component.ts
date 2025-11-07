@@ -16,6 +16,7 @@ import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { FileExportService } from '@app/core/file-export.service';
 import { Location } from '@angular/common';
 import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
+import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'ffn-crm',
@@ -130,7 +131,7 @@ export class CrmComponent implements OnInit {
       take(1),
       tap(relations => {
         this.relationData = relations;
-        this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
+        this.relationData.sort((a, b) => {return a.relationCode! - b.relationCode! });
       }),
       switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
       tap(events => this.events = events),
@@ -184,17 +185,28 @@ export class CrmComponent implements OnInit {
   }
 
   private sortOnRelationCodeAndEvent(a: RegistrationData, b: RegistrationData): number {
-    return a.relationCode === b.relationCode ? a.year - b.year : a.relationCode - b.relationCode;
+    let sortData = a.relationCode === undefined && b.relationCode === undefined;
+    return (sortData ? a.relationName === b.relationName : a.relationCode === b.relationCode) ? a.year - b.year : (sortData ? a.relationName?.localeCompare(b.relationName!)! : a.relationCode! - b.relationCode!);
   }
 
   private mapInviteToRegistration(registration: Registration): RegistrationData {
     const event = this.events.find(event => event.uid === registration.event)!
     return {
       ...registration,
-      relationName: this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName,
+      relationName: !!registration.relationCode ? this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName : registration.relationName,
       year: event?.year,
       event: event?.name
     }
+  }
+
+  public deleteRelation() {
+    this.modalService.addModal(ConfirmComponent, { title: 'Delete ' + this.selectedRelation?.relationName, message: "Are you sure you want to delete '" + this.selectedRelation?.relationName + "' from your database?" })
+      .subscribe(confirmed => {
+        if(confirmed) {
+          this.relationsCollectionService.delete(this.selectedRelation!)
+            .subscribe(() => this.selectedRelation = undefined);
+        }
+      });
   }
 
 }

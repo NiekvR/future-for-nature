@@ -15,6 +15,10 @@
     overflow: hidden;
     position: relative;
 
+    .label {
+      flex: 0 0 100px;
+    }
+
     .footer {
       margin-top: 15px;
       display: flex;

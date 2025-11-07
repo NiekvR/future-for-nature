@@ -23,7 +23,7 @@
     <h1>Customer Relationship Management Portal</h1>
     <div class="flex">
       <button class="border big m-r-5" (click)="openAddRelationImport()"><i class="fas fa-user-plus fa-2x"></i></button>
-      <button class="border big" disabled><i class="fas fa-file-import fa-2x "></i></button>
+      <button class="border big" (click)="openFileImport()"><i class="fas fa-file-import fa-2x "></i></button>
     </div>
   </div>
   <div *ngIf="!relationData && !registrationData" class="flex-1 flex justify-center align-center">
@@ -42,7 +42,6 @@
   <ag-grid-angular *ngIf="selectedTab === 'Registrations' && !!registrationData"
                    style="width: 100%; height: 100%"
                    class="ag-theme-alpine"
-                   (rowClicked)="onRowClicked($event)"
                    [columnDefs]="registrationColumnDefs"
                    [defaultColDef]="defaultColDef"
                    [rowData]="registrationData"
@@ -57,7 +56,7 @@
 </div>
 
 <div class="right-panel" *ngIf="!!selectedRelation">
-  <ffn-relation-detail [relation]="selectedRelation"></ffn-relation-detail>
+  <ffn-relation-detail [relation]="selectedRelation" (deleted)="deleteRelation()"></ffn-relation-detail>
 </div>
 <!--<div class="flex-1">-->
 <!--  <ffn-edit-relation [relation]="selectedRelation"></ffn-edit-relation>-->

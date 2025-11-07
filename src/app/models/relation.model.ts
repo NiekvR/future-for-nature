@@ -26,7 +26,7 @@ export enum ReasonNonActive {
 export interface Relation {
   relationType?: RelationType;
   relationStatus: RelationStatus;
-  relationCode: number;
+  relationCode?: number;
   relationName: string;
   visit_address?: string;
   visit_postcode?: string;
@@ -75,4 +75,5 @@ export interface Relation {
   headFamilyCode?: number;
   headFamilieName?: string;
   id?: string;
+  connection?: string;
 }

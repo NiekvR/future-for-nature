@@ -4,9 +4,11 @@ import { AngularFirestore, DocumentData } from '@angular/fire/compat/firestore';
 import { CollectionService } from '@app/core/collection.service';
 import { CollectionReference, Firestore, limit } from '@angular/fire/firestore';
 import { collection, query, where } from 'firebase/firestore';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { Event } from '@app/models/event.model';
 import { map } from 'rxjs/operators';
+import { Registration } from '@app/models/event-registration.model';
+import { RelationCodeCollectionService } from '@app/core/relation-code-collection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ import { map } from 'rxjs/operators';
 export class RelationsCollectionService extends CollectionService<Relation> {
   private firestore: Firestore = inject(Firestore);
 
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private relationCodeCollectionService: RelationCodeCollectionService) {
     super();
     this.setCollection(collection(this.firestore, 'relations') as CollectionReference<Relation, DocumentData>);
   }
@@ -23,6 +25,23 @@ export class RelationsCollectionService extends CollectionService<Relation> {
     const q = query(collection(this.firestore, 'relations'), limit(max));
 
     return this.queryCollection(q);
+  }
+
+  public getItemBasedOnRelationCode(relationCode: number): Observable<Relation | undefined> {
+    const q = query(collection(this.firestore, 'relations'), where("relationCode", '==', relationCode));
+
+    return this.queryCollection(q).pipe(map(relations => relations.pop()))
+  }
+
+  public override add(item:any): Observable<Relation> {
+    return this.relationCodeCollectionService.getLatestRelationCode()
+      .pipe(
+        switchMap(relationCode => {
+          item.relationCode = ++relationCode;
+          return super.add(item);
+        }),
+        switchMap(relation => this.relationCodeCollectionService.updateRelationCode(relation))
+      )
   }
 
   protected override convertItem(item: any): Relation {

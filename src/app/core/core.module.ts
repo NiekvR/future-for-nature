@@ -7,8 +7,6 @@ import { ScoreCollectionService } from '@app/core/score-collection.service';
 import { UserService } from '@app/core/user.service';
 import { RelationsCollectionService } from '@app/core/relations-collection.service';
 import { EventCollectionService } from '@app/core/event-collection.service';
-import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
-import { EventAttendanceCollectionService } from '@app/core/even-attendance-collection.service';
 import { CollectionService } from '@app/core/collection.service';
 
 
@@ -25,8 +23,6 @@ import { CollectionService } from '@app/core/collection.service';
     UserService,
     RelationsCollectionService,
     EventCollectionService,
-    EventInviteCollectionService,
-    EventAttendanceCollectionService,
     CollectionService
   ]
 })

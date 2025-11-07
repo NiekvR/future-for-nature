@@ -5,7 +5,6 @@ import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { Event } from '@app/models/event.model';
 import { Relation } from '@app/models/relation.model';
 import { NewEventInvite } from '@app/admin/crm/new-event-invite.model';
-import { InviteAction, InviteCategory } from '@app/models/event-registration.model';
 import { Valuable } from '@app/admin/crm/file-import/valuable.model';
 
 @Injectable({

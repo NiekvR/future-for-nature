@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Relation, RelationStatus } from '@app/models/relation.model';
 import { DropoutComponent } from '@app/admin/crm/relation-detail/dropout/dropout.component';
 import { NgIf } from '@angular/common';
@@ -7,6 +7,9 @@ import { AppUser } from '@app/models/app-user';
 import { AddUserComponent } from '@app/admin/manage-users/add-user/add-user.component';
 import { NgxModalService } from 'ngx-modalview';
 import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
+import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
+import { RelationsCollectionService } from '@app/core/relations-collection.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ffn-relation-detail',
@@ -21,11 +24,13 @@ import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relatio
 export class RelationDetailComponent implements OnInit {
   @Input() relation!: Relation;
   public hasRelationToFFN = false;
+  @Output() deleted = new EventEmitter();
 
 
   public RelationStatus = RelationStatus;
 
-  constructor(private modalService: NgxModalService) { }
+  constructor(private modalService: NgxModalService, private relationsCollectionService: RelationsCollectionService, private router: Router,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.hasRelationToFFN = this.relationHasRelationToFFN();
@@ -41,5 +46,10 @@ export class RelationDetailComponent implements OnInit {
 
   public updateRelation(relation: Relation) {
     this.modalService.addModal(EditRelationComponent, { relation: relation }).subscribe(relation => this.relation = relation);
+  }
+
+  public deleteRelation() {
+    console.log('F');
+    this.deleted.next(true);
   }
 }
