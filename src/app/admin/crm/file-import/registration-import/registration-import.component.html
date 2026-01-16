@@ -18,7 +18,7 @@
         placeholder="Add attendance csv"
         type="file"
         (change)="saveFile($event)"
-        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        accept=".csv">
       <div class="error-message" *ngIf="!!error">
         {{error}}
       </div>

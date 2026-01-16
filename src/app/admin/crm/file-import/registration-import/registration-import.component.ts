@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxModalService } from 'ngx-modalview';
 import { AdminService } from '@app/admin/admin.service';
-import { map, switchMap, tap } from 'rxjs';
+import {map, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import { RegistrationDso } from '@app/models/registration-dso.model';
 import { FileImportService } from '@app/core/file-import.service';
 import { Event } from '@app/models/event.model';
@@ -23,6 +23,21 @@ export class RegistrationImportComponent implements OnInit {
   public uploading = false;
   public uploaded = false;
   public numberOfRegistration = 0;
+  public wrongHeaders: string[] = [];
+
+  private registrationHeaders = [
+    'Code',
+    'Name',
+    'Connection',
+    'Email',
+    'Invitation',
+    'Registered',
+    'Guest',
+    'Dinner',
+    'Guest Dinner',
+    'Import',
+    'Note'
+  ]
 
   constructor(private modalService: NgxModalService, private fileImportService: FileImportService,
               private adminService: AdminService, private eventCollectionService: EventCollectionService) { }
@@ -39,15 +54,18 @@ export class RegistrationImportComponent implements OnInit {
   }
 
   public upload() {
-    if(!!this.eventName && !!this.year && !!this.file) {
+    console.log(this.file.name.split('.').pop());
+    if(!!this.eventName && !!this.year && !!this.file && this.file.name.split('.').pop() === 'csv') {
       this.uploadFromCsv();
     } else {
-      this.error = 'Fill in event information';
+      this.error = 'Fill in event information or correct file type';
     }
   }
 
   public uploadFromCsv() {
     if(!this.uploading) {
+      this.wrongHeaders = [];
+      const stopSignal$ = new Subject();
       this.uploading = true;
       console.log('start', (!!this.file && !!this.eventName && !!this.year));
       this.eventCollectionService.add({ name: this.eventName, year: this.year })
@@ -56,9 +74,19 @@ export class RegistrationImportComponent implements OnInit {
             console.log(event);
             this.event = event
           }),
+          switchMap(() => this.adminService.getHeadersFromCSV(this.file)),
+          map(headers => {
+            const hasCorrectHeaders = this.hasCorrectHeaders(headers);
+            if (!hasCorrectHeaders) {
+              this.error = 'The following headers are not correct: ' + this.wrongHeaders.join(', ') + '. Please fix them in your CSV file. These are correct: ' + this.registrationHeaders.join(', ');
+              stopSignal$.next(1);
+            }
+            return headers;
+          }),
           switchMap(() => this.adminService.getFromCSV<RegistrationDso>(this.file)),
           switchMap(registrationDsos => this.fileImportService.updateAllRegistrationRelations(registrationDsos)),
-          switchMap(registrationDsos => this.fileImportService.importAllRegistrations(registrationDsos, this.event?.id!)))
+          switchMap(registrationDsos => this.fileImportService.importAllRegistrations(registrationDsos, this.event?.id!)),
+          takeUntil(stopSignal$))
         .subscribe(data => {
           console.log(data);
           this.numberOfRegistration = data.length + 1;
@@ -66,6 +94,17 @@ export class RegistrationImportComponent implements OnInit {
           //TODO add cancel to add relation, update upload proces
         });
     }
+  }
+
+  private hasCorrectHeaders(headers: string[]): boolean {
+    let hasCorrectHeader = headers.length === this.registrationHeaders.length;
+    headers.forEach(header => {
+      if(!this.registrationHeaders.includes(header)) {
+        hasCorrectHeader = false;
+        this.wrongHeaders.push(header);
+      }
+    })
+    return hasCorrectHeader;
   }
 
 }
