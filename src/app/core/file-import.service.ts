@@ -12,14 +12,12 @@ import { RelationCodeCollectionService } from '@app/core/relation-code-collectio
   providedIn: 'root'
 })
 export class FileImportService {
-  private tempNewRegistrations: Registration[] | undefined;
   private tempUploads: any[] | undefined;
   private tempEventId: string | undefined;
   private tempRelationCode = 101672;
 
   constructor(private registrationCollectionService: RegistrationCollectionService,
-              private relationsCollectionService: RelationsCollectionService,
-              private relationCodeCollectionService: RelationCodeCollectionService) { }
+              private relationsCollectionService: RelationsCollectionService) { }
 
   public importAllRegistrations(registrationDsos: RegistrationDso[], eventId: string) {
     this.tempUploads = registrationDsos;
@@ -68,7 +66,7 @@ export class FileImportService {
       getDate(newThis, 0)
         .pipe(
           expand((data, i) => {
-            console.log('Uploading ' + (i + 1));
+            console.log('Uploading ' + (i + 1) + ' COUNT: ' + count);
             return (i + 1) < count ? getDate(newThis, i + 1) : EMPTY;
           }, 0),
           reduce((acc, data) => {
@@ -139,6 +137,7 @@ export class FileImportService {
   }
 
   private registrationDsoToRegistration(registrationDso: RegistrationDso): Registration {
+    console.log(registrationDso);
     const registration: Registration = {
       event: this.tempEventId!,
       category: this.getInviteCategory(registrationDso.invitation),
@@ -218,6 +217,7 @@ export class FileImportService {
     let category: RegisteredCategory;
     switch (registeredCategory.toLowerCase().trim()) {
       case 'yes': category = RegisteredCategory.yes; break;
+      case 'no': category = RegisteredCategory.no; break;
       case 'canceled': category = RegisteredCategory.canceled; break;
       case 'unsubscribed': category = RegisteredCategory.unsubscribed; break;
       case 'unavailable': category = RegisteredCategory.unavailable; break;

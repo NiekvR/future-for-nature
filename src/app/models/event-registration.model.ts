@@ -31,6 +31,7 @@ export enum InviteCategory {
 
 export enum RegisteredCategory {
   yes = 'yes',
+  no = 'no',
   canceled = 'canceled',
   unavailable = 'unavailable',
   unsubscribed = 'unsubscribed',
