@@ -191,7 +191,7 @@ export class CrmComponent implements OnInit {
   }
 
   private mapInviteToRegistration(registration: Registration): RegistrationData {
-    const event = this.events.find(event => event.uid === registration.event)!
+    const event = this.events.find(event => event.id === registration.event)!
     return {
       ...registration,
       relationName: !!registration.relationCode ? this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName : registration.relationName,
