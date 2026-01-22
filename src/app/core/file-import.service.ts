@@ -34,6 +34,20 @@ export class FileImportService {
       .pipe(tap(() => { this.tempUploads = undefined;}));
   }
 
+  public deleteAllWrongRelations(relations: Relation[]) {
+    this.tempUploads = relations;
+    const count = relations.length;
+    return this.iterateThroughObservables(this, this.deleteThisRelation, count)
+      .pipe(tap(() => { this.tempUploads = undefined;}));
+  }
+
+  public deleteAllWrongRegistrations(registration: Registration[]) {
+    this.tempUploads = registration;
+    const count = registration.length;
+    return this.iterateThroughObservables(this, this.deleteThisRegistration, count)
+      .pipe(tap(() => { this.tempUploads = undefined;}));
+  }
+
   public getRegistrationsFromEvent(eventId: string, registration2023Dso: Registration2023Dso[]): Observable<{ registrationDsos: Registration2023Dso[], registrations: Registration[] }>  {
     return this.registrationCollectionService.getAllFromEvent(eventId)
       .pipe(map(registrations => { return { registrationDsos: registration2023Dso, registrations }}))
@@ -42,6 +56,14 @@ export class FileImportService {
   private importRegistration(newThis: this, index: number): Observable<Registration> {
     const registration = newThis.registrationDsoToRegistration(newThis.tempUploads![ index ]);
     return newThis.addRegistration(registration!);
+  }
+
+  private deleteThisRelation(newThis: this, index: number) {
+    return newThis.deleteRelation(newThis.tempUploads![ index ]);
+  }
+
+  private deleteThisRegistration(newThis: this, index: number) {
+    return newThis.deleteRegistration(newThis.tempUploads![ index ]);
   }
 
   private updateRelations(newThis: this, index: number): Observable<RegistrationDso> {
@@ -97,6 +119,14 @@ export class FileImportService {
           return registrationDso
         })
       )
+  }
+
+  private deleteRelation(relation: Relation): Observable<void> {
+    return this.relationsCollectionService.delete(relation);
+  }
+
+  private deleteRegistration(registration: Registration): Observable<void> {
+    return this.registrationCollectionService.delete(registration);
   }
 
   private createRelation(registrationDso: RegistrationDso): Relation {

@@ -33,6 +33,12 @@ export class RelationsCollectionService extends CollectionService<Relation> {
     return this.queryCollection(q).pipe(map(relations => relations.pop()))
   }
 
+  public getAllUsersWithHigherCode(): Observable<Relation[]> {
+    const q = query(collection(this.firestore, 'relations'), where("relationCode", '>', 101605));
+
+    return this.queryCollection(q)
+  }
+
   public override add(item:any): Observable<Relation> {
     return this.relationCodeCollectionService.getLatestRelationCode()
       .pipe(

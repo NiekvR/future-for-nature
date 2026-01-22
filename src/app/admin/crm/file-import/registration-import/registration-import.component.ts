@@ -6,6 +6,7 @@ import { RegistrationDso } from '@app/models/registration-dso.model';
 import { FileImportService } from '@app/core/file-import.service';
 import { Event } from '@app/models/event.model';
 import { EventCollectionService } from '@app/core/event-collection.service';
+import {RelationsCollectionService} from "@app/core/relations-collection.service";
 
 @Component({
   selector: 'ffn-registration-import',
@@ -40,7 +41,7 @@ export class RegistrationImportComponent implements OnInit {
   ]
 
   constructor(private modalService: NgxModalService, private fileImportService: FileImportService,
-              private adminService: AdminService, private eventCollectionService: EventCollectionService) { }
+              private adminService: AdminService, private eventCollectionService: EventCollectionService, private relationsCollectionService: RelationsCollectionService) { }
 
   ngOnInit(): void {
   }
@@ -84,6 +85,8 @@ export class RegistrationImportComponent implements OnInit {
             return headers;
           }),
           switchMap(() => this.adminService.getFromCSV<RegistrationDso>(this.file)),
+          tap(registrationDso => console.log(registrationDso)),
+          map(registrationDsos => registrationDsos.filter(registrationDso => this.hasData(registrationDso))),
           switchMap(registrationDsos => this.fileImportService.updateAllRegistrationRelations(registrationDsos)),
           switchMap(registrationDsos => this.fileImportService.importAllRegistrations(registrationDsos, this.event?.id!)),
           takeUntil(stopSignal$))
@@ -96,10 +99,19 @@ export class RegistrationImportComponent implements OnInit {
     }
   }
 
+  public hasData(registrationDso:RegistrationDso): boolean {
+    return !!registrationDso.name &&
+      registrationDso.name.length > 0 &&
+      !!registrationDso.email &&
+      registrationDso.email.length > 0 &&
+      !!registrationDso.invitation &&
+      registrationDso.invitation.length > 0;
+  }
+
   private hasCorrectHeaders(headers: string[]): boolean {
     let hasCorrectHeader = headers.length === this.registrationHeaders.length;
     headers.forEach(header => {
-      if(!this.registrationHeaders.includes(header)) {
+      if(!this.registrationHeaders.includes(header.trim())) {
         hasCorrectHeader = false;
         this.wrongHeaders.push(header);
       }

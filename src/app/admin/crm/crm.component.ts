@@ -17,6 +17,7 @@ import { FileExportService } from '@app/core/file-export.service';
 import { Location } from '@angular/common';
 import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
 import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
+import {FileImportService} from "@app/core/file-import.service";
 
 @Component({
   selector: 'ffn-crm',
@@ -118,7 +119,7 @@ export class CrmComponent implements OnInit {
   constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgxModalService,
               private relationsCollectionService: RelationsCollectionService, private eventCollectionService: EventCollectionService,
               private registrationCollectionService: RegistrationCollectionService, private fileExportService: FileExportService,
-              private location: Location) { }
+              private location: Location, private fileImportService: FileImportService) { }
 
   ngOnInit(): void {
 
@@ -208,5 +209,22 @@ export class CrmComponent implements OnInit {
         }
       });
   }
+
+  public removeWrongUsers() {
+    this.relationsCollectionService.getAllUsersWithHigherCode()
+      .pipe(
+        switchMap(relations => this.fileImportService.deleteAllWrongRelations(relations))
+      )
+      .subscribe(relations => console.log(relations))
+  }
+
+  public removeAllRegistrationsFromEvent() {
+    this.registrationCollectionService.getAllFromEvent('CiFuk2aZFRIKqDffAcgh')
+      .pipe(
+        switchMap(registrations => this.fileImportService.deleteAllWrongRegistrations(registrations))
+      )
+      .subscribe(registrations => console.log(registrations))
+  }
+
 
 }
