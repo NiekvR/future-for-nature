@@ -1,10 +1,12 @@
+@import "variables";
+
 form {
   margin-top: 50px;
   width: 300px;
   background-color: white;
   padding: 20px;
 
-  input {
+  .special {
     margin-bottom: 10px;
     border: none;
     border-bottom: 1px solid $secondary;

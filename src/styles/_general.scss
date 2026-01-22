@@ -216,7 +216,7 @@ i {
   font-style: italic;
 }
 
-.selected {
+.selected, .color-primary {
   color: $primary;
 }
 
@@ -236,4 +236,8 @@ popper-content {
       visibility: hidden;
     }
   }
+}
+
+.border-bottom {
+  border-bottom: 1px solid $black;
 }

@@ -1,27 +1,23 @@
 import { Component, isDevMode, OnInit, ViewChild } from '@angular/core';
-import { from, map, Observable, switchMap, take, tap } from 'rxjs';
+import { from, switchMap, take, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import {
-  OverallScoresModalComponent
-} from '@app/shared/components/overall-scores-modal/overall-scores-modal.component';
 import { NgxModalService } from 'ngx-modalview';
 import { FileImportComponent } from '@app/admin/crm/file-import/file-import.component';
-import { CellClickedEvent, ColDef, FilterChangedEvent, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, RowClickedEvent } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { RelationsCollectionService } from '@app/core/relations-collection.service';
-import { EventInviteCollectionService } from '@app/core/event-invite-collection.service';
-import { EventInvite, InviteType } from '@app/models/event-invite.model';
 import { Event } from '@app/models/event.model';
-import { EventInviteDSO } from '@app/models/event-invite-dso.model';
 import { EventCollectionService } from '@app/core/event-collection.service';
-import { Relation } from '@app/models/relation.model';
-import { EventInviteData } from '@app/admin/crm/event-invite-data.model';
+import { Relation, RelationStatus, RelationType } from '@app/models/relation.model';
 import { RegistrationCollectionService } from '@app/core/registration-collection.service';
-import { InviteAction, InviteCategory, Registration } from '@app/models/event-registration.model';
+import { Registration } from '@app/models/event-registration.model';
 import { RegistrationData } from '@app/admin/crm/registration-data.model';
 import { FileExportService } from '@app/core/file-export.service';
 import { Location } from '@angular/common';
+import { EditRelationComponent } from '@app/admin/crm/edit-relation/edit-relation.component';
+import { ConfirmComponent } from '@app/shared/components/confirm/confirm.component';
+import {FileImportService} from "@app/core/file-import.service";
 
 @Component({
   selector: 'ffn-crm',
@@ -115,6 +111,7 @@ export class CrmComponent implements OnInit {
   ]
 
   public selectedTab = this.tabs[ 0 ];
+  public selectedRelation?: Relation;
 
   // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -122,29 +119,37 @@ export class CrmComponent implements OnInit {
   constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgxModalService,
               private relationsCollectionService: RelationsCollectionService, private eventCollectionService: EventCollectionService,
               private registrationCollectionService: RegistrationCollectionService, private fileExportService: FileExportService,
-              private location: Location) { }
+              private location: Location, private fileImportService: FileImportService) { }
 
   ngOnInit(): void {
+
+  }
+
+  public getData() {
     const relationObservable = isDevMode() ? this.relationsCollectionService.getLimitNumberOfItems(50) : this.relationsCollectionService.getAll();
     const registrationObservable = isDevMode() ? this.registrationCollectionService.getLimitNumberOfItems(50) : this.registrationCollectionService.getAll();
     relationObservable.pipe(
-        take(1),
-        tap(relations => {
-          this.relationData = relations;
-          this.relationData.sort((a, b) => {return a.relationCode - b.relationCode });
-        }),
-        switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
-        tap(events => this.events = events),
-        switchMap(() => registrationObservable.pipe(take(1))),
-        tap(registrations => {
-          this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
-          this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
-        }))
+      take(1),
+      tap(relations => {
+        this.relationData = relations;
+        this.relationData.sort((a, b) => {return a.relationCode! - b.relationCode! });
+      }),
+      switchMap(() => this.eventCollectionService.getAll().pipe(take(1))),
+      tap(events => this.events = events),
+      switchMap(() => registrationObservable.pipe(take(1))),
+      tap(registrations => {
+        this.registrationData = registrations.map(registration => this.mapInviteToRegistration(registration));
+        this.registrationData.sort((a, b) => this.sortOnRelationCodeAndEvent(a, b));
+      }))
       .subscribe()
   }
 
   public openFileImport() {
     this.modalService.addModal(FileImportComponent, {}).subscribe();
+  }
+
+  public openAddRelationImport() {
+    this.modalService.addModal(EditRelationComponent, {}).subscribe();
   }
 
   public createInviteCSV() {
@@ -162,9 +167,10 @@ export class CrmComponent implements OnInit {
   }
 
   // Example of consuming Grid Event
-  // public onCellClicked( e: CellClickedEvent): void {
-  //   console.log('cellClicked', e);
-  // }
+  public onRowClicked( e: RowClickedEvent): void {
+    console.log('row', e.data);
+    this.selectedRelation = e.data;
+  }
   // public onFilterChanged( e: FilterChangedEvent): void {
   //   console.log('filterChanged', e);
   //   console.log('RFilterModel', this.agGrid.api.getFilterModel());
@@ -179,24 +185,46 @@ export class CrmComponent implements OnInit {
     this.agGrid.api.setFilterModel(this.filterModel);
   }
 
-  // Example using Grid's API
-  // public  clearSelection(): void {
-  //   console.log('CLEAR')
-  //   this.agGrid.api.clearRangeSelection();
-  // }
-
   private sortOnRelationCodeAndEvent(a: RegistrationData, b: RegistrationData): number {
-    return a.relationCode === b.relationCode ? a.year - b.year : a.relationCode - b.relationCode;
+    let sortData = a.relationCode === undefined && b.relationCode === undefined;
+    return (sortData ? a.relationName === b.relationName : a.relationCode === b.relationCode) ? a.year - b.year : (sortData ? a.relationName?.localeCompare(b.relationName!)! : a.relationCode! - b.relationCode!);
   }
 
   private mapInviteToRegistration(registration: Registration): RegistrationData {
     const event = this.events.find(event => event.uid === registration.event)!
     return {
       ...registration,
-      relationName: this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName,
+      relationName: !!registration.relationCode ? this.relationData.find(relation => relation.relationCode === registration.relationCode)?.relationName : registration.relationName,
       year: event?.year,
       event: event?.name
     }
   }
+
+  public deleteRelation() {
+    this.modalService.addModal(ConfirmComponent, { title: 'Delete ' + this.selectedRelation?.relationName, message: "Are you sure you want to delete '" + this.selectedRelation?.relationName + "' from your database?" })
+      .subscribe(confirmed => {
+        if(confirmed) {
+          this.relationsCollectionService.delete(this.selectedRelation!)
+            .subscribe(() => this.selectedRelation = undefined);
+        }
+      });
+  }
+
+  public removeWrongUsers() {
+    this.relationsCollectionService.getAllUsersWithHigherCode()
+      .pipe(
+        switchMap(relations => this.fileImportService.deleteAllWrongRelations(relations))
+      )
+      .subscribe(relations => console.log(relations))
+  }
+
+  public removeAllRegistrationsFromEvent() {
+    this.registrationCollectionService.getAllFromEvent('CiFuk2aZFRIKqDffAcgh')
+      .pipe(
+        switchMap(registrations => this.fileImportService.deleteAllWrongRegistrations(registrations))
+      )
+      .subscribe(registrations => console.log(registrations))
+  }
+
 
 }

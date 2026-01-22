@@ -1,0 +1,19 @@
+@import "variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1 0 50px;
+
+  transition: flex-grow 300ms;
+  max-height: min-content;
+  margin-top: 10px;
+  padding: 0 5px 10px 5px;
+
+  &.closed {
+    flex-grow: 0.001;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+}

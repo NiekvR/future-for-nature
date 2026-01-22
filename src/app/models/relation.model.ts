@@ -19,13 +19,14 @@ export enum Membership {
 
 export enum ReasonNonActive {
   noContact = 'no contact',
-  decedent = 'decedent'
+  decedent = 'decedent',
+  other = 'other'
 }
 
 export interface Relation {
   relationType?: RelationType;
   relationStatus: RelationStatus;
-  relationCode: number;
+  relationCode?: number;
   relationName: string;
   visit_address?: string;
   visit_postcode?: string;
@@ -73,4 +74,6 @@ export interface Relation {
   iban?: string;
   headFamilyCode?: number;
   headFamilieName?: string;
+  id?: string;
+  connection?: string;
 }

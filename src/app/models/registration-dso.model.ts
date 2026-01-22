@@ -1,12 +1,15 @@
 export interface RegistrationDso {
-  relatiecode: string;
-  naam: string;
-  actieuitnodiging: string;
-  uitnodigingcategorie: string;
-  geregistreerd: string;
-  aantalgeregistreerd: string;
-  aanwezig: string;
-  aantalaanwezig: string;
+  code: string;
+  name: string;
+  connection: string;
+  email: string;
+  invitation: string;
+  registered: string;
+  guest: string;
+  dinner: string;
+  guestdinner: string;
+  import: string;
+  note: string;
 }
 
 export interface Registration2023Dso {

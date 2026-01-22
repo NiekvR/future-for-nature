@@ -26,16 +26,32 @@ export enum InviteCategory {
   extra = 'extra',
   unknown = 'unknown',
   organization = 'organization',
-  normalPlus = 'normal plus'
+  normalPlus = 'plus one'
+}
+
+export enum RegisteredCategory {
+  yes = 'yes',
+  no = 'no',
+  canceled = 'canceled',
+  unavailable = 'unavailable',
+  unsubscribed = 'unsubscribed',
+  hardBounce = 'hard bounce',
+  softBounce = 'soft bounce'
 }
 
 export interface Registration {
   id?: string;
-  relationCode: number;
+  relationCode?: number | undefined;
   event: string;
+  relationName?: string;
   action?: InviteAction;
   category?: InviteCategory;
   persons?: number
+  registrationCategory?: RegisteredCategory;
   registered?: boolean;
   present?: number;
+  guest?: string;
+  dinner?: boolean;
+  guestDiner?: boolean;
+  note?: string;
 }

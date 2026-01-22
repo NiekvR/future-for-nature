@@ -1,7 +1,7 @@
 import { InviteAction, InviteCategory } from '@app/models/event-registration.model';
 
 export interface RegistrationData {
-  relationCode: number;
+  relationCode?: number;
   relationName?: string;
   event: string;
   year: number;
@@ -10,4 +10,5 @@ export interface RegistrationData {
   persons?: number
   registered?: boolean;
   present?: number;
+
 }

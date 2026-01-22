@@ -90,6 +90,19 @@ export class AdminService {
     return subject.asObservable().pipe(filter(applicants => !!applicants));
   }
 
+  public getHeadersFromCSV<T>(file: File): Observable<string[]> {
+    const subject = new Subject<any[]>();
+    Papa.parse<T>(file, {
+      header: true,
+      complete: function (results) {
+        subject.next(results.meta.fields!);
+        subject.complete();
+      }
+    });
+
+    return subject.asObservable().pipe(filter(applicants => !!applicants));
+  }
+
   private addApplicantToDb(application: Application): Observable<Application> {
     return this.applicationCollectionService.add(application);
   }

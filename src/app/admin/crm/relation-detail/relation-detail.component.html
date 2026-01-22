@@ -1,0 +1,231 @@
+<h3 class="text-center">
+  <i class="fa-solid fa-circle fa-2xs status"
+     [class.active]="relation.relationStatus === RelationStatus.active "
+     [class.non-active]="relation.relationStatus === RelationStatus.nonActive "></i>
+  {{ relation.relationName }}
+</h3>
+<div class="p-5 flex flex-column flex-1 overflow-auto">
+  <div class="flex justify-space-between">
+    <div>Relation code:</div>
+    <div>{{ relation.relationCode }}</div>
+  </div>
+  <div class="flex justify-space-between">
+    <div>Email:</div>
+    <div>{{ relation.email }}</div>
+  </div>
+  <div class="flex justify-space-between">
+    <div>Phone:</div>
+    <div>{{ relation.phone }}</div>
+  </div>
+  <div class="flex flex-column" *ngIf="relation.note">
+    <div>Note:</div>
+    <div>{{ relation.note }}</div>
+  </div>
+  <ffn-dropout title="Addresses">
+    <div class="p-b-5 border-bottom">
+      <div *ngIf="relation.visit_address">
+        <div><strong>Visit address:</strong></div>
+        <div class="flex justify-space-between">
+          <div>Street:</div>
+          <div>{{ relation.visit_address }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Postcode:</div>
+          <div>{{ relation.visit_postcode }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>City:</div>
+          <div>{{ relation.visit_city }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Land:</div>
+          <div>{{ relation.visit_landcode }}</div>
+        </div>
+      </div>
+      <div *ngIf="relation.post_address" class="p-t-5">
+        <div><strong>Post address:</strong></div>
+        <div class="flex justify-space-between">
+          <div>Street:</div>
+          <div>{{ relation.post_address }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Postcode:</div>
+          <div>{{ relation.post_postcode }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>City:</div>
+          <div>{{ relation.post_city }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Land:</div>
+          <div>{{ relation.post_landcode }}</div>
+        </div>
+      </div>
+    </div>
+  </ffn-dropout>
+  <ffn-dropout title="Extra Contact details">
+    <div class="p-b-5 border-bottom">
+      <div class="flex justify-space-between" *ngIf="relation.email2">
+        <div>Extra email:</div>
+        <div>{{ relation.email2 }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.phone2">
+        <div>Extra phone number:</div>
+        <div>{{ relation.phone2 }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.phone3">
+        <div>Extra phone number:</div>
+        <div>{{ relation.phone2 }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.website">
+        <div>Website:</div>
+        <div>{{ relation.website }}</div>
+      </div>
+      <div class="flex justify-center" *ngIf="!relation.email2 && !relation.phone2 && !relation.phone3 && !relation.website">
+        No extra contact details available
+      </div>
+    </div>
+  </ffn-dropout>
+  <ffn-dropout title="Personal information">
+    <div class="p-b-5 border-bottom">
+      <div class="flex justify-space-between" *ngIf="relation.firstNames">
+        <div>First names:</div>
+        <div>{{ relation.firstNames }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.callSign">
+        <div>Call sign:</div>
+        <div>{{ relation.callSign }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.infix">
+        <div>Infix:</div>
+        <div>{{ relation.infix }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.lastName">
+        <div>Last relationName:</div>
+        <div>{{ relation.lastName }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.dayOfBirth">
+        <div>Day of birth:</div>
+        <div>{{ getDate(relation.dayOfBirth) }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.dietaryRequirements">
+        <div>Dietary requirements:</div>
+        <div>{{ relation.dietaryRequirements }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.dutchSalutation">
+        <div>Dutch salutation:</div>
+        <div>{{ relation.dutchSalutation }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.englishSalutation">
+        <div>English salutation:</div>
+        <div>{{ relation.englishSalutation }}</div>
+      </div>
+    </div>
+  </ffn-dropout>
+  <ffn-dropout title="Realtion to FFN" *ngIf="hasRelationToFFN">
+    <div class="p-b-5 border-bottom">
+      <div class="flex justify-space-between" *ngIf="relation.board">
+        <div>Board:</div>
+        <div>{{ relation.board }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.team">
+        <div>Team:</div>
+        <div>{{ relation.team }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.nsc">
+        <div>NSC:</div>
+        <div>{{ relation.nsc }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.isc">
+        <div>ISC:</div>
+        <div>{{ relation.isc }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.rva">
+        <div>RVA:</div>
+        <div>{{ relation.rva }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.ffnFriend">
+        <div>FFN Friend:</div>
+        <div>{{ relation.ffnFriend }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.globeGuard">
+        <div>Globe guard:</div>
+        <div>{{ relation.globeGuard }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.winner">
+        <div>Winner:</div>
+        <div>{{ relation.winner }}</div>
+      </div>
+      <div class="flex justify-space-between" *ngIf="relation.winner">
+        <div>Old donor:</div>
+        <div>{{ relation.oldDonors }}</div>
+      </div>
+    </div>
+  </ffn-dropout>
+  <ffn-dropout title="FFN Friend" *ngIf="relation.ffnFriend">
+    <div class="flex justify-space-between p-b-5 border-bottom">
+      <div>Canceled:</div>
+      <div>{{ relation.ffnFriendCancelDate || 'n.a.' }}</div>
+    </div>
+  </ffn-dropout>
+  <ffn-dropout title="Business relation" *ngIf="relation.relationCodeBusinessRelation || relation.relationCodeBusinessRelationExtra">
+    <div class="p-b-5 border-bottom">
+      <div *ngIf="relation.relationCodeBusinessRelation" class="p-t-5">
+        <div><strong>Main:</strong></div>
+        <div class="flex justify-space-between">
+          <div>Code:</div>
+          <div>{{ relation.relationCodeBusinessRelation }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Name:</div>
+          <div>{{ relation.nameBusinessRelation }}</div>
+        </div>
+        <div class="flex justify-space-between" *ngIf="relation.headBusinessRelation">
+          <div>Is Head:</div>
+          <div>{{ relation.headBusinessRelation }}</div>
+        </div>
+        <div class="flex justify-space-between" *ngIf="relation.functionBusinessRelation">
+          <div>Function:</div>
+          <div>{{ relation.functionBusinessRelation }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Is nature organisation:</div>
+          <div>{{ relation.natureOrganisation }}</div>
+        </div>
+      </div>
+      <div *ngIf="relation.relationCodeBusinessRelationExtra" class="p-t-5">
+        <div>Extra:</div>
+        <div class="flex justify-space-between">
+          <div>Code:</div>
+          <div>{{ relation.relationCodeBusinessRelation }}</div>
+        </div>
+        <div class="flex justify-space-between">
+          <div>Name:</div>
+          <div>{{ relation.nameBusinessRelationExtra }}</div>
+        </div>
+      </div>
+    </div>
+
+  </ffn-dropout>
+  <ffn-dropout title="Family" *ngIf="relation.headFamilyCode">
+    <div class="p-b-5 border-bottom">
+      <div class="flex justify-space-between">
+        <div>Code:</div>
+        <div>{{ relation.headFamilyCode }}</div>
+      </div>
+      <div class="flex justify-space-between">
+        <div>Name:</div>
+        <div>{{ relation.headFamilieName }}</div>
+      </div>
+      <div class="flex justify-space-between">
+        <div>Has extra invite:</div>
+        <div>{{ relation.extraFamilyInvite }}</div>
+      </div>
+    </div>
+  </ffn-dropout>
+</div>
+<div class="flex">
+  <button (click)="updateRelation(relation)" class="flex-1"><i class="fas fa-edit m-r-10"></i>Edit user</button>
+  <button (click)="deleteRelation()" class="error flex-1"><i class="fas fa-trash m-r-10"></i>Remove user</button>
+</div>
+

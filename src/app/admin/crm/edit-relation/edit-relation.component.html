@@ -1,0 +1,181 @@
+<div class="content">
+  <h4>{{ !!relation ? 'Edit relation' : 'Add new relation' }}</h4>
+  <form [formGroup]="relationForm" (ngSubmit)="submitForm()" class="flex width-100 flex-column m-t-0 overflow-hidden">
+    <div class="flex overflow-auto">
+      <div class="form-lane">
+        <div>Name</div>
+        <mat-form-field *ngFor="let field of nameFields">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput [formControlName]="field.code">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="note" placeholder="Add notes when needed..."></textarea>
+        </mat-form-field>
+      </div>
+      <div class="form-lane">
+        <div>General information</div>
+        <mat-form-field [style.width.px]="212">
+          <mat-label>Date of birth</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dayOfBirth">
+          <mat-hint>DD-MM-YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field *ngFor="let field of generalInfo">
+          <mat-label>{{ field.label }}</mat-label>
+          @if (field.field === FieldType.input) {
+            <input matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.email) {
+            <input type="email" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.number) {
+            <input type="number" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.select) {
+            <mat-select [formControlName]="field.code">
+              @for (option of field.options; track option) {
+                <mat-option [value]="option.value">{{option.label}}</mat-option>
+              }
+            </mat-select>
+          }
+          @if (field.hasError && !!relationForm.get(field.code)?.errors) {
+            <mat-error>{{field.error}}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-lane">
+        <div>Visit adress:</div>
+        <mat-form-field class="example-full-width" *ngFor="let field of visitAdress">
+          <mat-label>{{ field.label }}</mat-label>
+          @if (field.field === FieldType.input) {
+            <input matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.email) {
+            <input type="email" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.number) {
+            <input type="number" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.select) {
+            <mat-select [formControlName]="field.code">
+              @for (option of field.options; track option) {
+                <mat-option [value]="option.value">{{option.label}}</mat-option>
+              }
+            </mat-select>
+          }
+          @if (field.hasError && !!relationForm.get(field.code)?.errors) {
+            <mat-error>{{field.error}}</mat-error>
+          }
+        </mat-form-field>
+        <div>Post adress:</div>
+        <mat-form-field  *ngFor="let field of postAdress">
+          <mat-label>{{ field.label }}</mat-label>
+          @if (field.field === FieldType.input) {
+            <input matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.email) {
+            <input type="email" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.number) {
+            <input type="number" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.select) {
+            <mat-select [formControlName]="field.code">
+              @for (option of field.options; track option) {
+                <mat-option [value]="option.value">{{option.label}}</mat-option>
+              }
+            </mat-select>
+          }
+          @if (field.hasError && !!relationForm.get(field.code)?.errors) {
+            <mat-error>{{field.error}}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-lane">
+        <div>Business Information</div>
+        <mat-form-field  *ngFor="let field of businessInformation">
+          <mat-label>{{ field.label }}</mat-label>
+          @if (field.field === FieldType.input) {
+            <input matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.email) {
+            <input type="email" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.number) {
+            <input type="number" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.select) {
+            <mat-select [formControlName]="field.code">
+              @for (option of field.options; track option) {
+                <mat-option [value]="option.value">{{option.label}}</mat-option>
+              }
+            </mat-select>
+          }
+          @if (field.hasError && !!relationForm.get(field.code)?.errors) {
+            <mat-error>{{field.error}}</mat-error>
+          }
+        </mat-form-field>
+        <mat-checkbox formControlName="natureOrganisation">Nature organisation</mat-checkbox>
+        <div>Memberships and status</div>
+        <mat-form-field *ngFor="let field of membershipsAndStatus">
+          <mat-label>{{ field.label }}</mat-label>
+          @if (field.field === FieldType.input) {
+            <input matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.email) {
+            <input type="email" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.number) {
+            <input type="number" matInput [formControlName]="field.code">
+          }
+          @if (field.field === FieldType.select) {
+            <mat-select [formControlName]="field.code" [multiple]="field.multiple">
+              @if (!!field.options) {
+                @for (option of field.options; track option) {
+                  <mat-option [value]="option.value">{{option.label}}</mat-option>
+                }
+              }
+              @if (!!field.multiOptions) {
+                @for (group of field.multiOptions; track group) {
+                  <mat-optgroup [label]="group.name"
+                                [disabled]="group.disabled">
+                    @for (option of group.options; track option) {
+                      <mat-option [value]="option.value">{{option.label}}</mat-option>
+                    }
+                  </mat-optgroup>
+                }
+              }
+            </mat-select>
+          }
+          @if (field.hasError && !!relationForm.get(field.code)?.errors) {
+            <mat-error>{{field.error}}</mat-error>
+          }
+        </mat-form-field>
+        <p class="flex"><mat-checkbox formControlName="oldDonors">Old Donor</mat-checkbox></p>
+        <mat-form-field [style.width.px]="212">
+          <mat-label>Ffn friend cancellation date</mat-label>
+          <input matInput [matDatepicker]="datePicker" formControlName="ffnFriendCancelDate">
+          <mat-hint>DD-MM-YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+        </mat-form-field>
+        @if (relationForm.get('relationStatus')?.value === RelationStatus.nonActive) {
+          <mat-form-field>
+            <mat-label>Reason non active</mat-label>
+            <mat-select formControlName="reasonNonActive">
+              @for (option of reasonsNonActive; track option) {
+                <mat-option [value]="option.value">{{option.label}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+
+    </div>
+    <div class="flex flex-end">
+      <button type="submit">Save</button>
+    </div>
+    </form>
+</div>

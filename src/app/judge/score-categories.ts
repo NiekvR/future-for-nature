@@ -58,7 +58,7 @@ export const SCORE_CATEGORIES: ScoreCategory[] = [
       },
       {
         id: '3.2',
-        name: 'Project',
+        name: 'Conservation work',
         info: 'Added value of the proposed project to the target species / area / habitat.'
       },
       {

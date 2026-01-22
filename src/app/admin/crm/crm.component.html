@@ -21,7 +21,13 @@
 <div class="flex flex-column flex-1 overflow-hidden">
   <div class="flex align-center justify-space-between app-header">
     <h1>Customer Relationship Management Portal</h1>
-    <button class="border big" disabled><i class="fas fa-file-import fa-2x"></i></button>
+    <div class="flex">
+      <button class="border big m-r-5" (click)="openAddRelationImport()"><i class="fas fa-user-plus fa-2x"></i></button>
+      <button class="border big" (click)="openFileImport()"><i class="fas fa-file-import fa-2x "></i></button>
+    </div>
+  </div>
+  <div *ngIf="!relationData && !registrationData" class="flex-1 flex justify-center align-center">
+    <button (click)="getData()"><i class="fas fa-download m-r-10"></i>Load relations</button>
   </div>
   <ag-grid-angular *ngIf="selectedTab === 'Relations' && !!relationData"
                     style="width: 100%; height: 100%"
@@ -29,7 +35,8 @@
                     [columnDefs]="relationColumnDefs"
                     [defaultColDef]="defaultColDef"
                     [rowData]="relationData"
-                    [rowSelection]="'multiple'"
+                   (rowClicked)="onRowClicked($event)"
+                    [rowSelection]="'single'"
                     [animateRows]="true">
   </ag-grid-angular>
   <ag-grid-angular *ngIf="selectedTab === 'Registrations' && !!registrationData"
@@ -38,7 +45,7 @@
                    [columnDefs]="registrationColumnDefs"
                    [defaultColDef]="defaultColDef"
                    [rowData]="registrationData"
-                   [rowSelection]="'multiple'"
+                   [rowSelection]="'single'"
                    [animateRows]="true">
   </ag-grid-angular>
   <div class="tab-container flex p-l-50">
@@ -47,3 +54,10 @@
     </div>
   </div>
 </div>
+
+<div class="right-panel" *ngIf="!!selectedRelation">
+  <ffn-relation-detail [relation]="selectedRelation" (deleted)="deleteRelation()"></ffn-relation-detail>
+</div>
+<!--<div class="flex-1">-->
+<!--  <ffn-edit-relation [relation]="selectedRelation"></ffn-edit-relation>-->
+<!--</div>-->

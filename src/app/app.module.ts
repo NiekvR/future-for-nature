@@ -20,6 +20,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     {
       provide: DefaultNgxModalOptionConfig,
       useValue: {...defaultNgxModalOptions, ...{ closeOnEscape: true, closeOnClickOutside: true }}
-    }
+    },
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

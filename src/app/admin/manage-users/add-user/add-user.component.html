@@ -2,8 +2,8 @@
   <h4>{{ !!user ? 'Edit user' : 'Add new user' }}</h4>
   <div class="body">
     <form #form class="flex flex-column">
-      <input type="email" name="email" [(ngModel)]="email" placeholder="email" required>
-      <input type="text" name="name" [(ngModel)]="name" placeholder="name" required>
+      <input class="special" type="email" name="email" [(ngModel)]="email" placeholder="email" required>
+      <input type="text" name="name" [(ngModel)]="name" placeholder="relationName" required>
       <div class="error-message" *ngIf="!!error">
         {{error}}
       </div>
