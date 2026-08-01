@@ -16,6 +16,11 @@
         <p class="highlight" [innerHtml]="highlights[ 'focalSpecies' ].text"></p>
         <p class="hide" id="focalSpecies" (textSelect)="openPopup($event)">{{ application.focalSpecies }}</p>
       </div>
+      <div class="application-part">
+        <label>Scientific name:</label>
+        <p class="highlight" [innerHtml]="highlights[ 'scientificName' ].text"></p>
+        <p class="hide" id="focalSpecies" (textSelect)="openPopup($event)"><i>{{ application.scientificName }}</i></p>
+      </div>
     </div>
     <div class="flex flex-column flex-50">
       <div class="application-part">
@@ -28,10 +33,10 @@
         <p class="highlight" [innerHtml]="highlights[ 'dateOfBirth' ].text"></p>
         <p class="hide" id="dateOfBirth" (textSelect)="openPopup($event)">{{ application.dateOfBirth }}</p>
       </div>
-      <div class="application-part">
+      <div class="application-part" *ngIf="!!age">
         <label>Age:</label>
         <p class="highlight" [innerHtml]="highlights[ 'age' ].text"></p>
-        <p class="hide" id="age" (textSelect)="openPopup($event)">{{ age }}</p>
+        <p class="hide" id="age" (textSelect)="openPopup($event)">{{ application.age }}</p>
       </div>
       <div class="application-part">
         <label>Gender:</label>
@@ -49,6 +54,38 @@
         <p class="hide" id="englishProficiency" (textSelect)="openPopup($event)">{{ application.englishProficiency }}</p>
       </div>
     </div>
+  </div>
+  <h1>Candidates achievements</h1>
+  <div class="application-part-row m-t-15">
+    <label>What inspired you to get into nature conservation and specifically to this species?:</label>
+    <p class="highlight" [innerHtml]="highlights[ 'inspiration' ].text"></p>
+    <p class="hide" id="inspiration" (textSelect)="openPopup($event)">{{ application.inspiration }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Outline concrete contributions you have personally made regarding species protection:</label>
+    <p class="highlight" [innerHtml]="highlights[ 'contributionsMade' ].text"></p>
+    <p class="hide" id="contributionsMade" (textSelect)="openPopup($event)">{{ application.contributionsMade }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Why should you receive the Future For Nature Award?:</label>
+    <p class="highlight" [innerHtml]="highlights[ 'achievements' ].text"></p>
+    <p class="hide" id="achievements" (textSelect)="openPopup($event)">{{ application.achievements }}</p>
+  </div>
+  <h1>Conservation vision</h1>
+  <div class="application-part-row m-t-15">
+    <label>What are the (conservation) problems you will try to solve?:</label>
+    <p class="highlight" [innerHtml]="highlights[ 'problems' ].text"></p>
+    <p class="hide" id="problems" (textSelect)="openPopup($event)">{{ application.problems }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>What strategies guide your work, and why did you determine this approach to be the most effective?):</label>
+    <p class="highlight" [innerHtml]="highlights[ 'vision' ].text"></p>
+    <p class="hide" id="vision" (textSelect)="openPopup($event)">{{ application.vision }}</p>
+  </div>
+  <div class="application-part-row m-t-15">
+    <label>Added value of the FFN award:</label>
+    <p class="highlight" [innerHtml]="highlights[ 'addedValue' ].text"></p>
+    <p class="hide" id="addedValue" (textSelect)="openPopup($event)">{{ application.addedValue }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Formal education:</label>
@@ -69,21 +106,6 @@
     <label>Other awards:</label>
     <p class="highlight" [innerHtml]="highlights[ 'otherAwards' ].text"></p>
     <p class="hide" id="otherAwards" (textSelect)="openPopup($event)">{{ application.otherAwards }}</p>
-  </div>
-  <div class="application-part-row m-t-15">
-    <label>Candidates achievements:</label>
-    <p class="highlight" [innerHtml]="highlights[ 'achievements' ].text"></p>
-    <p class="hide" id="achievements" (textSelect)="openPopup($event)">{{ application.achievements }}</p>
-  </div>
-  <div class="application-part-row m-t-15">
-    <label>Conservation vision:</label>
-    <p class="highlight" [innerHtml]="highlights[ 'vision' ].text"></p>
-    <p class="hide" id="vision" (textSelect)="openPopup($event)">{{ application.vision }}</p>
-  </div>
-  <div class="application-part-row m-t-15">
-    <label>Added value of the FFN award:</label>
-    <p class="highlight" [innerHtml]="highlights[ 'addedValue' ].text"></p>
-    <p class="hide" id="addedValue" (textSelect)="openPopup($event)">{{ application.addedValue }}</p>
   </div>
   <div class="application-part-row m-t-15">
     <label>Additional information:</label>

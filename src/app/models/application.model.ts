@@ -6,9 +6,13 @@ export interface Application {
   nationality: string;
   countryOfWork: string;
   focalSpecies: string;
+  scientificName: string;
   dateOfBirth: string;
+  age: string;
   gender: string;
   nativeLanguage: string;
+  achievements: string;
+  contributionsMade: string;
   englishProficiency: string;
   email: string;
   telephoneNumber: string;
@@ -16,7 +20,8 @@ export interface Application {
   employmentRecord: string;
   formerApplications: string;
   otherAwards: string;
-  achievements: string;
+  inspiration: string;
+  problems: string;
   vision: string;
   addedValue: string;
   additionalInformation: string;
