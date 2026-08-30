@@ -5,13 +5,15 @@ import { ApplicationCollectionService } from '@app/core/application-collection.s
 import { ApplicationDBO } from '@app/models/applicationDBO.model';
 
 import * as Papa from 'papaparse';
+import {ApplicationService} from "@app/core/application.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  constructor(private applicationCollectionService: ApplicationCollectionService) {
+  constructor(private applicationCollectionService: ApplicationCollectionService,
+              private applicationService: ApplicationService,) {
   }
 
   public getApplicantsFromCSV(file: File): Observable<ApplicationDBO[]> {
@@ -24,11 +26,16 @@ export class AdminService {
           .replace(/\s/g, '')
           .replace(/\(/g, '')
           .replace(/\)/g, '')
+          .replace(/\//g, '')
+          .replace(/\./g, '')
+          .replace(/;/g, '')
+          .replace(/,/g, '')
           .replace(/["']/g, '')
           .replace(/\?/g, '')
           .toLowerCase();
       },
       complete: function (results) {
+        console.log(results);
         subject.next(results.data);
         subject.complete();
       }
@@ -38,6 +45,7 @@ export class AdminService {
   }
 
   public applicantsDBOtoApplication(applicationDBOs: ApplicationDBO[]): Application[] {
+    console.log(applicationDBOs);
     return applicationDBOs
       .map(applicationDBO => this.getApplicationDBOToApplication(applicationDBO))
       .filter(application => application.name.fullName.trim().length > 0);
@@ -118,21 +126,32 @@ export class AdminService {
     application.nationality = applicationDBO.nationality || '';
     application.countryOfWork = applicationDBO.countryofwork || '';
     application.focalSpecies = applicationDBO.focalspecies || '';
+    application.scientificName = applicationDBO.scientificnamesofthefocalspecies || '';
     application.dateOfBirth = applicationDBO.dateofbirth || '';
+    application.age = '' + this.applicationService.getAge(applicationDBO.dateofbirth);
     application.gender = applicationDBO.gender || '';
     application.nativeLanguage = applicationDBO.nativelanguage || '';
     application.englishProficiency = applicationDBO.englishproficiency || '';
+    application.inspiration = applicationDBO.candidatesachievementswhatinspiredyoutogetintonatureconservationandspecificallytothisspecies || '';
+    application.contributionsMade = applicationDBO.candidatesachievementsoutlineconcretecontributionsyouhavepersonallymaderegardingspeciesprotectionincludingwhyyoufocusedonthisspecificspeciesandareatowhatextentdidthethreatenedstatuslocallyregionallyorgloballyofthespeciesplayaroleifanyofyourdecisionsinthepastdidnotturnoutasyouhopedforexampleintermsofprojectprogressenvisionedimpactormediaattentionpleasementionithereaswelltogetherwiththelessonslearned || '';
     application.formalEducation = applicationDBO.formaleducation || '';
     application.employmentRecord = applicationDBO.employmentrecord || '';
     application.formerApplications = applicationDBO.formerffnawardapplications || '';
     application.otherAwards = applicationDBO.otherawards || '';
-    application.achievements = applicationDBO.candidatesachievements || '';
-    application.vision = applicationDBO.conservationvision || '';
+    application.achievements = applicationDBO.candidatesachievementswhyshouldyoureceivethefuturefornatureaward || '';
+    application.problems = applicationDBO.conservationvisionwhataretheconservationproblemsyouwilltrytosolvehowaretheyembeddedinthelocalregionalglobalcontextandhowwillyouaimtosolvethem || '';
+    application.vision = applicationDBO.conservationvisionwhatstrategiesguideyourworkandwhydidyoudeterminethisapproachtobethemosteffective || '';
     application.addedValue = applicationDBO.addedvalueoftheffnaward || '';
     application.additionalInformation = applicationDBO.additionalinformation || '';
     application.referee = [
       this.getReferee1FromApplicationDBO(applicationDBO),
       this.getReferee2FromApplicationDBO(applicationDBO)];
+    application.notUsedAi = applicationDBO.ihavenotusedaitoolsinthewritingofthisapplication;
+    application.aiForLanguage = applicationDBO.ihaveusedaitoolsonlyforlanguageimprovementseggrammarspellinglanguageandconfirmthatthecontentisentirelymyown;
+    application.aiForIdeas = applicationDBO.ihaveusedaitoolsinthewritingofthisapplicationforideagenerationstructuringorpartialrewritingoftheapplicationtexttheresultingapplicationincludingtheideasexperiencesandfinalcontentarefullyreflectingmyownachievementsideasopinionsandvision;
+    application.aiForDrafts = applicationDBO.ihaveusedaitoolsextensivelytogenerateordraftpartsofthisapplicationwhileihavereviewedthecontentitmaynotfullyreflectmyownwordingideasorachievementscorrectly;
+    application.aiUnsure = applicationDBO.iamunsurehowtoclassifymyuseofaitools;
+
 
     return application;
   }
@@ -142,7 +161,7 @@ export class AdminService {
     referee.name = this.getReferee1NameFromApplicationDBO(applicationDBO);
     referee.position = applicationDBO.positionreferee1 || '';
     referee.organisation = applicationDBO.organisationreferee1 || '';
-    referee.statement = applicationDBO.referencestatementreferee1 || '';
+    referee.statement = applicationDBO.referenceletter1 || '';
     return referee;
   }
 
@@ -161,7 +180,7 @@ export class AdminService {
     referee.name = this.getReferee2NameFromApplicationDBO(applicationDBO);
     referee.position = applicationDBO.positionreferee2 || '';
     referee.organisation = applicationDBO.organisationreferee2 || '';
-    referee.statement = applicationDBO.referencestatementreferee2 || '';
+    referee.statement = applicationDBO.referenceletter2 || '';
     return referee;
   }
 
@@ -177,11 +196,10 @@ export class AdminService {
 
   private getNameFromApplicationDBO(applicationDBO: ApplicationDBO): Name {
     const name = {} as Name;
-    name.prefix = applicationDBO.prefix || '';
-    name.firstName = applicationDBO.firstname || '';
-    name.middleName = applicationDBO.middle || '';
-    name.surName = applicationDBO.surname || '';
-    name.suffix = applicationDBO.suffix || '';
+    name.firstName = applicationDBO.namefirstname || '';
+    name.middleName = applicationDBO.namemiddle || '';
+    name.surName = applicationDBO.namesurname || '';
+    name.suffix = applicationDBO.namesuffix || '';
     return this.getFullName(name);
   }
 

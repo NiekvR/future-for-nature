@@ -8,9 +8,11 @@ export class ApplicationService {
   constructor() { }
 
   public getAge(dateOfBirth: string): number {
-    const yearOfBirth = +dateOfBirth.split('/')[2];
-    const monthOfBirth = +dateOfBirth.split('/')[1];
-    const dayOfMonthOfBirth = +dateOfBirth.split('/')[0];
+    console.log(dateOfBirth)
+    const dayOfMonthOfBirth = +dateOfBirth.split('-')[2];
+    const monthOfBirth = +dateOfBirth.split('-')[1];
+    const yearOfBirth = +dateOfBirth.split('-')[0];
+    console.log(yearOfBirth, monthOfBirth, dayOfMonthOfBirth);
     const today = new Date();
     let age = today.getFullYear() - yearOfBirth;
     const month = today.getMonth() - monthOfBirth;

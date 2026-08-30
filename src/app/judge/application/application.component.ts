@@ -28,6 +28,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.application)
     this.dateOfBirthToAge();
     this.getHighlights();
     this.hostPosition = this.el.nativeElement.getBoundingClientRect();
@@ -59,6 +60,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   private dateOfBirthToAge() {
     this.age = this.applicationService.getAge(this.application.dateOfBirth);
+    console.log(this.age)
   }
 
   private getHighlights() {

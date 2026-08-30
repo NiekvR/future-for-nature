@@ -26,6 +26,18 @@
 
     .highlight {
       top: 28px;
+
+      &.no-top {
+        top:0;
+      }
+
+      &.two-liner {
+        top:50px;
+      }
+
+      &.four-liner {
+        top:89px;
+      }
     }
 
     label {

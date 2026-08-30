@@ -66,6 +66,9 @@ export class ScoreCollectionService extends CollectionService<Score> {
         1.3: {
           id: '1.3',
         },
+        1.4: {
+          id: '1.4',
+        },
         2.1: {
           id: '2.1',
         },
@@ -75,14 +78,14 @@ export class ScoreCollectionService extends CollectionService<Score> {
         2.3: {
           id: '2.3',
         },
+        2.4: {
+          id: '2.4',
+        },
         3.1: {
           id: '3.1',
         },
         3.2: {
           id: '3.2',
-        },
-        3.3: {
-          id: '3.3',
         }
       },
       pristine: true,
