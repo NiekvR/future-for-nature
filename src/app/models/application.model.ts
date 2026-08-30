@@ -26,6 +26,11 @@ export interface Application {
   addedValue: string;
   additionalInformation: string;
   referee: Referee[];
+  notUsedAi: string;
+  aiForLanguage: string;
+  aiForIdeas: string;
+  aiForDrafts: string;
+  aiUnsure: string;
 }
 
 export interface Name {

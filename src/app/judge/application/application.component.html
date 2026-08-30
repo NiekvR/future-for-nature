@@ -62,8 +62,8 @@
     <p class="hide" id="inspiration" (textSelect)="openPopup($event)">{{ application.inspiration }}</p>
   </div>
   <div class="application-part-row m-t-15">
-    <label>Outline concrete contributions you have personally made regarding species protection:</label>
-    <p class="highlight" [innerHtml]="highlights[ 'contributionsMade' ].text"></p>
+    <label>Outline concrete contributions you have personally made regarding species protection, including why you focused on this specific species and area; to what extent did the threatened status (locally, regionally, or globally) of the species play a role. If any of your decisions in the past did not turn out as you hoped (for example in terms of project progress, envisioned impact or media attention) please mention it here as well, together with the lessons learned.:</label>
+    <p class="highlight four-liner" [innerHtml]="highlights[ 'contributionsMade' ].text"></p>
     <p class="hide" id="contributionsMade" (textSelect)="openPopup($event)">{{ application.contributionsMade }}</p>
   </div>
   <div class="application-part-row m-t-15">
@@ -73,8 +73,8 @@
   </div>
   <h1>Conservation vision</h1>
   <div class="application-part-row m-t-15">
-    <label>What are the (conservation) problems you will try to solve?:</label>
-    <p class="highlight" [innerHtml]="highlights[ 'problems' ].text"></p>
+    <label>What are the (conservation) problems you will try to solve? How are they embedded in the local/regional/global context? And how will you aim to solve them?:</label>
+    <p class="highlight two-liner" [innerHtml]="highlights[ 'problems' ].text"></p>
     <p class="hide" id="problems" (textSelect)="openPopup($event)">{{ application.problems }}</p>
   </div>
   <div class="application-part-row m-t-15">
@@ -135,6 +135,27 @@
         <p class="hide" [id]="i + '-statement'" (textSelect)="openPopup($event)">{{ referee.statement }}</p>
       </div>
     </div>
+  </div>
+  <h1 class="m-0">Use of AI predictive language models</h1>
+  <div class="application-part-row" *ngIf="!!application.notUsedAi">
+    <p class="highlight no-top" [innerHtml]="highlights[ 'notUsedAi' ].text"></p>
+    <p class="hide" id="notUsedAi" (textSelect)="openPopup($event)">{{ application.notUsedAi }}</p>
+  </div>
+  <div class="application-part-row" *ngIf="!!application.aiForLanguage">
+    <p class="highlight no-top" [innerHtml]="highlights[ 'aiForLanguage' ].text"></p>
+    <p class="hide" id="aiForLanguage" (textSelect)="openPopup($event)">{{ application.aiForLanguage }}</p>
+  </div>
+  <div class="application-part-row" *ngIf="!!application.aiForIdeas">
+    <p class="highlight no-top" [innerHtml]="highlights[ 'aiForIdeas' ].text"></p>
+    <p class="hide" id="aiForIdeas" (textSelect)="openPopup($event)">{{ application.aiForIdeas }}</p>
+  </div>
+  <div class="application-part-row" *ngIf="!!application.aiForDrafts">
+    <p class="highlight no-top" [innerHtml]="highlights[ 'aiForDrafts' ].text"></p>
+    <p class="hide" id="aiForDrafts" (textSelect)="openPopup($event)">{{ application.aiForDrafts }}</p>
+  </div>
+  <div class="application-part-row" *ngIf="!!application.aiUnsure">
+    <p class="highlight no-top" [innerHtml]="highlights[ 'aiUnsure' ].text"></p>
+    <p class="hide" id="aiUnsure" (textSelect)="openPopup($event)">{{ application.aiUnsure }}</p>
   </div>
 </div>
 

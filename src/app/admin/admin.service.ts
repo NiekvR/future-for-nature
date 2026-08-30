@@ -146,6 +146,12 @@ export class AdminService {
     application.referee = [
       this.getReferee1FromApplicationDBO(applicationDBO),
       this.getReferee2FromApplicationDBO(applicationDBO)];
+    application.notUsedAi = applicationDBO.ihavenotusedaitoolsinthewritingofthisapplication;
+    application.aiForLanguage = applicationDBO.ihaveusedaitoolsonlyforlanguageimprovementseggrammarspellinglanguageandconfirmthatthecontentisentirelymyown;
+    application.aiForIdeas = applicationDBO.ihaveusedaitoolsinthewritingofthisapplicationforideagenerationstructuringorpartialrewritingoftheapplicationtexttheresultingapplicationincludingtheideasexperiencesandfinalcontentarefullyreflectingmyownachievementsideasopinionsandvision;
+    application.aiForDrafts = applicationDBO.ihaveusedaitoolsextensivelytogenerateordraftpartsofthisapplicationwhileihavereviewedthecontentitmaynotfullyreflectmyownwordingideasorachievementscorrectly;
+    application.aiUnsure = applicationDBO.iamunsurehowtoclassifymyuseofaitools;
+
 
     return application;
   }
