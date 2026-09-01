@@ -49,6 +49,7 @@ export class ApplicantsOverviewComponent implements OnDestroy{
         this.adminService.deleteApplicantsFromDB()
           .pipe(
             switchMap(() => this.adminService.getApplicantsFromCSV(applicantsCsv)),
+            map(applicantDBOs => applicantDBOs.filter(applicantDBO => !!applicantDBO.namefirstname)),
             map(applicantDBOs => this.adminService.applicantsDBOtoApplication(applicantDBOs)),
             map(applicants => applicants.length > 0 ? applicants : throwError(() => new Error(`Canceled`))),
             switchMap(applicants => this.adminService.addApplicantsToDB(applicants as Application[])),
